@@ -1,6 +1,13 @@
 
 
 
+**1.0.0.10**
+
+- Version number changed and release rebuilt.
+- Released on https://github.com/akesseler/Plexdata.ArgumentParser.
+- Released on https://www.nuget.org/packages/Plexdata.ArgumentParser.NET/.
+- Support terminated on https://sourceforge.net/projects/argument-parser-net/.
+
 **1.0.0.9**
 
 - History file added.
