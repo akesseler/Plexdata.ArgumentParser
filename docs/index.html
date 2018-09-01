@@ -70,9 +70,9 @@ tbody tr:nth-child(odd){
   <a href="#overview">Overview</a>
   <a href="#licensing">Licensing</a>
   <a href="#installation">Installation</a>
-  <a href="#importing">Importing</a>
-  <a href="#exporting">Exporting</a>
-  <a href="#settings">Settings</a>
+  <a href="#declaration">Declaration</a>
+  <a href="#usage">Usage</a>
+  <a href="#help">Help</a>
   <a href="#limitation">Limitation</a>
 </div>
 <div class="content">
@@ -82,7 +82,20 @@ tbody tr:nth-child(odd){
 <h2 id="overview">Overview</h2>
 
 <p>
-The <i>Plexdata Argument Parser</i> ...
+The <i>Plexdata Argument Parser</i> is a library that allows users to easily parse the command 
+line arguments given to a program. The main feature of this library is that users only need to 
+define their own class representing all possible command line arguments. Thereafter, each of the 
+properties is tagged by an attribute which describes the type of the expected command line argument.
+</p>
+<p>
+At runtime an instance of this pre&#8209;defined class is consigned to the <i>Plexdata Argument Parser</i> 
+together with the actual command line arguments. After the parsing procedure the class contains the values 
+that have been assigned by command line.
+</p>
+<p>
+Another feature of the <i>Plexdata Argument Parser</i> is the possibility of an automated generation 
+of a program&rsquo;s help text. For this purpose the pre&#8209;defined class is tagged by a suitable 
+set of attributes that include all information needed to generate the help text.
 </p>
 
 <h2 id="licensing">Licensing</h2>
@@ -153,28 +166,230 @@ Additionally, all releases can be downloaded from <i>GitHub</i>. Please visit pa
 to find all available versions.
 </p>
 
-<h2 id="importing">Importing</h2>
+<h2 id="declaration">Declaration</h2>
 
 <p>
-TBD...
+A class that shall serve as representation of supported command line arguments should consist of a set 
+of properties. Each of these properties must have a public setter as well as a public getter. All other 
+properties, fields and/or methods are ignored.
+</p>
+<p>
+Furthermore, all in all three different types of command line arguments are supported. These three different 
+types are called <i>Switch</i>, <i>Option</i> and <i>Verbal</i> arguments.
 </p>
 
-<h2 id="exporting">Exporting</h2>
+<h3 id="declaration-switch">Switch</h3>
 
 <p>
-TBD...
+<i>Switches</i> are command line arguments that either can be &ldquo;on&rdquo; or &ldquo;off&rdquo;. In other 
+words, <i>Switches</i> represent some kind of <i>Boolean</i> type. One typical representative of this type of 
+command line argument is for example the argument <code>--verbose</code>. A command line argument class can 
+have multiple <i>Switch</i> types.
 </p>
 
-<h2 id="settings">Settings</h2>
+<h3 id="declaration-option">Option</h3>
 
 <p>
-TBD...
+<i>Options</i> are command line arguments that include additional information. Such kind of command line argument 
+is for example the argument <code>--username</code>, because of this argument type requires that a username has to 
+be specified. Otherwise a logon can&rsquo;t be performed for instance. A command line argument class can have multiple 
+<i>Option</i> types.
+</p>
+
+<h3 id="declaration-verbal">Verbal</h3>
+
+<p>
+<i>Verbal</i> arguments are types that don&rsquo;t have a name. Furthermore, such kind of command line argument 
+may consist of multiple values. A typical representative of this type is for example a list of files to be processed. 
+A command line argument class can have only one <i>Verbal</i> type.
+</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>
+Task of this section is to show how the <i>Plexdata Argument Parser</i> can be used to configure a class that 
+shall serve as command line argument representation.
+</p>
+
+<h3 id="usage-switch">Switch</h3>
+
+<p>
+As mentioned above, a program that wants to use on/off arguments should be configured as demonstrated below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [SwitchParameter(SolidLabel = "verbose", BriefLabel = "v")]
+    public Boolean IsVerbose { get; set; }
+
+    [SwitchParameter(SolidLabel = "debug")]
+    public Boolean IsDebug { get; set; }
+}</code></pre>
+<p>
+As shown above, each property is of type <i>Boolean</i> and provides a public setter as well as a public getter 
+for those properties. Further, each of these properties is tagged by an attribute named <code>SwitchParameter</code>. 
+The <code>SolidLabel</code> of each switch parameter defines the long name of the command line argument. Long 
+name command line arguments are typically prefixed by a double&#8209;dash.
+</p>
+<p>
+Additionally, property <code>IsVerbose</code> uses a <code>BriefLabel</code> as well. A brief label typically 
+represents an abbreviation of the long argument and is usually prefixed by a single&#8209;dash at command line.
+</p>
+<p>
+In contrast to that, property <code>IsDebug</code> only uses the <code>SolidLabel</code> which in turn means that 
+only the long name is available as command line argument.
+</p>
+<p>
+With this class in background, users can for instance call the program as shown as follows.
+</p>
+<pre><code>$&gt; program.exe --verbose --debug
+$&gt; program.exe -v --debug
+$&gt; program.exe --verbose
+$&gt; program.exe -v
+$&gt; program.exe --debug</code></pre>
+
+<h3 id="usage-option">Option</h3>
+
+<p>
+As mentioned above, a program that wants to use arguments with additional data should be configured as 
+demonstrated below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "password", Dependencies = "Username")]
+    public String Password { get; set; }
+
+    [OptionParameter(SolidLabel = "username", Dependencies = "Password")]
+    public String Username { get; set; }
+}</code></pre>
+<p>
+As shown above, each of the <i>Option</i> attributes include a <i>Dependencies</i> tag. Task of this tag 
+is to ensure that each of the command line arguments tagged this way are provided when a program is called.
+</p>
+<p>
+This in detail means that if one of the arguments is provided without the other one than the parser throws 
+an exception to inform that a rule check has failed.
+</p>
+<p>
+With this class in background, users can for instance call the program as shown as follows.
+</p>
+<pre><code>$&gt; program.exe --username &lt;username&gt; --password &lt;password&gt;
+$&gt; program.exe --password &lt;password&gt; --username &lt;username&gt;</code></pre>
+
+<h3 id="usage-verbal">Verbal</h3>
+
+<p>
+As mentioned above, a program that wants to use for example a list of files as arguments, then it would be 
+configured as demonstrated below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [VerbalParameter]
+    public String[] Files { get; set; }
+}</code></pre>
+<p>
+As shown above, the <i>Verbal</i> attribute is used for such a purpose. In contrast to the usage of 
+<i>Switches</i> and/or <i>Options</i>, the usage of <i>Verbal</i> attributes is limited to one per class. 
+Otherwise a rule check exception is thrown by the parser.
+</p>
+<p>
+With this class in background, users can for instance call the program as shown as follows.
+</p>
+<pre><code>$&gt; program.exe file1.txt
+$&gt; program.exe file1.txt file2.txt
+$&gt; program.exe file1.txt file2.txt file3.txt</code></pre>
+
+<h3 id="usage-parsing">Parsing</h3>
+<p>
+Once a proper class has been implemented, the program&rsquo;s main method can parse a given list of 
+command line arguments as shown below.
+</p>
+<pre><code>static void Main(string[] args)
+{
+    try
+    {
+        if (args.Length > 0)
+        {
+            CmdLineArgs cmdLineArgs = new CmdLineArgs();
+            cmdLineArgs.Process(args);
+        }
+    }
+    catch (Exception exception)
+    {
+        Console.WriteLine(exception.Message);
+    }
+}</code></pre>
+<p>
+As shown above, it is strictly recommended to surround any call to the command line parser by a 
+<code>try&hellip;catch</code> block.
+</p>
+
+<h2 id="help">Help</h2>
+
+<p>
+The <i>Plexdata Argument Parser</i> is also able to generate a command line help text. For this purpose 
+a class that describes all possible command line arguments should be configured with additional attributes. 
+Here an example.
+</p>
+<pre><code>[HelpLicense]
+[HelpUtilize]
+[HelpPreface("This program does something useful.")]
+[ParametersGroup]
+class CmdLineArgs
+{
+    [HelpSummary("More output during runtime.")]
+    [SwitchParameter(SolidLabel = "verbose", BriefLabel = "v")]
+    public Boolean IsVerbose { get; set; }
+
+    [HelpSummary("Run program in Debug mode.")]
+    [SwitchParameter(SolidLabel = "debug")]
+    public Boolean IsDebug { get; set; }
+}</code></pre>
+<p>
+Parsing the help text and printing it out could be done as shown below.
+</p>
+<pre><code>static void Main(string[] args)
+{
+    try
+    {
+        CmdLineArgs cmdLineArgs = new CmdLineArgs();
+        Console.WriteLine(cmdLineArgs.Generate());
+        Console.ReadKey();
+    }
+    catch (Exception exception)
+    {
+        Console.WriteLine(exception.Message);
+    }
+}</code></pre>
+<p>
+For the above example, the help screen shown to the user would look like shown below.
+</p>
+<pre><code>Copyright &copy; &lt;company&gt;
+
+This program does something useful.
+
+Usage:
+
+  &lt;program&gt; [options]
+
+Options:
+
+  --verbose [-v]  More output during runtime.
+
+  --debug         Run program in Debug mode.</code></pre>
+<p>
+For sure, this is a pretty simple example. In other words, the help generator is able to do more. 
+For example it is possible to take some of the &ldquo;properties&rdquo; from the executing assembly 
+and put them into the help text. The help usage part as well as the help option section can be 
+grouped and so on.
 </p>
 
 <h2 id="limitation">Limitation</h2>
 
 <p>
-TBD...
+Not known at the moment.
 </p>
 
 </div>
