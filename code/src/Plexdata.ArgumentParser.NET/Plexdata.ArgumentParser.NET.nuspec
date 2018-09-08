@@ -8,10 +8,11 @@
     <owners>$author$</owners>
     <licenseUrl>https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/akesseler/Plexdata.ArgumentParser</projectUrl>
+    <iconUrl>https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/icon.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Update release on NuGet.org.</releaseNotes>
-    <copyright>Copyright 2018 plexdata.de</copyright>
+    <releaseNotes>Upgrade to .NET Framework version v4.7.2.</releaseNotes>
+    <copyright>Copyright © 2018 - plexdata.de</copyright>
     <tags>command line argument parser</tags>
   </metadata>
 </package>

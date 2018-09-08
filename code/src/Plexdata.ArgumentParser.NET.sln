@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{D57C
 		clean.cmd = clean.cmd
 		HISTORY.md = HISTORY.md
 		README.md = README.md
+		TODOs.md = TODOs.md
 	EndProjectSection
 EndProject
 Global
