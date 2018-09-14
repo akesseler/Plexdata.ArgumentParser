@@ -287,13 +287,13 @@ namespace Plexdata.ArgumentParser.Tests
                 Arguments = new String[] { "--swt3" },
                 Expected = new TestClassSwitchDependencyProperties(), },
             new ArgumentProcessorProcessHelper{
-                Arguments = new String[] { "--swt1 --swt2" },
+                Arguments = new String[] { "--swt1", "--swt2" },
                 Expected = new TestClassSwitchDependencyProperties(), },
             new ArgumentProcessorProcessHelper{
-                Arguments = new String[] { "--swt2 --swt1" },
+                Arguments = new String[] { "--swt2", "--swt1" },
                 Expected = new TestClassSwitchDependencyProperties(), },
             new ArgumentProcessorProcessHelper{
-                Arguments = new String[] { "--swt3 --swt1" },
+                Arguments = new String[] { "--swt3", "--swt1" },
                 Expected = new TestClassSwitchDependencyProperties(), },
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--pw aaa" },
@@ -508,6 +508,1319 @@ namespace Plexdata.ArgumentParser.Tests
             processor.Process();
 
             Assert.AreEqual(expected.Stringify(), actual.Stringify());
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassSwitchDebugDefaultA
+        {
+            [SwitchParameter(SolidLabel = "debug")]
+            public Boolean Debug { get; set; }
+
+            [SwitchParameter(SolidLabel = "default", BriefLabel = "d")]
+            public Boolean Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassSwitchDebugDefaultA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "-d" },
+                Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = true, Default = true },
+            },
+         };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataSwitchDebugDefaultA")]
+        public void Process_BugfixTestDataSwitchDebugDefaultA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassSwitchDebugDefaultA expected = testHelper.Expected as BugfixTestClassSwitchDebugDefaultA;
+            BugfixTestClassSwitchDebugDefaultA actual = new BugfixTestClassSwitchDebugDefaultA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassSwitchDebugDefaultB
+        {
+            [SwitchParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public Boolean Debug { get; set; }
+
+            [SwitchParameter(SolidLabel = "default")]
+            public Boolean Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassSwitchDebugDefaultB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "-d" },
+                Expected = new BugfixTestClassSwitchDebugDefaultB { Debug = true, Default = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataSwitchDebugDefaultB")]
+        public void Process_BugfixTestDataSwitchDebugDefaultB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassSwitchDebugDefaultB expected = testHelper.Expected as BugfixTestClassSwitchDebugDefaultB;
+            BugfixTestClassSwitchDebugDefaultB actual = new BugfixTestClassSwitchDebugDefaultB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassSwitchDefaultDebugA
+        {
+            [SwitchParameter(SolidLabel = "default")]
+            public Boolean Default { get; set; }
+
+            [SwitchParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public Boolean Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassSwitchDefaultDebugA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "-d" },
+                Expected = new BugfixTestClassSwitchDefaultDebugA { Debug = true, Default = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataSwitchDefaultDebugA")]
+        public void Process_BugfixTestDataSwitchDefaultDebugA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassSwitchDefaultDebugA expected = testHelper.Expected as BugfixTestClassSwitchDefaultDebugA;
+            BugfixTestClassSwitchDefaultDebugA actual = new BugfixTestClassSwitchDefaultDebugA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassSwitchDefaultDebugB
+        {
+            [SwitchParameter(SolidLabel = "default", BriefLabel = "d")]
+            public Boolean Default { get; set; }
+
+            [SwitchParameter(SolidLabel = "debug")]
+            public Boolean Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassSwitchDefaultDebugB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = true, Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = false, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = true, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "-d" },
+                Expected = new BugfixTestClassSwitchDefaultDebugB { Debug = true, Default = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataSwitchDefaultDebugB")]
+        public void Process_BugfixTestDataSwitchDefaultDebugB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassSwitchDefaultDebugB expected = testHelper.Expected as BugfixTestClassSwitchDefaultDebugB;
+            BugfixTestClassSwitchDefaultDebugB actual = new BugfixTestClassSwitchDefaultDebugB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDebugDefaultA
+        {
+            [OptionParameter(SolidLabel = "debug")]
+            public String Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d")]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDebugDefaultA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "-d", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultA { Debug = "debug-value", Default = "default-value" },
+            },
+   };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDebugDefaultA")]
+        public void Process_BugfixTestDataOptionDebugDefaultA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDebugDefaultA expected = testHelper.Expected as BugfixTestClassOptionDebugDefaultA;
+            BugfixTestClassOptionDebugDefaultA actual = new BugfixTestClassOptionDebugDefaultA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDebugDefaultASeparator
+        {
+            [OptionParameter(SolidLabel = "debug", Separator = '=')]
+            public String Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d", Separator = '=')]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDebugDefaultASeparator other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultASeparator = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value", "--default=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value", "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value", "-d=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+   };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDebugDefaultASeparator")]
+        public void Process_BugfixTestDataOptionDebugDefaultASeparator_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDebugDefaultASeparator expected = testHelper.Expected as BugfixTestClassOptionDebugDefaultASeparator;
+            BugfixTestClassOptionDebugDefaultASeparator actual = new BugfixTestClassOptionDebugDefaultASeparator();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDebugDefaultB
+        {
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public String Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default")]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDebugDefaultB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value", "-default", "default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultB { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDebugDefaultB")]
+        public void Process_BugfixTestDataOptionDebugDefaultB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDebugDefaultB expected = testHelper.Expected as BugfixTestClassOptionDebugDefaultB;
+            BugfixTestClassOptionDebugDefaultB actual = new BugfixTestClassOptionDebugDefaultB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDebugDefaultBSeparator
+        {
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d", Separator = '=')]
+            public String Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default", Separator = '=')]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDebugDefaultBSeparator other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultBSeparator = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value", "--default=default-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value", "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value", "-d=debug-value" },
+                Expected = new BugfixTestClassOptionDebugDefaultBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDebugDefaultBSeparator")]
+        public void Process_BugfixTestDataOptionDebugDefaultBSeparator_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDebugDefaultBSeparator expected = testHelper.Expected as BugfixTestClassOptionDebugDefaultBSeparator;
+            BugfixTestClassOptionDebugDefaultBSeparator actual = new BugfixTestClassOptionDebugDefaultBSeparator();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDefaultDebugA
+        {
+            [OptionParameter(SolidLabel = "default")]
+            public String Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDefaultDebugA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value", "-default", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugA { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDefaultDebugA")]
+        public void Process_BugfixTestDataOptionDefaultDebugA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDefaultDebugA expected = testHelper.Expected as BugfixTestClassOptionDefaultDebugA;
+            BugfixTestClassOptionDefaultDebugA actual = new BugfixTestClassOptionDefaultDebugA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDefaultDebugASeparator
+        {
+            [OptionParameter(SolidLabel = "default", Separator = '=')]
+            public String Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d", Separator = '=')]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDefaultDebugASeparator other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugASeparator = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value", "--default=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value", "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--d=debug-value", "-default=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugASeparator { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDefaultDebugASeparator")]
+        public void Process_BugfixTestDataOptionDefaultDebugASeparator_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDefaultDebugASeparator expected = testHelper.Expected as BugfixTestClassOptionDefaultDebugASeparator;
+            BugfixTestClassOptionDefaultDebugASeparator actual = new BugfixTestClassOptionDefaultDebugASeparator();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDefaultDebugB
+        {
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d")]
+            public String Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug")]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDefaultDebugB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default", "default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value", "-debug", "debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugB { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDefaultDebugB")]
+        public void Process_BugfixTestDataOptionDefaultDebugB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDefaultDebugB expected = testHelper.Expected as BugfixTestClassOptionDefaultDebugB;
+            BugfixTestClassOptionDefaultDebugB actual = new BugfixTestClassOptionDefaultDebugB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassOptionDefaultDebugBSeparator
+        {
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d", Separator = '=')]
+            public String Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug", Separator = '=')]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassOptionDefaultDebugBSeparator other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugBSeparator = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = "debug-value", Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = null, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug=debug-value", "--default=default-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default=default-value", "--debug=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d=default-value", "-debug=debug-value" },
+                Expected = new BugfixTestClassOptionDefaultDebugBSeparator { Debug = "debug-value", Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataOptionDefaultDebugBSeparator")]
+        public void Process_BugfixTestDataOptionDefaultDebugBSeparator_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassOptionDefaultDebugBSeparator expected = testHelper.Expected as BugfixTestClassOptionDefaultDebugBSeparator;
+            BugfixTestClassOptionDefaultDebugBSeparator actual = new BugfixTestClassOptionDefaultDebugBSeparator();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDefaultDebugA
+        {
+            [SwitchParameter(SolidLabel = "default")]
+            public Boolean Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDefaultDebugA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDefaultDebugA { Debug = "debug-value", Default = true},
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDefaultDebugA")]
+        public void Process_BugfixTestDataMixedDefaultDebugA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDefaultDebugA expected = testHelper.Expected as BugfixTestClassMixedDefaultDebugA;
+            BugfixTestClassMixedDefaultDebugA actual = new BugfixTestClassMixedDefaultDebugA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDefaultDebugB
+        {
+            [SwitchParameter(SolidLabel = "default", BriefLabel = "d")]
+            public Boolean Default { get; set; }
+
+            [OptionParameter(SolidLabel = "debug")]
+            public String Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDefaultDebugB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugB { Debug = "debug-value", Default = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDefaultDebugB")]
+        public void Process_BugfixTestDataMixedDefaultDebugB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDefaultDebugB expected = testHelper.Expected as BugfixTestClassMixedDefaultDebugB;
+            BugfixTestClassMixedDefaultDebugB actual = new BugfixTestClassMixedDefaultDebugB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDefaultDebugC
+        {
+            [OptionParameter(SolidLabel = "default")]
+            public String Default { get; set; }
+
+            [SwitchParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public Boolean Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDefaultDebugC other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugC = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = true, Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = true, Default = null},
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugC { Debug = true, Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDefaultDebugC")]
+        public void Process_BugfixTestDataMixedDefaultDebugC_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDefaultDebugC expected = testHelper.Expected as BugfixTestClassMixedDefaultDebugC;
+            BugfixTestClassMixedDefaultDebugC actual = new BugfixTestClassMixedDefaultDebugC();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDefaultDebugD
+        {
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d")]
+            public String Default { get; set; }
+
+            [SwitchParameter(SolidLabel = "debug")]
+            public Boolean Debug { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDefaultDebugD other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugD = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = true, Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDefaultDebugD { Debug = true, Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDefaultDebugD")]
+        public void Process_BugfixTestDataMixedDefaultDebugD_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDefaultDebugD expected = testHelper.Expected as BugfixTestClassMixedDefaultDebugD;
+            BugfixTestClassMixedDefaultDebugD actual = new BugfixTestClassMixedDefaultDebugD();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDebugDefaultA
+        {
+            [OptionParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public String Debug { get; set; }
+
+            [SwitchParameter(SolidLabel = "default")]
+            public Boolean Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDebugDefaultA other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDebugDefaultA { Debug = "debug-value", Default = true},
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDebugDefaultA")]
+        public void Process_BugfixTestDataMixedDebugDefaultA_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDebugDefaultA expected = testHelper.Expected as BugfixTestClassMixedDebugDefaultA;
+            BugfixTestClassMixedDebugDefaultA actual = new BugfixTestClassMixedDebugDefaultA();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDebugDefaultB
+        {
+            [OptionParameter(SolidLabel = "debug")]
+            public String Debug { get; set; }
+
+            [SwitchParameter(SolidLabel = "default", BriefLabel = "d")]
+            public Boolean Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDebugDefaultB other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = "debug-value", Default = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = null, Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "debug-value", "--default" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = "debug-value", Default = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "--debug", "debug-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultB { Debug = "debug-value", Default = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDebugDefaultB")]
+        public void Process_BugfixTestDataMixedDebugDefaultB_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDebugDefaultB expected = testHelper.Expected as BugfixTestClassMixedDebugDefaultB;
+            BugfixTestClassMixedDebugDefaultB actual = new BugfixTestClassMixedDebugDefaultB();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDebugDefaultC
+        {
+            [SwitchParameter(SolidLabel = "debug", BriefLabel = "d")]
+            public Boolean Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default")]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDebugDefaultC other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultC = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = true, Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = true, Default = null},
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultC { Debug = true, Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDebugDefaultC")]
+        public void Process_BugfixTestDataMixedDebugDefaultC_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDebugDefaultC expected = testHelper.Expected as BugfixTestClassMixedDebugDefaultC;
+            BugfixTestClassMixedDebugDefaultC actual = new BugfixTestClassMixedDebugDefaultC();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class BugfixTestClassMixedDebugDefaultD
+        {
+            [SwitchParameter(SolidLabel = "debug")]
+            public Boolean Debug { get; set; }
+
+            [OptionParameter(SolidLabel = "default", BriefLabel = "d")]
+            public String Default { get; set; }
+
+            public Boolean IsEqual(BugfixTestClassMixedDebugDefaultD other)
+            {
+                return this.Debug == other.Debug && this.Default == other.Default;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultD = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = true, Default = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = false, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--debug", "--default", "default-value" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--default", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = true, Default = "default-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "-d", "default-value", "--debug" },
+                Expected = new BugfixTestClassMixedDebugDefaultD { Debug = true, Default = "default-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("BugfixTestDataMixedDebugDefaultD")]
+        public void Process_BugfixTestDataMixedDebugDefaultD_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            BugfixTestClassMixedDebugDefaultD expected = testHelper.Expected as BugfixTestClassMixedDebugDefaultD;
+            BugfixTestClassMixedDebugDefaultD actual = new BugfixTestClassMixedDebugDefaultD();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassMixedSeparators
+        {
+            [OptionParameter(SolidLabel = "option1", BriefLabel = "op1", Separator = '=')]
+            public String Option1 { get; set; }
+
+            [OptionParameter(SolidLabel = "option2", BriefLabel = "op2", Separator = ':')]
+            public String Option2 { get; set; }
+
+            public Boolean IsEqual(TestClassMixedSeparators other)
+            {
+                return this.Option1 == other.Option1 && this.Option2 == other.Option2;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataMixedSeparators = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1=option1-value", "--option2:option2-value" },
+                Expected = new TestClassMixedSeparators { Option1 = "option1-value", Option2 = "option2-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--op1=option1-value", "--op2:option2-value" },
+                Expected = new TestClassMixedSeparators { Option1 = "option1-value", Option2 = "option2-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--op1=option1-value", "--option2:option2-value" },
+                Expected = new TestClassMixedSeparators { Option1 = "option1-value", Option2 = "option2-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1=option1-value", "--op2:option2-value" },
+                Expected = new TestClassMixedSeparators { Option1 = "option1-value", Option2 = "option2-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("TestDataMixedSeparators")]
+        public void Process_TestDataMixedSeparators_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassMixedSeparators expected = testHelper.Expected as TestClassMixedSeparators;
+            TestClassMixedSeparators actual = new TestClassMixedSeparators();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
         }
     }
 }

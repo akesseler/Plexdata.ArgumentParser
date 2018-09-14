@@ -234,7 +234,7 @@ namespace Plexdata.ArgumentParser.Attributes
             {
                 if (!String.IsNullOrWhiteSpace(other))
                 {
-                    return other.StartsWith(this.SolidLabel);
+                    return this.SolidLabel.Equals(this.TailorOther(other));
                 }
             }
 
@@ -257,7 +257,7 @@ namespace Plexdata.ArgumentParser.Attributes
             {
                 if (!String.IsNullOrWhiteSpace(other))
                 {
-                    return other.StartsWith(this.BriefLabel);
+                    return this.BriefLabel.Equals(this.TailorOther(other));
                 }
             }
 
@@ -357,6 +357,32 @@ namespace Plexdata.ArgumentParser.Attributes
             }
 
             return result.Length > 0 ? result.ToString() : base.ToString();
+        }
+
+        #endregion
+
+        #region Privates
+
+        /// <summary>
+        /// This method cuts off any additional data from given string that not 
+        /// belong to the label, but only if current instance is of type "Option".
+        /// </summary>
+        /// <param name="label">
+        /// The label to be tailored.
+        /// </param>
+        /// <returns>
+        /// The tailored label.
+        /// </returns>
+        private String TailorOther(String label)
+        {
+            if (this is OptionParameterAttribute)
+            {
+                String[] pieces = label.Split(new Char[] { (this as OptionParameterAttribute).Separator }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (pieces.Length > 0) { label = pieces[0]; }
+            }
+
+            return label;
         }
 
         #endregion

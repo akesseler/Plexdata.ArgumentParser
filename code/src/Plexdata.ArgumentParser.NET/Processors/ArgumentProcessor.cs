@@ -356,12 +356,6 @@ namespace Plexdata.ArgumentParser.Processors
 
             foreach (ArgumentProcessorSetting current in this.Settings)
             {
-                // BUG: Checking labels only by "starts with" is actually not save enough.
-                //      If you have for example a class that exposes two properties, and one 
-                //      of them is tagged by an attribute that uses label "s1" and the other 
-                //      one is tagged by an attribute that uses label "s2", then you may get 
-                //      in trouble when a user tries parsing something like "-s1 -s2a". In 
-                //      such a case parameter "-s2a" will be treated as "-s2"!
                 if (current.Attribute.IsSolidLabelAndStartsWith(parameter) ||
                     current.Attribute.IsBriefLabelAndStartsWith(parameter))
                 {
