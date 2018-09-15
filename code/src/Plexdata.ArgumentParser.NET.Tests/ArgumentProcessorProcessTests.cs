@@ -1822,5 +1822,329 @@ namespace Plexdata.ArgumentParser.Tests
 
             Assert.IsTrue(expected.IsEqual(actual));
         }
+
+        [ParametersGroup]
+        private class TestClassImplicitDependencyAssignmentSingleSingle
+        {
+            [OptionParameter(SolidLabel = "option1")]
+            public String Option1 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            public Boolean Switch1 { get; set; }
+
+            public Boolean IsEqual(TestClassImplicitDependencyAssignmentSingleSingle other)
+            {
+                return this.Option1 == other.Option1 && this.Switch1 == other.Switch1;
+            }
+        }
+
+        [Test]
+        public void Process_UnsatisfiedArgumentList_ThrowsDependentViolationException()
+        {
+            String[] arguments = new String[] { "--option1", "option1-value" };
+
+            TestClassImplicitDependencyAssignmentSingleSingle actual = new TestClassImplicitDependencyAssignmentSingleSingle();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
+
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataDependencySingleSingle = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleSingle { Option1 = "option1-value", Switch1 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleSingle { Option1 = "option1-value", Switch1 = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("TestDataDependencySingleSingle")]
+        public void Process_TestDataDependencySingleSingle_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassImplicitDependencyAssignmentSingleSingle expected = testHelper.Expected as TestClassImplicitDependencyAssignmentSingleSingle;
+            TestClassImplicitDependencyAssignmentSingleSingle actual = new TestClassImplicitDependencyAssignmentSingleSingle();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassImplicitDependencyAssignmentSingleDouble
+        {
+            [OptionParameter(SolidLabel = "option1")]
+            public String Option1 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            public Boolean Switch1 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option1")]
+            public Boolean Switch2 { get; set; }
+
+            public Boolean IsEqual(TestClassImplicitDependencyAssignmentSingleDouble other)
+            {
+                return this.Option1 == other.Option1 && this.Switch1 == other.Switch1 && this.Switch2 == other.Switch2;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataDependencySingleDouble = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = true, Switch2 = false },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = true, Switch2 = false  },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = false, Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = false, Switch2 = true  },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = true, Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1", "--switch2", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentSingleDouble { Option1 = "option1-value", Switch1 = true, Switch2 = true  },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("TestDataDependencySingleDouble")]
+        public void Process_TestDataDependencySingleDouble_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassImplicitDependencyAssignmentSingleDouble expected = testHelper.Expected as TestClassImplicitDependencyAssignmentSingleDouble;
+            TestClassImplicitDependencyAssignmentSingleDouble actual = new TestClassImplicitDependencyAssignmentSingleDouble();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassImplicitDependencyAssignmentDoubleSingle
+        {
+            [OptionParameter(SolidLabel = "option1")]
+            public String Option1 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            public Boolean Switch1 { get; set; }
+
+            [OptionParameter(SolidLabel = "option2")]
+            public String Option2 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option2")]
+            public Boolean Switch2 { get; set; }
+
+            public Boolean IsEqual(TestClassImplicitDependencyAssignmentDoubleSingle other)
+            {
+                return this.Option1 == other.Option1 && this.Switch1 == other.Switch1 &&
+                       this.Option2 == other.Option2 && this.Switch2 == other.Switch2;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataDependencyDoubleSingle = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1", "--option2", "option2-value", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1", "--option1", "option1-value", "--switch2", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--switch2", "--option1", "option1-value", "--switch1" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--option2", "option2-value", "--switch1", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1", "--switch2", "--option1", "option1-value", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--option2", "option2-value", "--switch1", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--switch1", "--option2", "option2-value", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--option1", "option1-value", "--switch2", "--switch1" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleSingle { Option1 = "option1-value", Switch1 = true, Option2 = "option2-value", Switch2 = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("TestDataDependencyDoubleSingle")]
+        public void Process_TestDataDependencyDoubleSingle_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassImplicitDependencyAssignmentDoubleSingle expected = testHelper.Expected as TestClassImplicitDependencyAssignmentDoubleSingle;
+            TestClassImplicitDependencyAssignmentDoubleSingle actual = new TestClassImplicitDependencyAssignmentDoubleSingle();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassImplicitDependencyAssignmentDoubleDouble
+        {
+            [OptionParameter(SolidLabel = "option1")]
+            public String Option1 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch1a", Dependencies = "Option1")]
+            public Boolean Switch1A { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch1b", Dependencies = "Option1")]
+            public Boolean Switch1B { get; set; }
+
+            [OptionParameter(SolidLabel = "option2")]
+            public String Option2 { get; set; }
+
+            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option2")]
+            public Boolean Switch2 { get; set; }
+
+            public Boolean IsEqual(TestClassImplicitDependencyAssignmentDoubleDouble other)
+            {
+                return this.Option1 == other.Option1 && this.Switch1A == other.Switch1A && this.Switch1B == other.Switch1B &&
+                       this.Option2 == other.Option2 && this.Switch2 == other.Switch2;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataDependencyDoubleDouble = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1a", "--option2", "option2-value", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1a", "--option1", "option1-value", "--switch2", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--switch2", "--option1", "option1-value", "--switch1a" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--option2", "option2-value", "--switch1a", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1a", "--switch2", "--option1", "option1-value", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--option2", "option2-value", "--switch1a", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--switch1a", "--option2", "option2-value", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--option1", "option1-value", "--switch2", "--switch1a" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1A = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--switch1b", "--option2", "option2-value", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1b", "--option1", "option1-value", "--switch2", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--switch2", "--option1", "option1-value", "--switch1b" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--option2", "option2-value", "--switch1b", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch1b", "--switch2", "--option1", "option1-value", "--option2", "option2-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option1", "option1-value", "--option2", "option2-value", "--switch1b", "--switch2" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--switch2", "--switch1b", "--option2", "option2-value", "--option1", "option1-value" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--option2", "option2-value", "--option1", "option1-value", "--switch2", "--switch1b" },
+                Expected = new TestClassImplicitDependencyAssignmentDoubleDouble { Option1 = "option1-value", Switch1B = true, Option2 = "option2-value", Switch2 = true },
+            },
+        };
+
+        [Test]
+        [TestCaseSource("TestDataDependencyDoubleDouble")]
+        public void Process_TestDataDependencyDoubleDouble_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassImplicitDependencyAssignmentDoubleDouble expected = testHelper.Expected as TestClassImplicitDependencyAssignmentDoubleDouble;
+            TestClassImplicitDependencyAssignmentDoubleDouble actual = new TestClassImplicitDependencyAssignmentDoubleDouble();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
     }
 }

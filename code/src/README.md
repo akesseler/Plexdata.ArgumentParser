@@ -9,3 +9,7 @@ The help file with the whole API documentation is not yet available.
 ## Trouble Shooting
 
 Nothing known at the moment.
+
+## Known Issues
+
+Nothing known at the moment.

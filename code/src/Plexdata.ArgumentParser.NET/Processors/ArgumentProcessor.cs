@@ -224,8 +224,7 @@ namespace Plexdata.ArgumentParser.Processors
                     {
                         if (this.TryFindSetting(out setting))
                         {
-                            List<String> items = new List<String>();
-                            items.Add((String)OptionTypeConverter.Convert(parameter, typeof(String)));
+                            List<String> items = new List<String> { (String)OptionTypeConverter.Convert(parameter, typeof(String)) };
 
                             while (true)
                             {
@@ -320,7 +319,8 @@ namespace Plexdata.ArgumentParser.Processors
 
                 this.ValidateExclusiveProperties(processed);
                 this.ValidateRequiredProperties(processed);
-                this.ValidateDependentProperties(processed);
+                this.ValidateExplicitDependentProperties(processed);
+                this.ValidateImplicitDependentProperties(processed);
             }
             catch (Exception exception)
             {
@@ -400,7 +400,16 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
-        private void ValidateDependentProperties(List<ArgumentProcessorSetting> processed)
+        /// <summary>
+        /// This method performs an explicit validation of dependent properties.
+        /// </summary>
+        /// <param name="processed">
+        /// The list of items to be validated.
+        /// </param>
+        /// <exception cref="DependentViolationException">
+        /// At least one of the required dependencies was not satisfied.
+        /// </exception>
+        private void ValidateExplicitDependentProperties(List<ArgumentProcessorSetting> processed)
         {
             if (processed.Any())
             {
@@ -455,6 +464,105 @@ namespace Plexdata.ArgumentParser.Processors
                             throw new DependentViolationException(String.Format(format, value0, value1));
                         }
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method performs an implicit validation of dependent properties.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Implicit means that a one property explicitly depends on another property 
+        /// but this explicit parameter is missing in the argument list. 
+        /// </para>
+        /// <para>
+        /// Imagine a class like this:
+        /// </para>
+        /// <code>
+        /// class Arguments
+        /// {
+        ///     [OptionParameter(SolidLabel = "config")]
+        ///     public String Config { get; set; }
+        ///     [SwitchParameter(SolidLabel = "export", Dependencies = "Config")]
+        ///     public Boolean IsExport { get; set; }
+        ///     [SwitchParameter(SolidLabel = "create", Dependencies = "Config")]
+        ///     public Boolean IsCreate { get; set; }
+        /// }
+        /// </code>
+        /// <para>
+        /// Also imagine a list of given command line argument like this:
+        /// </para>
+        /// <code>
+        /// $> program.exe --config config-file.ext
+        /// </code>
+        /// <para>
+        /// Actually, this will not cause any kind of trouble, but...
+        /// </para>
+        /// <para>
+        /// ...the the program does not know if "execute" mode or "create" mode was wanted 
+        /// by the user (because of both properties are false by default).
+        /// </para>
+        /// <para>
+        /// This is the actual problem and fixing this challenge is task of this method.
+        /// </para>
+        /// </remarks>
+        /// <param name="processed">
+        /// The list of items to be validated.
+        /// </param>
+        /// <exception cref="DependentViolationException">
+        /// At least one of the required dependencies was not satisfied.
+        /// </exception>
+        private void ValidateImplicitDependentProperties(List<ArgumentProcessorSetting> processed)
+        {
+            if (processed.Any() && this.Settings.Any())
+            {
+                String current = null;
+                List<String> missing = new List<String>();
+
+                foreach (ArgumentProcessorSetting source in processed)
+                {
+                    current = $"\"{source.ToParameterLabel()}\"";
+                    missing.Clear();
+
+                    // Filter out all potential candidates.
+                    IEnumerable<ArgumentProcessorSetting> candidates = this.Settings.Where(x => x.Property.Name != source.Property.Name);
+
+                    foreach (ArgumentProcessorSetting candidate in candidates)
+                    {
+                        // Try finding any dependency for current candidate.
+                        IEnumerable<String> dependencies = candidate.Attribute.GetDependencies().Where(x => x == source.Property.Name);
+
+                        // Nothing found? Well then there will probably be no dependence!
+                        if (!dependencies.Any()) { continue; }
+
+                        // Search for current candidate within all applied arguments.
+                        Boolean satisfied = processed.Where(x => x.Property.Name == candidate.Property.Name).Any();
+
+                        // Has been found? Well the implicit dependence was probably satisfied!
+                        // NOTE: This way to handle it actually means an OR operation. An XOR 
+                        //       operation is not supported at the moment.
+                        if (satisfied)
+                        {
+                            missing.Clear();
+                            break;
+                        }
+
+                        // Add this candidate to the list of probably missing arguments.
+                        missing.Add($"\"{candidate.ToParameterLabel()}\"");
+                    }
+
+                    if (missing.Count > 0) { break; }
+                }
+
+                if (missing.Count > 0)
+                {
+                    // At least one unsatisfied implicit dependency has been found if this piece of code is reached.
+                    String either = missing.Count() > 1 ? "either " : "";
+                    String suffix = missing.Count() > 1 ? "none of them has been " : "it was not ";
+                    String message = $"Argument {current} {either}depends on {String.Join(" or on ", missing)}, but {suffix}applied.";
+
+                    throw new DependentViolationException(message);
                 }
             }
         }

@@ -1,6 +1,12 @@
 
 
 
+**1.0.0.12**
+
+- Bugfix for the debug/default issue.
+- Implicit dependency check added.
+- Increasing the version number.
+
 **1.0.0.11**
 
 - Upgrading to *.NET Framework v4.7.2*.
