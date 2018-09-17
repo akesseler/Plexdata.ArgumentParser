@@ -24,6 +24,7 @@
 
 using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
+using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
 using Plexdata.ArgumentParser.Processors;
@@ -249,30 +250,34 @@ namespace Plexdata.ArgumentParser.Tests
         [ParametersGroup]
         private class TestClassSwitchDependencyProperties
         {
-            [SwitchParameter(SolidLabel = "swt1", Dependencies = "Switch2,   Switch3")]
+            [SwitchParameter(SolidLabel = "swt1", DependencyList = "Switch2,   Switch3", DependencyType = DependencyType.Required)]
             public Boolean Switch1 { get; set; }
-            [SwitchParameter(SolidLabel = "swt2", Dependencies = "Switch1:Switch3")]
+            [SwitchParameter(SolidLabel = "swt2", DependencyList = "Switch1:Switch3", DependencyType = DependencyType.Required)]
             public Boolean Switch2 { get; set; }
-            [SwitchParameter(SolidLabel = "swt3", Dependencies = "Switch2;   Switch1; ")]
+            [SwitchParameter(SolidLabel = "swt3", DependencyList = "Switch2;   Switch1; ", DependencyType = DependencyType.Required)]
             public Boolean Switch3 { get; set; }
         }
 
         [ParametersGroup]
         private class TestClassOptionDependencyProperties
         {
-            [OptionParameter(SolidLabel = "pw", Dependencies = "Username")]
+            [OptionParameter(SolidLabel = "pw", DependencyList = "Username")]
             public String Password { get; set; }
-            [OptionParameter(SolidLabel = "un", Dependencies = "Password")]
+            [OptionParameter(SolidLabel = "un", DependencyList = "Password")]
             public String Username { get; set; }
         }
 
         [ParametersGroup]
         private class TestClassWrongDependencyProperties
         {
-            [SwitchParameter(SolidLabel = "swtA", Dependencies = "swtB")]
+            [SwitchParameter(SolidLabel = "swtA", DependencyList = "swtB, swtC, Switch4")]
             public Boolean Switch1 { get; set; }
-            [SwitchParameter(SolidLabel = "swtB", Dependencies = "swtA")]
+            [SwitchParameter(SolidLabel = "swtB", DependencyList = "swtA")]
             public Boolean Switch2 { get; set; }
+            [SwitchParameter(SolidLabel = "swtC", DependencyList = "swtA, Switch4")]
+            public Boolean Switch3 { get; set; }
+            [SwitchParameter(SolidLabel = "swtD", DependencyList = "swtA")]
+            public Boolean Switch4 { get; set; }
         }
 
         private static ArgumentProcessorProcessHelper[] DependencyArgumentsTestData = new ArgumentProcessorProcessHelper[]
@@ -318,16 +323,16 @@ namespace Plexdata.ArgumentParser.Tests
             [SwitchParameter(SolidLabel = "console", BriefLabel = "c")]
             public Boolean Console { get; set; }
 
-            [OptionParameter(SolidLabel = "password", BriefLabel = "p", Dependencies = "Username")]
+            [OptionParameter(SolidLabel = "password", BriefLabel = "p", DependencyList = "Username")]
             public String Password { get; set; }
 
-            [OptionParameter(SolidLabel = "username", BriefLabel = "u", Dependencies = "Password")]
+            [OptionParameter(SolidLabel = "username", BriefLabel = "u", DependencyList = "Password")]
             public String Username { get; set; }
 
-            [SwitchParameter(SolidLabel = "fork", BriefLabel = "f", Dependencies = "LogFile")]
+            [SwitchParameter(SolidLabel = "fork", BriefLabel = "f", DependencyList = "LogFile")]
             public Boolean IsFork { get; set; }
 
-            [OptionParameter(SolidLabel = "logfile", BriefLabel = "l", Dependencies = "IsFork")]
+            [OptionParameter(SolidLabel = "logfile", BriefLabel = "l", DependencyList = "IsFork")]
             public String LogFile { get; set; }
 
             [VerbalParameter]
@@ -1826,10 +1831,10 @@ namespace Plexdata.ArgumentParser.Tests
         [ParametersGroup]
         private class TestClassImplicitDependencyAssignmentSingleSingle
         {
-            [OptionParameter(SolidLabel = "option1")]
+            [OptionParameter(SolidLabel = "option1", DependencyList = "Switch1", DependencyType = DependencyType.Required)]
             public String Option1 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch1")]
             public Boolean Switch1 { get; set; }
 
             public Boolean IsEqual(TestClassImplicitDependencyAssignmentSingleSingle other)
@@ -1884,10 +1889,10 @@ namespace Plexdata.ArgumentParser.Tests
             [OptionParameter(SolidLabel = "option1")]
             public String Option1 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch1", DependencyList = "Option1")]
             public Boolean Switch1 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch2", DependencyList = "Option1")]
             public Boolean Switch2 { get; set; }
 
             public Boolean IsEqual(TestClassImplicitDependencyAssignmentSingleDouble other)
@@ -1950,13 +1955,13 @@ namespace Plexdata.ArgumentParser.Tests
             [OptionParameter(SolidLabel = "option1")]
             public String Option1 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch1", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch1", DependencyList = "Option1")]
             public Boolean Switch1 { get; set; }
 
             [OptionParameter(SolidLabel = "option2")]
             public String Option2 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option2")]
+            [SwitchParameter(SolidLabel = "switch2", DependencyList = "Option2")]
             public Boolean Switch2 { get; set; }
 
             public Boolean IsEqual(TestClassImplicitDependencyAssignmentDoubleSingle other)
@@ -2030,16 +2035,16 @@ namespace Plexdata.ArgumentParser.Tests
             [OptionParameter(SolidLabel = "option1")]
             public String Option1 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch1a", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch1a", DependencyList = "Option1")]
             public Boolean Switch1A { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch1b", Dependencies = "Option1")]
+            [SwitchParameter(SolidLabel = "switch1b", DependencyList = "Option1")]
             public Boolean Switch1B { get; set; }
 
             [OptionParameter(SolidLabel = "option2")]
             public String Option2 { get; set; }
 
-            [SwitchParameter(SolidLabel = "switch2", Dependencies = "Option2")]
+            [SwitchParameter(SolidLabel = "switch2", DependencyList = "Option2")]
             public Boolean Switch2 { get; set; }
 
             public Boolean IsEqual(TestClassImplicitDependencyAssignmentDoubleDouble other)
@@ -2140,6 +2145,464 @@ namespace Plexdata.ArgumentParser.Tests
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
             TestClassImplicitDependencyAssignmentDoubleDouble expected = testHelper.Expected as TestClassImplicitDependencyAssignmentDoubleDouble;
             TestClassImplicitDependencyAssignmentDoubleDouble actual = new TestClassImplicitDependencyAssignmentDoubleDouble();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalRequiredImplicitStrong
+        {
+            [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Optional)]
+            public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+
+            [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+            [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+
+            public Boolean IsEqual(Object other)
+            {
+                if (other == null)
+                {
+                    throw new ArgumentNullException(nameof(other));
+                }
+
+                if (other.GetType() != this.GetType())
+                {
+                    throw new NotSupportedException($"Type of {nameof(other)} is different from {this.GetType()}");
+                }
+
+                dynamic result = Convert.ChangeType(other, this.GetType());
+
+                return
+                    this.Filename == result.Filename &&
+                    this.Operation == result.Operation &&
+                    this.Execution == result.Execution;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--execution", "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value", "--execution", "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitStrongInvalid))]
+        public void Process_TestDataOptionalRequiredImplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredImplicitStrong actual = new TestClassOptionalRequiredImplicitStrong();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongValid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredImplicitStrong { Filename = "file-name.ext", Operation = "operation-value", Execution = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value" },
+                Expected = new TestClassOptionalRequiredImplicitStrong { Filename = "file-name.ext", Operation = null, Execution = "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredImplicitStrong { Filename = "file-name.ext", Operation = "operation-value", Execution = "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitStrongValid))]
+        public void Process_TestDataOptionalRequiredImplicitStrongValid_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredImplicitStrong expected = testHelper.Expected as TestClassOptionalRequiredImplicitStrong;
+            TestClassOptionalRequiredImplicitStrong actual = new TestClassOptionalRequiredImplicitStrong();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalRequiredImplicitWeak
+        {
+            [OptionParameter(SolidLabel = "file-name")]
+            public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+
+            [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+            [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+
+            public Boolean IsEqual(Object other)
+            {
+                if (other == null)
+                {
+                    throw new ArgumentNullException(nameof(other));
+                }
+
+                if (other.GetType() != this.GetType())
+                {
+                    throw new NotSupportedException($"Type of {nameof(other)} is different from {this.GetType()}");
+                }
+
+                dynamic result = Convert.ChangeType(other, this.GetType());
+
+                return
+                    this.Filename == result.Filename &&
+                    this.Operation == result.Operation &&
+                    this.Execution == result.Execution;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--execution", "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value", "--execution", "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitWeakInvalid))]
+        public void Process_TestDataOptionalRequiredImplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredImplicitWeak actual = new TestClassOptionalRequiredImplicitWeak();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakValid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext" },
+                Expected = new TestClassOptionalRequiredImplicitWeak { Filename = "file-name.ext", Operation = null, Execution = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredImplicitWeak { Filename = "file-name.ext", Operation = "operation-value", Execution = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value" },
+                Expected = new TestClassOptionalRequiredImplicitWeak { Filename = "file-name.ext", Operation = null, Execution = "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredImplicitWeak { Filename = "file-name.ext", Operation = "operation-value", Execution = "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitWeakValid))]
+        public void Process_TestDataOptionalRequiredImplicitWeakValid_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredImplicitWeak expected = testHelper.Expected as TestClassOptionalRequiredImplicitWeak;
+            TestClassOptionalRequiredImplicitWeak actual = new TestClassOptionalRequiredImplicitWeak();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalRequiredExplicitStrong
+        {
+            [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
+            public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+
+            [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
+            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+            [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
+            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+
+            public Boolean IsEqual(Object other)
+            {
+                if (other == null)
+                {
+                    throw new ArgumentNullException(nameof(other));
+                }
+
+                if (other.GetType() != this.GetType())
+                {
+                    throw new NotSupportedException($"Type of {nameof(other)} is different from {this.GetType()}");
+                }
+
+                dynamic result = Convert.ChangeType(other, this.GetType());
+
+                return
+                    this.Filename == result.Filename &&
+                    this.Operation == result.Operation &&
+                    this.Execution == result.Execution;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--execution", "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value", "--execution", "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--operation", "operation-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitStrongInvalid))]
+        public void Process_TestDataOptionalRequiredExplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredExplicitStrong actual = new TestClassOptionalRequiredExplicitStrong();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongValid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredExplicitStrong { Filename = "file-name.ext", Operation = "operation-value", Execution = "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitStrongValid))]
+        public void Process_TestDataOptionalRequiredExplicitStrongValid_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredExplicitStrong expected = testHelper.Expected as TestClassOptionalRequiredExplicitStrong;
+            TestClassOptionalRequiredExplicitStrong actual = new TestClassOptionalRequiredExplicitStrong();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalRequiredExplicitWeak
+        {
+            [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
+            public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+
+            [OptionParameter(SolidLabel = "operation")]
+            public String Operation { get; set; } // 'Operation' can be used without 'Filename'.
+
+            [OptionParameter(SolidLabel = "execution")]
+            public String Execution { get; set; } // 'Execution' can be used without 'Filename'.
+
+            public Boolean IsEqual(Object other)
+            {
+                if (other == null)
+                {
+                    throw new ArgumentNullException(nameof(other));
+                }
+
+                if (other.GetType() != this.GetType())
+                {
+                    throw new NotSupportedException($"Type of {nameof(other)} is different from {this.GetType()}");
+                }
+
+                dynamic result = Convert.ChangeType(other, this.GetType());
+
+                return
+                    this.Filename == result.Filename &&
+                    this.Operation == result.Operation &&
+                    this.Execution == result.Execution;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--operation", "operation-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitWeakInvalid))]
+        public void Process_TestDataOptionalRequiredExplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredExplicitWeak actual = new TestClassOptionalRequiredExplicitWeak();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakValid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredExplicitWeak { Filename = null, Operation = "operation-value", Execution = null },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--execution", "execution-value" },
+                Expected = new TestClassOptionalRequiredExplicitWeak { Filename = null, Operation = null, Execution = "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--operation", "operation-value", "--execution", "execution-value" },
+                Expected = new TestClassOptionalRequiredExplicitWeak { Filename = null, Operation = "operation-value", Execution = "execution-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--file-name", "file-name.ext", "--execution", "execution-value", "--operation", "operation-value" },
+                Expected = new TestClassOptionalRequiredExplicitWeak { Filename = "file-name.ext", Operation = "operation-value", Execution = "execution-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitWeakValid))]
+        public void Process_TestDataOptionalRequiredExplicitWeakValid_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredExplicitWeak expected = testHelper.Expected as TestClassOptionalRequiredExplicitWeak;
+            TestClassOptionalRequiredExplicitWeak actual = new TestClassOptionalRequiredExplicitWeak();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            processor.Process();
+
+            Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalRequiredCrossing
+        {
+            [OptionParameter(SolidLabel = "password", DependencyList = "Username", DependencyType = DependencyType.Required)]
+            public String Password { get; set; } // 'Password' depends on 'Username'.
+
+            [OptionParameter(SolidLabel = "username", DependencyList = "Password", DependencyType = DependencyType.Required)]
+            public String Username { get; set; } // 'Username' depends on 'Password'.
+
+            public Boolean IsEqual(Object other)
+            {
+                if (other == null)
+                {
+                    throw new ArgumentNullException(nameof(other));
+                }
+
+                if (other.GetType() != this.GetType())
+                {
+                    throw new NotSupportedException($"Type of {nameof(other)} is different from {this.GetType()}");
+                }
+
+                dynamic result = Convert.ChangeType(other, this.GetType());
+
+                return
+                    this.Password == result.Password &&
+                    this.Username == result.Username;
+            }
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredCrossingInvalid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--password", "password-value" },
+            },
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--username", "username-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredCrossingInvalid))]
+        public void Process_TestDataOptionalRequiredCrossingInvalid_ThrowsDependentViolationException(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredCrossing actual = new TestClassOptionalRequiredCrossing();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
+            Assert.Throws<DependentViolationException>(() => { processor.Process(); });
+        }
+
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredCrossingValid = new ArgumentProcessorProcessHelper[]
+        {
+            new ArgumentProcessorProcessHelper
+            {
+                Arguments = new String[] { "--password", "password-value", "--username", "username-value" },
+                Expected = new TestClassOptionalRequiredCrossing { Password = "password-value", Username = "username-value" },
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(TestDataOptionalRequiredCrossingValid))]
+        public void Process_TestDataOptionalRequiredCrossingValid_ResultIsEqual(Object testObject)
+        {
+            ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
+            TestClassOptionalRequiredCrossing expected = testHelper.Expected as TestClassOptionalRequiredCrossing;
+            TestClassOptionalRequiredCrossing actual = new TestClassOptionalRequiredCrossing();
 
             ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
             processor.Process();

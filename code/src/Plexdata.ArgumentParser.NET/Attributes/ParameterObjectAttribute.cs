@@ -54,6 +54,7 @@ namespace Plexdata.ArgumentParser.Attributes
         {
             this.IsRequired = false;
             this.IsExclusive = false;
+            this.DependencyType = DependencyType.Optional;
         }
 
         #endregion
@@ -168,7 +169,7 @@ namespace Plexdata.ArgumentParser.Attributes
 
         /// <summary>
         /// True, if this parameter is required. Otherwise this parameter is treated as 
-        /// optional parameter. The default value is false.
+        /// optional parameter. The default value is <c>false</c>.
         /// </summary>
         public Boolean IsRequired
         {
@@ -179,12 +180,23 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// True, if this parameter is used exclusively. Exclusive parameters cannot be 
         /// used along with other parameters. Otherwise this parameter is treated as a 
-        /// non-exclusive parameter. The default value is false.
+        /// non-exclusive parameter. The default value is <c>false</c>.
         /// </summary>
         public Boolean IsExclusive
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// This property is no longer supported and will be removed in later 
+        /// versions! Use property <see cref="DependencyList"/> instead.
+        /// </summary>
+        [Obsolete("Property is no longer supported and will be removed in later versions! Use property \"DependencyList\" instead.")]
+        public String Dependencies
+        {
+            get { return this.DependencyList; }
+            set { this.DependencyList = value; }
         }
 
         /// <summary>
@@ -194,7 +206,7 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <remarks>
         /// Actually, it is possible to use one of the allowed dependency separators.
         /// </remarks>
-        public String Dependencies
+        public String DependencyList
         {
             get
             {
@@ -207,11 +219,20 @@ namespace Plexdata.ArgumentParser.Attributes
         }
 
         /// <summary>
+        /// The type of the dependencies that are referenced by property <see cref="DependencyList"/>.
+        /// The default value is <c>Optional</c>.
+        /// </summary>
+        public DependencyType DependencyType
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// Convenient getter to determine if the dependency feature is used or not.
         /// </summary>
         public Boolean IsDependencies
         {
-            get { return !String.IsNullOrWhiteSpace(this.Dependencies); }
+            get { return !String.IsNullOrWhiteSpace(this.DependencyList); }
         }
 
         #endregion
@@ -277,7 +298,7 @@ namespace Plexdata.ArgumentParser.Attributes
         {
             if (this.IsDependencies)
             {
-                return this.Dependencies.Split(DependencySeparators.AllowedSeparators, StringSplitOptions.RemoveEmptyEntries);
+                return this.DependencyList.Split(DependencySeparators.AllowedSeparators, StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
@@ -334,21 +355,22 @@ namespace Plexdata.ArgumentParser.Attributes
 
             if (this.IsSolidLabel)
             {
-                result.Append($"SolidLabel: {this.SolidLabel}, ");
+                result.Append($"{nameof(this.SolidLabel)}: {this.SolidLabel}, ");
             }
 
             if (this.IsBriefLabel)
             {
-                result.Append($"BriefLabel: {this.BriefLabel}, ");
+                result.Append($"{nameof(this.BriefLabel)}: {this.BriefLabel}, ");
             }
 
-            result.Append($"Required: {this.IsRequired}, ");
+            result.Append($"{nameof(this.IsRequired)}: {this.IsRequired}, ");
 
-            result.Append($"Exclusive: {this.IsExclusive}, ");
+            result.Append($"{nameof(this.IsExclusive)}: {this.IsExclusive}, ");
 
             if (this.IsDependencies)
             {
-                result.Append($"Dependencies: {this.Dependencies}, ");
+                result.Append($"{nameof(this.DependencyType)}: {this.DependencyType}, ");
+                result.Append($"{nameof(this.DependencyList)}: {this.DependencyList}, ");
             }
 
             if (result.Length >= 2)

@@ -6,6 +6,10 @@ Best way to build the whole project is to use _Visual Studio 2017 Community_. Th
 
 The help file with the whole API documentation is not yet available.
 
+## Breaking Changes
+
+The property ``Dependencies`` of class ``ParameterObjectAttribute`` has been marked as obsolete and is no longer supported!
+
 ## Trouble Shooting
 
 Nothing known at the moment.

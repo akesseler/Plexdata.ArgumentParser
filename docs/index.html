@@ -9,7 +9,7 @@ body {
 }
 .navbar {
     height: 100%;
-    width: 165px;
+    width: 190px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -18,8 +18,12 @@ body {
     overflow-x: hidden;
     padding-top: 20px;
 }
+.navbar .navsub {
+    font-size: 1.2em;
+    margin-left: 1em;
+}
 .navbar a {
-    padding: 6px 8px 6px 16px;
+    padding: 3px 8px 3px 16px;
     text-decoration: none;
     font-size: 1.6em;
     color: #818181;
@@ -29,7 +33,7 @@ body {
     color: #F1F1F1;
 }
 .content {
-    margin-left: 165px;
+    margin-left: 190px;
     font-size: 1.4em;
     padding: 10px 50px;
 }
@@ -63,6 +67,12 @@ th, td {
 tbody tr:nth-child(odd){
     background-color: #FCFCFC;
 }
+p a {
+    text-decoration: none;
+}
+p a:hover {
+    text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -71,7 +81,18 @@ tbody tr:nth-child(odd){
   <a href="#licensing">Licensing</a>
   <a href="#installation">Installation</a>
   <a href="#declaration">Declaration</a>
+    <a href="#declaration-switch" class="navsub">Switch</a>
+    <a href="#declaration-option" class="navsub">Option</a>
+    <a href="#declaration-verbal" class="navsub">Verbal</a>
   <a href="#usage">Usage</a>
+    <a href="#usage-switch" class="navsub">Switch</a>
+    <a href="#usage-option" class="navsub">Option</a>
+    <a href="#usage-verbal" class="navsub">Verbal</a>
+    <a href="#usage-parsing" class="navsub">Parsing</a>
+  <a href="#dependencies">Dependencies</a>
+    <a href="#dependencies-explicit" class="navsub">Explicit</h3>
+    <a href="#dependencies-implicit" class="navsub">Implicit</h3>
+    <a href="#dependencies-crossing" class="navsub">Crossing</h3>
   <a href="#help">Help</a>
   <a href="#limitation">Limitation</a>
 </div>
@@ -183,17 +204,17 @@ types are called <i>Switch</i>, <i>Option</i> and <i>Verbal</i> arguments.
 <p>
 <i>Switches</i> are command line arguments that either can be &ldquo;on&rdquo; or &ldquo;off&rdquo;. In other 
 words, <i>Switches</i> represent some kind of <i>Boolean</i> type. One typical representative of this type of 
-command line argument is for example the argument <code>--verbose</code>. A command line argument class can 
-have multiple <i>Switch</i> types.
+command line argument is for example the argument <code>&#8209;&#8209;verbose</code>. A command line argument 
+class can have multiple <i>Switch</i> types.
 </p>
 
 <h3 id="declaration-option">Option</h3>
 
 <p>
 <i>Options</i> are command line arguments that include additional information. Such kind of command line argument 
-is for example the argument <code>--username</code>, because of this argument type requires that a username has to 
-be specified. Otherwise a logon can&rsquo;t be performed for instance. A command line argument class can have multiple 
-<i>Option</i> types.
+is for example the argument <code>&#8209;&#8209;username</code>, because of this argument type requires that a user 
+name has to be specified. Otherwise a login can&rsquo;t be performed for instance. A command line argument class can 
+have multiple <i>Option</i> types.
 </p>
 
 <h3 id="declaration-verbal">Verbal</h3>
@@ -257,14 +278,14 @@ demonstrated below.
 <pre><code>[ParametersGroup]
 class CmdLineArgs
 {
-    [OptionParameter(SolidLabel = "password", Dependencies = "Username")]
+    [OptionParameter(SolidLabel = "password", DependencyList = "Username")]
     public String Password { get; set; }
 
-    [OptionParameter(SolidLabel = "username", Dependencies = "Password")]
+    [OptionParameter(SolidLabel = "username", DependencyList = "Password")]
     public String Username { get; set; }
 }</code></pre>
 <p>
-As shown above, each of the <i>Option</i> attributes include a <i>Dependencies</i> tag. Task of this tag 
+As shown above, each of the <i>Option</i> attributes include a <i>DependencyList</i> tag. Task of this tag 
 is to ensure that each of the command line arguments tagged this way are provided when a program is called.
 </p>
 <p>
@@ -324,6 +345,161 @@ command line arguments as shown below.
 <p>
 As shown above, it is strictly recommended to surround any call to the command line parser by a 
 <code>try&hellip;catch</code> block.
+</p>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<p>
+This feature allows making an argument depends on another argument or a list of arguments. At the 
+moment there exist three types of dependencies; explicit, implicit and crossing dependencies. This section 
+wants to clarify how to use the dependency feature of the <i>Plexdata Argument Parser</i>.
+</p>
+<p>
+At this point it is important to know, the parameter <code>DependencyList</code> of any of the attributes 
+always takes a list property names! The parameter <code>DependencyList</code> does neither accept the 
+<code>SolidLabel</code> nor the <code>BriefLabel</code> as value.
+</p>
+
+<h3 id="dependencies-explicit">Explicit Dependency</h3>
+
+<p>
+The term of an <i>Explicit Dependency</i> means that one argument depends on another argument or a list of arguments. 
+A good example of this kind of dependency is the argument combination of <code>&#8209;&#8209;file&#8209;name</code>, 
+<code>&#8209;&#8209;operation</code> and <code>&#8209;&#8209;execution</code>. In other words, the argument 
+<code>&#8209;&#8209;file&#8209;name</code> requires the type of operation as well as the type of execution, 
+but not the other way round.
+</p>
+
+<h4 id="dependencies-explicit-strong">Strong Explicit Dependency</h4>
+
+<p>
+The <i>Strong Explicit Dependency</i> means in detail that all referenced arguments are required to satisfy 
+the needs of the source argument. The other way round, the <i>Strong Explicit Dependency</i> combines all referenced 
+arguments with an AND operation. How to configure such kind of dependency is shown in code snippet below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
+    public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+
+    [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
+    public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+    [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
+    public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+}</code></pre>
+<p>
+With the above class in mind, a program execution will only be possible like shown as follows.
+</p>
+<pre><code>$&gt; program.exe --file-name file-name.ext --execution execution-value --operation operation-value</code></pre>
+
+<h4 id="dependencies-explicit-weak">Weak Explicit Dependency</h4>
+
+<p>
+The <i>Weak Explicit Dependency</i> combines all referenced arguments with an AND operation as well. But in 
+contrast to the <i>Strong Explicit Dependency</i>, the <i>Weak Explicit Dependency</i> allows a usage of the 
+referenced arguments independently of the source argument. How to configure this kind of dependency is shown 
+in code snippet below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
+    public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+
+    [OptionParameter(SolidLabel = "operation")]
+    public String Operation { get; set; } // 'Operation' can be used without 'Filename'.
+
+    [OptionParameter(SolidLabel = "execution")]
+    public String Execution { get; set; } // 'Execution' can be used without 'Filename'.
+}</code></pre>
+<p>
+With the above class in mind, a program execution will be possible like shown below.
+</p>
+<pre><code>$&gt; program.exe --operation operation-value
+$&gt; program.exe --execution execution-value
+$&gt; program.exe --operation operation-value --execution execution-value
+$&gt; program.exe --file-name file-name.ext --execution execution-value --operation operation-value</code></pre>
+
+<h3 id="dependencies-implicit">Implicit Dependency</h3>
+
+<p>
+The term of an <i>Implicit Dependency</i> also means that one argument depends on another argument or a list of 
+arguments. But in contrast to an <i>Explicit Dependency</i> relation, an <i>Implicit Dependency</i> turns around 
+the referencing direction. This in fact makes it possible to combine the source argument with its dependent 
+arguments by an OR operation. The same example as above can be used right here as well to show how this kind 
+of dependency works.
+</p>
+
+<h4 id="dependencies-implicit-strong">Strong Implicit Dependency</h4>
+
+<p>
+The <i>Strong Implicit Dependency</i> means in detail that only a subset of all referenced arguments is required 
+to satisfy the needs of the source argument. As mentioned above, the <i>Strong Implicit Dependency</i> combines all 
+referenced arguments with an OR operation. How to configure such kind of dependency is shown in code snippet below.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Optional)]
+    public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+
+    [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+    public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+    [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+    public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+}</code></pre>
+<p>
+With the above class in mind, a program execution will be possible as shown here.
+</p>
+<pre><code>$&gt; program.exe --file-namefile-name.ext --operation operation-value
+$&gt; program.exe --file-name file-name.ext --execution execution-value
+$&gt; program.exe --file-name file-name.ext --execution execution-value --operation operation-value</code></pre>
+
+<h4 id="dependencies-implicit-weak">Weak Implicit Dependency</h4>
+
+<p>
+Some readers may already guess, the difference between a <i>Strong Implicit Dependency</i> and the <i>Weak Implicit Dependency</i> 
+is that an independent usage of the referenced arguments becomes possible. No, unfortunately not! 
+</p>
+<p>
+But it becomes possible to use the source argument (<code>&#8209;&#8209;file&#8209;name</code> in the example above) without 
+of any of the referenced arguments. See following code snippet for an example of how to configure this kind of dependency.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "file-name")]
+    public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+
+    [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+    public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+
+    [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
+    public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+}</code></pre>
+<p>
+With the above class in mind, a program execution will be possible as shown here.
+</p>
+<pre><code>$&gt; program.exe --file-name file-name.ext 
+$&gt; program.exe --file-name file-name.ext --operation operation-value 
+$&gt; program.exe --file-name file-name.ext --execution execution-value 
+$&gt; program.exe --file-name file-name.ext --execution execution-value --operation operation-value</code></pre>
+
+<h3 id="dependencies-crossing">Crossing Dependency</h3>
+
+<p>
+The term of a <i>Crossing Dependency</i> does actually mean that one argument depends on another argument and vice 
+versa. A good example of this kind of dependency is the argument combination of <code>&#8209;&#8209;username</code> 
+and <code>&#8209;&#8209;password</code>, because a user name does not make any sense without having a password.
+</p>
+<p>
+How to configure such kind of dependency is shown in the example in section <a href="#usage-option">Option</a>. 
+Therefore, there is no need to explain it again right here. The only thing to mention in this section is that a 
+cross reference is already applied by using the reference name of one property within the list of dependencies 
+of the other property, and vice versa.
 </p>
 
 <h2 id="help">Help</h2>

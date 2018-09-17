@@ -23,6 +23,7 @@
  */
 
 using Plexdata.ArgumentParser.Attributes;
+using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Converters;
 using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
@@ -319,8 +320,7 @@ namespace Plexdata.ArgumentParser.Processors
 
                 this.ValidateExclusiveProperties(processed);
                 this.ValidateRequiredProperties(processed);
-                this.ValidateExplicitDependentProperties(processed);
-                this.ValidateImplicitDependentProperties(processed);
+                this.ValidateDependencyProperties(processed);
             }
             catch (Exception exception)
             {
@@ -367,6 +367,18 @@ namespace Plexdata.ArgumentParser.Processors
             return false;
         }
 
+        private IEnumerable<ArgumentProcessorSetting> TryGetReferencedItems(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, out IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            // Get list of dependencies...
+            String[] affected = source.Attribute.GetDependencies();
+
+            // Apply all affected dependencies from overall settings.
+            overall = this.Settings.Where(x => affected.Contains(x.Property.Name));
+
+            // Filter out all currently available dependencies and return them.
+            return others.Where(x => affected.Contains(x.Property.Name));
+        }
+
         private void ValidateExclusiveProperties(List<ArgumentProcessorSetting> processed)
         {
             foreach (ArgumentProcessorSetting current in processed)
@@ -400,170 +412,68 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
-        /// <summary>
-        /// This method performs an explicit validation of dependent properties.
-        /// </summary>
-        /// <param name="processed">
-        /// The list of items to be validated.
-        /// </param>
-        /// <exception cref="DependentViolationException">
-        /// At least one of the required dependencies was not satisfied.
-        /// </exception>
-        private void ValidateExplicitDependentProperties(List<ArgumentProcessorSetting> processed)
+        private void ValidateDependencyProperties(List<ArgumentProcessorSetting> processed)
         {
             if (processed.Any())
             {
-                foreach (ArgumentProcessorSetting current in processed)
+                foreach (ArgumentProcessorSetting source in processed)
                 {
-                    if (current.Attribute.IsDependencies)
+                    if (!source.Attribute.IsDependencies) { continue; }
+
+                    // TODO: Self reference check...
+
+                    this.ValidateReferencedProperties(source);
+
+                    IEnumerable<ArgumentProcessorSetting> others = this.TryGetReferencedItems(source,
+                        processed.Where(x => x.Property.Name != source.Property.Name),
+                        out IEnumerable<ArgumentProcessorSetting> overall);
+
+                    if (source.Attribute.DependencyType == DependencyType.Optional)
                     {
-                        // Get list of dependencies for currently affected item.
-                        String[] dependencies = current.Attribute.GetDependencies();
-
-                        // Filter out current item and get a new list of properties to be checked.
-                        var affected = processed.Where(x => x.Property.Name != current.Property.Name).ToList();
-
-                        // Now we have to find all properties contained in the 
-                        // dependency list that are still in the affected list.
-                        var results = affected.Where(x => dependencies.Contains(x.Property.Name)).ToList();
-
-                        if (results.Count != dependencies.Length)
-                        {
-                            List<String> present = results.Select(x => x.Property.Name).ToList();
-                            List<String> missing = dependencies.Where(x => !present.Contains(x)).ToList();
-
-                            String format = String.Empty;
-
-                            if (missing.Count == 1)
-                            {
-                                format = "Parameter \"{0}\" depends on parameter {1}.";
-                            }
-                            else
-                            {
-                                format = "Parameter \"{0}\" depends on parameters {1}.";
-                            }
-
-                            String value0 = current.ToParameterLabel();
-                            String value1 = String.Empty;
-
-                            foreach (String search in missing)
-                            {
-                                ArgumentProcessorSetting setting = this.Settings.FirstOrDefault(x => x.Property.Name == search);
-
-                                if (setting == null)
-                                {
-                                    throw new DependentViolationException($"The dependency name \"{search}\" could not be verified as property name.");
-                                }
-
-                                value1 += String.Format("\"{0}\", ", setting.ToParameterLabel());
-                            }
-
-                            value1 = value1.Trim();
-                            value1 = value1.Remove(value1.Length - 1);
-
-                            throw new DependentViolationException(String.Format(format, value0, value1));
-                        }
+                        this.ValidateOptionalDependencies(source, others, overall);
+                    }
+                    else if (source.Attribute.DependencyType == DependencyType.Required)
+                    {
+                        this.ValidateRequiredDependencies(source, others, overall);
+                    }
+                    else
+                    {
+                        throw new SupportViolationException(
+                            $"A value of {(Int32)source.Attribute.DependencyType} used for " +
+                            $"property {source.Property.Name} is not supported as dependency type.");
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// This method performs an implicit validation of dependent properties.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Implicit means that a one property explicitly depends on another property 
-        /// but this explicit parameter is missing in the argument list. 
-        /// </para>
-        /// <para>
-        /// Imagine a class like this:
-        /// </para>
-        /// <code>
-        /// class Arguments
-        /// {
-        ///     [OptionParameter(SolidLabel = "config")]
-        ///     public String Config { get; set; }
-        ///     [SwitchParameter(SolidLabel = "export", Dependencies = "Config")]
-        ///     public Boolean IsExport { get; set; }
-        ///     [SwitchParameter(SolidLabel = "create", Dependencies = "Config")]
-        ///     public Boolean IsCreate { get; set; }
-        /// }
-        /// </code>
-        /// <para>
-        /// Also imagine a list of given command line argument like this:
-        /// </para>
-        /// <code>
-        /// $> program.exe --config config-file.ext
-        /// </code>
-        /// <para>
-        /// Actually, this will not cause any kind of trouble, but...
-        /// </para>
-        /// <para>
-        /// ...the the program does not know if "execute" mode or "create" mode was wanted 
-        /// by the user (because of both properties are false by default).
-        /// </para>
-        /// <para>
-        /// This is the actual problem and fixing this challenge is task of this method.
-        /// </para>
-        /// </remarks>
-        /// <param name="processed">
-        /// The list of items to be validated.
-        /// </param>
-        /// <exception cref="DependentViolationException">
-        /// At least one of the required dependencies was not satisfied.
-        /// </exception>
-        private void ValidateImplicitDependentProperties(List<ArgumentProcessorSetting> processed)
+        private void ValidateReferencedProperties(ArgumentProcessorSetting source)
         {
-            if (processed.Any() && this.Settings.Any())
+            IEnumerable<String> candidates = source.Attribute.GetDependencies();
+            IEnumerable<String> properties = this.Settings.Where(x => candidates.Contains(x.Property.Name)).Select(x => x.Property.Name);
+
+            if (candidates.Count() != properties.Count())
             {
-                String current = null;
-                List<String> missing = new List<String>();
+                String[] missings = candidates.Except(properties).ToArray();
 
-                foreach (ArgumentProcessorSetting source in processed)
-                {
-                    current = $"\"{source.ToParameterLabel()}\"";
-                    missing.Clear();
+                String s = missings.Length > 1 ? "s" : String.Empty;
 
-                    // Filter out all potential candidates.
-                    IEnumerable<ArgumentProcessorSetting> candidates = this.Settings.Where(x => x.Property.Name != source.Property.Name);
+                throw new DependentViolationException($"Unable to confirm dependency name{s} {String.Join(" and ", missings.Select(x => $"\"{x}\""))} as property name{s}.");
+            }
+        }
 
-                    foreach (ArgumentProcessorSetting candidate in candidates)
-                    {
-                        // Try finding any dependency for current candidate.
-                        IEnumerable<String> dependencies = candidate.Attribute.GetDependencies().Where(x => x == source.Property.Name);
+        private void ValidateOptionalDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            if (overall.Any() && !others.Any())
+            {
+                throw new DependentViolationException($"Parameter \"{source.ToParameterLabel()}\" depends on {String.Join(" or ", overall.Select(x => $"\"{x.ToParameterLabel()}\""))}.");
+            }
+        }
 
-                        // Nothing found? Well then there will probably be no dependence!
-                        if (!dependencies.Any()) { continue; }
-
-                        // Search for current candidate within all applied arguments.
-                        Boolean satisfied = processed.Where(x => x.Property.Name == candidate.Property.Name).Any();
-
-                        // Has been found? Well the implicit dependence was probably satisfied!
-                        // NOTE: This way to handle it actually means an OR operation. An XOR 
-                        //       operation is not supported at the moment.
-                        if (satisfied)
-                        {
-                            missing.Clear();
-                            break;
-                        }
-
-                        // Add this candidate to the list of probably missing arguments.
-                        missing.Add($"\"{candidate.ToParameterLabel()}\"");
-                    }
-
-                    if (missing.Count > 0) { break; }
-                }
-
-                if (missing.Count > 0)
-                {
-                    // At least one unsatisfied implicit dependency has been found if this piece of code is reached.
-                    String either = missing.Count() > 1 ? "either " : "";
-                    String suffix = missing.Count() > 1 ? "none of them has been " : "it was not ";
-                    String message = $"Argument {current} {either}depends on {String.Join(" or on ", missing)}, but {suffix}applied.";
-
-                    throw new DependentViolationException(message);
-                }
+        private void ValidateRequiredDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            if (overall.Count() != others.Count())
+            {
+                throw new DependentViolationException($"Parameter \"{source.ToParameterLabel()}\" requires {String.Join(" and ", overall.Select(x => $"\"{x.ToParameterLabel()}\""))}.");
             }
         }
 

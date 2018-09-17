@@ -6,6 +6,8 @@
 - Bugfix for the debug/default issue.
 - Implicit dependency check added.
 - Increasing the version number.
+- Properties ``DependencyList`` and ``DependencyType`` introduced.
+- Property ``Dependencies`` marked as obsolete.
 
 **1.0.0.11**
 
