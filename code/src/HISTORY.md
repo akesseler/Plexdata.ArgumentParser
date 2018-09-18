@@ -1,6 +1,16 @@
 
 
 
+**1.0.0.12**
+
+- Bugfix for the debug/default issue.
+- Implicit dependency check added.
+- Increasing the version number.
+- Properties ``DependencyList`` and ``DependencyType`` introduced.
+- Property ``Dependencies`` marked as obsolete.
+- Package release on nuget.org
+- Release file uploaded on github.com
+
 **1.0.0.11**
 
 - Upgrading to *.NET Framework v4.7.2*.

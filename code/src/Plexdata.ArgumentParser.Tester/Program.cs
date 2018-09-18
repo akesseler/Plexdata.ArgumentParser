@@ -50,10 +50,10 @@ namespace Plexdata.ArgumentParser.Tester
         [ParametersGroup]
         class CmdLineArgs
         {
-            [OptionParameter(SolidLabel = "password", Dependencies = "Username")]
+            [OptionParameter(SolidLabel = "password", DependencyList = "Username", DependencyType = DependencyType.Required)]
             public String Password { get; set; }
 
-            [OptionParameter(SolidLabel = "username", Dependencies = "Password")]
+            [OptionParameter(SolidLabel = "username", DependencyList = "Password", DependencyType = DependencyType.Required)]
             public String Username { get; set; }
         }
 

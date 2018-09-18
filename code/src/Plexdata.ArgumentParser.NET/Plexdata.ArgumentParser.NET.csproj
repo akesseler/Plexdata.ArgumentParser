@@ -50,6 +50,7 @@
     <Compile Include="Attributes\HelpSummaryAttribute.cs" />
     <Compile Include="Attributes\HelpUtilizeAttribute.cs" />
     <Compile Include="Constants\DependencySeparators.cs" />
+    <Compile Include="Constants\DependencyType.cs" />
     <Compile Include="Constants\Placeholders.cs" />
     <Compile Include="Exceptions\ArgumentParserException.cs" />
     <Compile Include="Exceptions\HelpGeneratorException.cs" />

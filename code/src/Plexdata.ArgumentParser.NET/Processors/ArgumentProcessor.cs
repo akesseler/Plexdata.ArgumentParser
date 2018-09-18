@@ -23,6 +23,7 @@
  */
 
 using Plexdata.ArgumentParser.Attributes;
+using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Converters;
 using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
@@ -224,8 +225,7 @@ namespace Plexdata.ArgumentParser.Processors
                     {
                         if (this.TryFindSetting(out setting))
                         {
-                            List<String> items = new List<String>();
-                            items.Add((String)OptionTypeConverter.Convert(parameter, typeof(String)));
+                            List<String> items = new List<String> { (String)OptionTypeConverter.Convert(parameter, typeof(String)) };
 
                             while (true)
                             {
@@ -320,7 +320,7 @@ namespace Plexdata.ArgumentParser.Processors
 
                 this.ValidateExclusiveProperties(processed);
                 this.ValidateRequiredProperties(processed);
-                this.ValidateDependentProperties(processed);
+                this.ValidateDependencyProperties(processed);
             }
             catch (Exception exception)
             {
@@ -356,12 +356,6 @@ namespace Plexdata.ArgumentParser.Processors
 
             foreach (ArgumentProcessorSetting current in this.Settings)
             {
-                // BUG: Checking labels only by "starts with" is actually not save enough.
-                //      If you have for example a class that exposes two properties, and one 
-                //      of them is tagged by an attribute that uses label "s1" and the other 
-                //      one is tagged by an attribute that uses label "s2", then you may get 
-                //      in trouble when a user tries parsing something like "-s1 -s2a". In 
-                //      such a case parameter "-s2a" will be treated as "-s2"!
                 if (current.Attribute.IsSolidLabelAndStartsWith(parameter) ||
                     current.Attribute.IsBriefLabelAndStartsWith(parameter))
                 {
@@ -371,6 +365,18 @@ namespace Plexdata.ArgumentParser.Processors
             }
 
             return false;
+        }
+
+        private IEnumerable<ArgumentProcessorSetting> TryGetReferencedItems(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, out IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            // Get list of dependencies...
+            String[] affected = source.Attribute.GetDependencies();
+
+            // Apply all affected dependencies from overall settings.
+            overall = this.Settings.Where(x => affected.Contains(x.Property.Name));
+
+            // Filter out all currently available dependencies and return them.
+            return others.Where(x => affected.Contains(x.Property.Name));
         }
 
         private void ValidateExclusiveProperties(List<ArgumentProcessorSetting> processed)
@@ -406,62 +412,68 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
-        private void ValidateDependentProperties(List<ArgumentProcessorSetting> processed)
+        private void ValidateDependencyProperties(List<ArgumentProcessorSetting> processed)
         {
             if (processed.Any())
             {
-                foreach (ArgumentProcessorSetting current in processed)
+                foreach (ArgumentProcessorSetting source in processed)
                 {
-                    if (current.Attribute.IsDependencies)
+                    if (!source.Attribute.IsDependencies) { continue; }
+
+                    // TODO: Self reference check...
+
+                    this.ValidateReferencedProperties(source);
+
+                    IEnumerable<ArgumentProcessorSetting> others = this.TryGetReferencedItems(source,
+                        processed.Where(x => x.Property.Name != source.Property.Name),
+                        out IEnumerable<ArgumentProcessorSetting> overall);
+
+                    if (source.Attribute.DependencyType == DependencyType.Optional)
                     {
-                        // Get list of dependencies for currently affected item.
-                        String[] dependencies = current.Attribute.GetDependencies();
-
-                        // Filter out current item and get a new list of properties to be checked.
-                        var affected = processed.Where(x => x.Property.Name != current.Property.Name).ToList();
-
-                        // Now we have to find all properties contained in the 
-                        // dependency list that are still in the affected list.
-                        var results = affected.Where(x => dependencies.Contains(x.Property.Name)).ToList();
-
-                        if (results.Count != dependencies.Length)
-                        {
-                            List<String> present = results.Select(x => x.Property.Name).ToList();
-                            List<String> missing = dependencies.Where(x => !present.Contains(x)).ToList();
-
-                            String format = String.Empty;
-
-                            if (missing.Count == 1)
-                            {
-                                format = "Parameter \"{0}\" depends on parameter {1}.";
-                            }
-                            else
-                            {
-                                format = "Parameter \"{0}\" depends on parameters {1}.";
-                            }
-
-                            String value0 = current.ToParameterLabel();
-                            String value1 = String.Empty;
-
-                            foreach (String search in missing)
-                            {
-                                ArgumentProcessorSetting setting = this.Settings.FirstOrDefault(x => x.Property.Name == search);
-
-                                if (setting == null)
-                                {
-                                    throw new DependentViolationException($"The dependency name \"{search}\" could not be verified as property name.");
-                                }
-
-                                value1 += String.Format("\"{0}\", ", setting.ToParameterLabel());
-                            }
-
-                            value1 = value1.Trim();
-                            value1 = value1.Remove(value1.Length - 1);
-
-                            throw new DependentViolationException(String.Format(format, value0, value1));
-                        }
+                        this.ValidateOptionalDependencies(source, others, overall);
+                    }
+                    else if (source.Attribute.DependencyType == DependencyType.Required)
+                    {
+                        this.ValidateRequiredDependencies(source, others, overall);
+                    }
+                    else
+                    {
+                        throw new SupportViolationException(
+                            $"A value of {(Int32)source.Attribute.DependencyType} used for " +
+                            $"property {source.Property.Name} is not supported as dependency type.");
                     }
                 }
+            }
+        }
+
+        private void ValidateReferencedProperties(ArgumentProcessorSetting source)
+        {
+            IEnumerable<String> candidates = source.Attribute.GetDependencies();
+            IEnumerable<String> properties = this.Settings.Where(x => candidates.Contains(x.Property.Name)).Select(x => x.Property.Name);
+
+            if (candidates.Count() != properties.Count())
+            {
+                String[] missings = candidates.Except(properties).ToArray();
+
+                String s = missings.Length > 1 ? "s" : String.Empty;
+
+                throw new DependentViolationException($"Unable to confirm dependency name{s} {String.Join(" and ", missings.Select(x => $"\"{x}\""))} as property name{s}.");
+            }
+        }
+
+        private void ValidateOptionalDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            if (overall.Any() && !others.Any())
+            {
+                throw new DependentViolationException($"Parameter \"{source.ToParameterLabel()}\" depends on {String.Join(" or ", overall.Select(x => $"\"{x.ToParameterLabel()}\""))}.");
+            }
+        }
+
+        private void ValidateRequiredDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
+        {
+            if (overall.Count() != others.Count())
+            {
+                throw new DependentViolationException($"Parameter \"{source.ToParameterLabel()}\" requires {String.Join(" and ", overall.Select(x => $"\"{x.ToParameterLabel()}\""))}.");
             }
         }
 
