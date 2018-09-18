@@ -2156,13 +2156,13 @@ namespace Plexdata.ArgumentParser.Tests
         private class TestClassOptionalRequiredImplicitStrong
         {
             [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Optional)]
-            public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+            public String Filename { get; set; }
 
             [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
-            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+            public String Operation { get; set; }
 
             [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
-            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+            public String Execution { get; set; }
 
             public Boolean IsEqual(Object other)
             {
@@ -2252,13 +2252,13 @@ namespace Plexdata.ArgumentParser.Tests
         private class TestClassOptionalRequiredImplicitWeak
         {
             [OptionParameter(SolidLabel = "file-name")]
-            public String Filename { get; set; } // 'Filename' depends on 'Operation' or 'Execution'.
+            public String Filename { get; set; }
 
             [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Required)]
-            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+            public String Operation { get; set; }
 
             [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Required)]
-            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+            public String Execution { get; set; }
 
             public Boolean IsEqual(Object other)
             {
@@ -2349,13 +2349,13 @@ namespace Plexdata.ArgumentParser.Tests
         private class TestClassOptionalRequiredExplicitStrong
         {
             [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
-            public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+            public String Filename { get; set; }
 
             [OptionParameter(SolidLabel = "operation", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
-            public String Operation { get; set; } // 'Operation' cannot be used without 'Filename'.
+            public String Operation { get; set; }
 
             [OptionParameter(SolidLabel = "execution", DependencyList = "Filename", DependencyType = DependencyType.Optional)]
-            public String Execution { get; set; } // 'Execution' cannot be used without 'Filename'.
+            public String Execution { get; set; }
 
             public Boolean IsEqual(Object other)
             {
@@ -2443,13 +2443,13 @@ namespace Plexdata.ArgumentParser.Tests
         private class TestClassOptionalRequiredExplicitWeak
         {
             [OptionParameter(SolidLabel = "file-name", DependencyList = "Operation, Execution", DependencyType = DependencyType.Required)]
-            public String Filename { get; set; } // 'Filename' depends on 'Operation' and 'Execution'.
+            public String Filename { get; set; }
 
             [OptionParameter(SolidLabel = "operation")]
-            public String Operation { get; set; } // 'Operation' can be used without 'Filename'.
+            public String Operation { get; set; }
 
             [OptionParameter(SolidLabel = "execution")]
-            public String Execution { get; set; } // 'Execution' can be used without 'Filename'.
+            public String Execution { get; set; }
 
             public Boolean IsEqual(Object other)
             {
@@ -2537,13 +2537,13 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [ParametersGroup]
-        private class TestClassOptionalRequiredCrossing
+        private class TestClassOptionalRequiredMutual
         {
             [OptionParameter(SolidLabel = "password", DependencyList = "Username", DependencyType = DependencyType.Required)]
-            public String Password { get; set; } // 'Password' depends on 'Username'.
+            public String Password { get; set; }
 
             [OptionParameter(SolidLabel = "username", DependencyList = "Password", DependencyType = DependencyType.Required)]
-            public String Username { get; set; } // 'Username' depends on 'Password'.
+            public String Username { get; set; }
 
             public Boolean IsEqual(Object other)
             {
@@ -2565,7 +2565,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredCrossingInvalid = new ArgumentProcessorProcessHelper[]
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2578,31 +2578,31 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredCrossingInvalid))]
-        public void Process_TestDataOptionalRequiredCrossingInvalid_ThrowsDependentViolationException(Object testObject)
+        [TestCaseSource(nameof(TestDataOptionalRequiredMutualInvalid))]
+        public void Process_TestDataOptionalRequiredMutualInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
-            TestClassOptionalRequiredCrossing actual = new TestClassOptionalRequiredCrossing();
+            TestClassOptionalRequiredMutual actual = new TestClassOptionalRequiredMutual();
             ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredCrossingValid = new ArgumentProcessorProcessHelper[]
+        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
                 Arguments = new String[] { "--password", "password-value", "--username", "username-value" },
-                Expected = new TestClassOptionalRequiredCrossing { Password = "password-value", Username = "username-value" },
+                Expected = new TestClassOptionalRequiredMutual { Password = "password-value", Username = "username-value" },
             },
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredCrossingValid))]
-        public void Process_TestDataOptionalRequiredCrossingValid_ResultIsEqual(Object testObject)
+        [TestCaseSource(nameof(TestDataOptionalRequiredMutualValid))]
+        public void Process_TestDataOptionalRequiredMutualValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
-            TestClassOptionalRequiredCrossing expected = testHelper.Expected as TestClassOptionalRequiredCrossing;
-            TestClassOptionalRequiredCrossing actual = new TestClassOptionalRequiredCrossing();
+            TestClassOptionalRequiredMutual expected = testHelper.Expected as TestClassOptionalRequiredMutual;
+            TestClassOptionalRequiredMutual actual = new TestClassOptionalRequiredMutual();
 
             ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, testHelper.Arguments);
             processor.Process();

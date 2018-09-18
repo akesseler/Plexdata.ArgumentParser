@@ -92,7 +92,7 @@ p a:hover {
   <a href="#dependencies">Dependencies</a>
     <a href="#dependencies-explicit" class="navsub">Explicit</h3>
     <a href="#dependencies-implicit" class="navsub">Implicit</h3>
-    <a href="#dependencies-crossing" class="navsub">Crossing</h3>
+    <a href="#dependencies-mutual" class="navsub">Mutual</h3>
   <a href="#help">Help</a>
   <a href="#limitation">Limitation</a>
 </div>
@@ -351,7 +351,7 @@ As shown above, it is strictly recommended to surround any call to the command l
 
 <p>
 This feature allows making an argument depends on another argument or a list of arguments. At the 
-moment there exist three types of dependencies; explicit, implicit and crossing dependencies. This section 
+moment there exist three types of dependencies; explicit, implicit and mutual dependencies. This section 
 wants to clarify how to use the dependency feature of the <i>Plexdata Argument Parser</i>.
 </p>
 <p>
@@ -488,10 +488,10 @@ $&gt; program.exe --file-name file-name.ext --operation operation-value
 $&gt; program.exe --file-name file-name.ext --execution execution-value 
 $&gt; program.exe --file-name file-name.ext --execution execution-value --operation operation-value</code></pre>
 
-<h3 id="dependencies-crossing">Crossing Dependency</h3>
+<h3 id="dependencies-mutual">Mutual Dependency</h3>
 
 <p>
-The term of a <i>Crossing Dependency</i> does actually mean that one argument depends on another argument and vice 
+The term of a <i>Mutual Dependency</i> does actually mean that one argument depends on another argument and vice 
 versa. A good example of this kind of dependency is the argument combination of <code>&#8209;&#8209;username</code> 
 and <code>&#8209;&#8209;password</code>, because a user name does not make any sense without having a password.
 </p>
