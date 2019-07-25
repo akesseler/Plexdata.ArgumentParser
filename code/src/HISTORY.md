@@ -1,5 +1,12 @@
 
-
+**1.0.1**
+- Minor changes.
+- Unneeded references removed.
+- Reduction of version number to three digits (BREAKING CHANGES).
+- Update of copyright year in each source file.
+- Section _Problem_ in chapter _Usage_ added showing a workaround for a parsing issue.
+- Package release on `nuget.org`.
+- Release file uploaded on `github.com`.
 
 **1.0.0.12**
 

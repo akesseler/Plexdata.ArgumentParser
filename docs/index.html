@@ -89,6 +89,7 @@ p a:hover {
     <a href="#usage-option" class="navsub">Option</a>
     <a href="#usage-verbal" class="navsub">Verbal</a>
     <a href="#usage-parsing" class="navsub">Parsing</a>
+    <a href="#usage-problem" class="navsub">Problem</a>
   <a href="#dependencies">Dependencies</a>
     <a href="#dependencies-explicit" class="navsub">Explicit</h3>
     <a href="#dependencies-implicit" class="navsub">Implicit</h3>
@@ -128,7 +129,7 @@ The software has been published under the terms of
 <h3>MIT License</h3>
 
 <p>
-Copyright &copy; 2018 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
+Copyright &copy; 2019 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
 </p>
 <p>
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
@@ -346,6 +347,62 @@ command line arguments as shown below.
 As shown above, it is strictly recommended to surround any call to the command line parser by a 
 <code>try&hellip;catch</code> block.
 </p>
+
+<h3 id="usage-problem">Problem</h3>
+
+<p>
+There is a known issue while parsing a program&rsquo;s arguments and it comes to light when using the 
+<code>args</code> array that is provided as parameter of the <code>Main()</code> method. 
+</p>
+
+<p>
+The meant issue gets visible as soon as using arguments that are surrounded by double&#8209;quotes 
+and a backslash is included right before the closing double&#8209;quote. See below for such an example.
+</p>
+
+<pre><code>$&gt; program.exe -o -p "*.xyz" -s "c:\folder1\" -t "c:\folder2\" -v</code></pre>
+
+<p>
+Is this particular case the provided arguments are split into an array that looks like the one shown as 
+next.
+</p>
+
+<pre><code>[0]: "-o"
+[1]: "-p"
+[2]: "*.xyz"
+[3]: "-s"
+[4]: "c:\\folder1\" -t c:\\folder2\""
+[5]: "-v"</code></pre>
+
+<p>
+The mistake is in line [4] of the above example. The <i>.NET Framework</i> parser did interpret each 
+occurrence of a backslash and double&#8209;quote combination as an escaped double&#8209;quote character, 
+which was indeed not meant in this context. But the <i>Plexdata Argument Parser</i> provides a workaround 
+allowing to prevent such an unwanted behavior. See next code snippet how to use this workaround.
+</p>
+
+<pre><code>static void Main(string[] args)
+{
+    try
+    {
+        // Use the string extension method Extract() of package 
+        // Plexdata Argument Parser as alternative command line 
+        // argument parser.
+        <strong>string[] options = Environment.CommandLine.Extract();</strong>
+        if (options != null && options.Length &gt; 0)
+        {
+            // Maybe remove first array line because it just 
+            // contains the path of the calling executable.
+            CmdLineArgs cmdLineArgs = new CmdLineArgs();
+            cmdLineArgs.Process(options);
+            cmdLineArgs.Validate();
+        }
+    }
+    catch (Exception exception)
+    {
+        Console.WriteLine(exception.Message);
+    }
+}</code></pre>
 
 <h2 id="dependencies">Dependencies</h2>
 
