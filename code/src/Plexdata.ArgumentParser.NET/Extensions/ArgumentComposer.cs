@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2018 plexdata.de
+ * Copyright (c) 2019 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -90,7 +90,7 @@ namespace Plexdata.ArgumentParser.Extensions
                     throw new NotSupportedException("Double quotes are not supported as separator.");
                 }
 
-                bool inside = false;
+                Boolean inside = false;
 
                 List<String> results = new List<String>();
 
@@ -98,7 +98,7 @@ namespace Plexdata.ArgumentParser.Extensions
 
                 foreach (Char current in arguments)
                 {
-                    if (!inside && current == DoubleQuotes)
+                    if (!inside && current == ArgumentComposer.DoubleQuotes)
                     {
                         inside = true;
                         continue;
@@ -106,7 +106,7 @@ namespace Plexdata.ArgumentParser.Extensions
 
                     if (inside)
                     {
-                        if (current != DoubleQuotes)
+                        if (current != ArgumentComposer.DoubleQuotes)
                         {
                             builder.Append(current);
                         }

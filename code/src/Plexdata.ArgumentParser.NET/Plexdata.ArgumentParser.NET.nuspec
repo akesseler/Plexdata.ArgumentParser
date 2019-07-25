@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Bug fixing of debug/default issue and property Dependencies marked as obsolete.</releaseNotes>
-    <copyright>Copyright © 2018 - plexdata.de</copyright>
+    <copyright>Copyright © 2019 - plexdata.de</copyright>
     <tags>command line argument parser</tags>
   </metadata>
 </package>

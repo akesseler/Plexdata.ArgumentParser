@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2018 plexdata.de
+ * Copyright (c) 2019 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,35 +61,35 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentComposerHelper[] ExtractTestObjects = {
+        private static readonly ArgumentComposerHelper[] ExtractTestObjects = {
             new ArgumentComposerHelper {
                 Actual    = null,
                 Expected  = new String[] { },
-                Separator =' ' },
+                Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = String.Empty,
                 Expected  = new String[] { },
-                Separator =' ' },
+                Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "     ",
                 Expected  = new String[] { },
-                Separator =' ' },
+                Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1 --arg2 --opt1 string",
                 Expected  = new String[] { "--arg1", "--arg2","--opt1", "string" },
-                Separator =' ' },
+                Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1 --arg2 --opt1 \"string with spaces\"",
                 Expected  = new String[] { "--arg1", "--arg2","--opt1", "string with spaces" },
-                Separator =' ' },
+                Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1,--arg2,--opt1,\"string_without_spaces\"",
                 Expected  = new String[] { "--arg1", "--arg2","--opt1", "string_without_spaces" },
-                Separator =',' },
+                Separator = ',' },
             new ArgumentComposerHelper {
                 Actual    = "   --arg1      --arg2     --opt1 \"   string\twith\tspaces   \"",
                 Expected  = new String[] { "--arg1", "--arg2","--opt1", "   string\twith\tspaces   " },
-                Separator =' ' },
+                Separator = ' ' },
         };
 
         [Test]
