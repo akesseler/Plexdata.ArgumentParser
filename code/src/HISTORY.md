@@ -1,4 +1,12 @@
 
+**1.0.2**
+- Package migration from .NET Framework 4.7.2 to .NET Standard 2.0 (BREAKING CHANGES).
+- Whole documentation reviewed and adding of missing parts.
+- Update of Wiki documentation (initial draft of API docs).
+- Version number increased.
+- Package release on `nuget.org`.
+- Release file uploaded on `github.com`.
+
 **1.0.1**
 - Minor changes.
 - Unneeded references removed.

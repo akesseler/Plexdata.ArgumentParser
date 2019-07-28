@@ -29,16 +29,22 @@ using System.Collections.Generic;
 namespace Plexdata.ArgumentParser.Extensions
 {
     /// <summary>
+    /// The argument resolver extension.
+    /// </summary>
+    /// <remarks>
     /// Task of class argument resolve is to perform the command line processing 
     /// as well as the command line validation.
-    /// </summary>
+    /// </remarks>
     public static class ArgumentResolver
     {
         #region Publics
 
         /// <summary>
-        /// The extension method performs an attribute validation of given instance.
+        /// Performs an attribute validation of given instance.
         /// </summary>
+        /// <remarks>
+        /// The extension method performs an attribute validation of given instance.
+        /// </remarks>
         /// <typeparam name="TInstance">
         /// The generic type of a class that represents all available command line arguments 
         /// of a particular program.
@@ -53,9 +59,13 @@ namespace Plexdata.ArgumentParser.Extensions
         }
 
         /// <summary>
+        /// Performs the processing of all given command line arguments and tries to assign 
+        /// each argument to its corresponding properties.
+        /// </summary>
+        /// <remarks>
         /// The extension method performs the processing of all given command line arguments 
         /// and tries to assign each argument to its corresponding properties.
-        /// </summary>
+        /// </remarks>
         /// <typeparam name="TInstance">
         /// The generic type of a class that represents all available command line arguments 
         /// of a particular program.
@@ -74,9 +84,13 @@ namespace Plexdata.ArgumentParser.Extensions
         }
 
         /// <summary>
+        /// Performs the processing of all given command line arguments and tries to assign 
+        /// each argument to its corresponding properties.
+        /// </summary>
+        /// <remarks>
         /// The extension method performs the processing of all given command line arguments 
         /// and tries to assign each argument to its corresponding properties.
-        /// </summary>
+        /// </remarks>
         /// <typeparam name="TInstance">
         /// The generic type of a class that represents all available command line arguments 
         /// of a particular program.

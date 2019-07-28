@@ -27,13 +27,18 @@ using System;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
-    /// This attribute is reserved to be used on all command line argument types that 
-    /// represent some kind of switch. Switches are parameter that are either on or off.
+    /// The switch parameter attribute.
     /// </summary>
     /// <remarks>
+    /// <para>
+    /// This attribute is reserved to be used on all command line argument types that 
+    /// represent some kind of switch. Switches are parameter that are either on or off.
+    /// </para>
+    /// <para>
     /// Use this attribute only for properties that are either of type Boolean or of type 
     /// Nullable Boolean. Do never use this attribute together with other type. Otherwise 
     /// and exception is thrown.
+    /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class SwitchParameterAttribute : ParameterObjectAttribute
@@ -43,6 +48,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public SwitchParameterAttribute()
             : base()
         {

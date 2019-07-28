@@ -29,8 +29,34 @@ using System.Linq;
 
 namespace Plexdata.ArgumentParser.Extensions
 {
+    /// <summary>
+    /// The validation extension.
+    /// </summary>
+    /// <remarks>
+    /// This extension class provides various methods needed to 
+    /// validate command line arguments.
+    /// </remarks>
     internal static class ValidationExtension
     {
+        /// <summary>
+        /// Tests the parameter <paramref name="type"/> for <c>null</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method tests the parameter <paramref name="type"/> for 
+        /// <c>null</c> and throws an exception in that case.
+        /// </remarks>
+        /// <typeparam name="TType">
+        /// The generic type to be tested.
+        /// </typeparam>
+        /// <param name="type">
+        /// The value to be tested.
+        /// </param>
+        /// <param name="name">
+        /// The name of the tested value.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// This exception is thrown if provided <paramref name="type"/> is <c>null</c>.
+        /// </exception>
         public static void ThrowIfNull<TType>(this TType type, String name = "unknown") where TType : class
         {
             if (type == null)
@@ -39,6 +65,32 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Tests the parameter <paramref name="type"/> for <c>null</c>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method tests the parameter <paramref name="type"/>, that should be 
+        /// an <see cref="IEnumerable{Object}"/>, for <c>null</c> or being empty and 
+        /// throws an exception in that case.
+        /// </para>
+        /// <para>
+        /// In case of <typeparamref name="TType"/> is not an <see cref="IEnumerable{Object}"/>, 
+        /// then this method works exactly as method <see cref="ThrowIfNull{TType}(TType, String)"/>.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="TType">
+        /// The generic type to be tested.
+        /// </typeparam>
+        /// <param name="type">
+        /// The value to be tested.
+        /// </param>
+        /// <param name="name">
+        /// The name of the tested value.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// This exception is thrown if provided <paramref name="type"/> is <c>null</c> or empty.
+        /// </exception>
         public static void ThrowIfNullOrEmpty<TType>(this TType type, String name = "unknown") where TType : class
         {
             type.ThrowIfNull(name);
@@ -52,6 +104,24 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Tests the parameter <paramref name="value"/> for <c>null</c>, empty or 
+        /// consists only of white spaces.
+        /// </summary>
+        /// <remarks>
+        /// This method tests the parameter <paramref name="value"/> for <c>null</c>, 
+        /// empty or consists only of white spaces.
+        /// </remarks>
+        /// <param name="value">
+        /// The value to be tested.
+        /// </param>
+        /// <param name="name">
+        /// The name of the tested value.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// This exception is thrown if provided <paramref name="value"/> is <c>null</c> or 
+        /// empty or consists only of white spaces.
+        /// </exception>
         public static void ThrowIfNullOrWhiteSpace(this String value, String name = "unknown")
         {
             if (String.IsNullOrWhiteSpace(value))
@@ -60,6 +130,15 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Throws an argument parser exception.
+        /// </summary>
+        /// <remarks>
+        /// This method throws an argument parser exception.
+        /// </remarks>
+        /// <param name="exception">
+        /// The exception to be thrown.
+        /// </param>
         public static void ThrowArgumentParserException(this Exception exception)
         {
             if (exception != null)

@@ -29,14 +29,23 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The help license attribute.
+    /// </summary>
+    /// <remarks>
     /// The help license attribute is intended to be used to define 
     /// a program's copyright statement.
-    /// </summary>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class HelpLicenseAttribute : Attribute
     {
         #region Fields
 
+        /// <summary>
+        /// The content field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help license value.
+        /// </remarks>
         private String content = $"Copyright © {Placeholders.Company}";
 
         #endregion
@@ -46,6 +55,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public HelpLicenseAttribute()
             : base()
         {
@@ -54,6 +66,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Attribute constructor that takes a content parameter.
         /// </summary>
+        /// <remarks>
+        /// This constructor calls its base class constructor and than it 
+        /// initializes its <see cref="Content"/> property.
+        /// </remarks>
         /// <param name="content">
         /// The text to be used as content.
         /// </param>
@@ -77,6 +93,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// but only if it is not empty. Otherwise the placeholder remains 
         /// unchanged.
         /// </remarks>
+        /// <value>
+        /// The content assigned to an instance of this attribute.
+        /// </value>
         public String Content
         {
             get
@@ -92,6 +111,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the content is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the content is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current content availability.
+        /// </value>
         public Boolean IsContent
         {
             get
@@ -107,6 +133,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
+        /// <remarks>
+        /// This overwritten method returns a string representing the 
+        /// current object.
+        /// </remarks>
         /// <returns>
         /// A string that represents the current object.
         /// </returns>

@@ -27,13 +27,19 @@ using System;
 namespace Plexdata.ArgumentParser.Exceptions
 {
     /// <summary>
-    /// The exception serves as base class for all exceptions exposed by this library.
+    /// The base class of all exceptions exposed by this library.
     /// </summary>
+    /// <remarks>
+    /// The exception serves as base class for all exceptions exposed by this library.
+    /// </remarks>
     public class ArgumentParserException : SystemException
     {
         /// <summary>
-        /// This constructor creates an instance of this class using a given message.
+        /// The constructor with message argument.
         /// </summary>
+        /// <remarks>
+        /// This constructor creates an instance of this class using a given message.
+        /// </remarks>
         /// <param name="message">
         /// The message to be assigned to an instance of this class.
         /// </param>
@@ -43,9 +49,12 @@ namespace Plexdata.ArgumentParser.Exceptions
         }
 
         /// <summary>
+        /// The constructor with parameter and message arguments.
+        /// </summary>
+        /// <remarks>
         /// This constructor creates an instance of this class using a given message 
         /// as well as the name of the parameter that causes this exception.
-        /// </summary>
+        /// </remarks>
         /// <param name="parameter">
         /// The name of the parameter that has caused the exception.
         /// </param>
@@ -58,9 +67,12 @@ namespace Plexdata.ArgumentParser.Exceptions
         }
 
         /// <summary>
+        /// The constructor with message and exception arguments.
+        /// </summary>
+        /// <remarks>
         /// This constructor creates an instance of this class using a given message 
         /// as well as an inner exception.
-        /// </summary>
+        /// </remarks>
         /// <param name="message">
         /// The message to be assigned to an instance of this class.
         /// </param>
@@ -73,10 +85,13 @@ namespace Plexdata.ArgumentParser.Exceptions
         }
 
         /// <summary>
+        /// The constructor with parameter, message and exception arguments.
+        /// </summary>
+        /// <remarks>
         /// This constructor creates an instance of this class using a given message 
         /// as well as the name of the parameter that causes this exception. Additionally, 
         /// this constructor takes an inner exception as parameter.
-        /// </summary>
+        /// </remarks>
         /// <param name="parameter">
         /// The name of the parameter that has caused the exception.
         /// </param>
@@ -93,8 +108,14 @@ namespace Plexdata.ArgumentParser.Exceptions
         }
 
         /// <summary>
-        /// A getter that returns the name of parameter, or an empty string if unused.
+        /// Gets the name of parameter, or an empty string if unused.
         /// </summary>
+        /// <remarks>
+        /// The property getter that returns the name of parameter, or an empty string if unused.
+        /// </remarks>
+        /// <value>
+        /// The parameter name causing this exception.
+        /// </value>
         public String Parameter { get; private set; }
     }
 }

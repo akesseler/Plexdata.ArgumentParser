@@ -25,8 +25,11 @@
 namespace Plexdata.ArgumentParser.Constants
 {
     /// <summary>
-    /// The dependency type describes how entries in a dependency list have to be handled.
+    /// The type describing how to handle dependency list entries.
     /// </summary>
+    /// <remarks>
+    /// The dependency type describes how entries in a dependency list have to be handled.
+    /// </remarks>
     public enum DependencyType
     {
         /// <summary>

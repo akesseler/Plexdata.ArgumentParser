@@ -28,18 +28,48 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The help summary attribute.
+    /// </summary>
+    /// <remarks>
     /// The help summary attribute is intended to be used on properties to 
     /// provide a details description what the purpose of this particular 
     /// command line option is.
-    /// </summary>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class HelpSummaryAttribute : Attribute
     {
         #region Fields
 
+        /// <summary>
+        /// The heading field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help heading value.
+        /// </remarks>
         private String heading = "Options:";
+
+        /// <summary>
+        /// The section field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help section value.
+        /// </remarks>
         private String section = String.Empty;
+
+        /// <summary>
+        /// The content field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help summary value.
+        /// </remarks>
         private String content = String.Empty;
+
+        /// <summary>
+        /// The options field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help options value.
+        /// </remarks>
         private String options = String.Empty;
 
         #endregion
@@ -49,6 +79,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its parameterized class constructor.
+        /// </remarks>
         public HelpSummaryAttribute()
             : this(null)
         {
@@ -57,6 +90,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Attribute constructor that takes a content parameter.
         /// </summary>
+        /// <remarks>
+        /// This constructor calls its base class constructor and than it 
+        /// initializes its <see cref="Content"/> property.
+        /// </remarks>
         /// <param name="content">
         /// The content to be used as summary.
         /// </param>
@@ -78,6 +115,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// heading as first. Thereafter, each command line argument summary inside one 
         /// heading is grouped by its section.
         /// </remarks>
+        /// <value>
+        /// The heading assigned to an instance of this attribute.
+        /// </value>
         public String Heading
         {
             get
@@ -93,6 +133,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the heading is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the heading is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current heading availability.
+        /// </value>
         public Boolean IsHeading
         {
             get
@@ -109,6 +156,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// heading as first. Thereafter, each command line argument summary inside one 
         /// heading is grouped by its section.
         /// </remarks>
+        /// <value>
+        /// The section assigned to an instance of this attribute.
+        /// </value>
         public String Section
         {
             get
@@ -124,6 +174,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the section is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the section is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current section availability.
+        /// </value>
         public Boolean IsSection
         {
             get
@@ -135,6 +192,12 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Gets or set the current help text content.
         /// </summary>
+        /// <remarks>
+        /// This property gets or set the current help text content.
+        /// </remarks>
+        /// <value>
+        /// The content assigned to an instance of this attribute.
+        /// </value>
         public String Content
         {
             get
@@ -150,6 +213,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the content is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the content is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current content availability.
+        /// </value>
         public Boolean IsContent
         {
             get
@@ -159,9 +229,16 @@ namespace Plexdata.ArgumentParser.Attributes
         }
 
         /// <summary>
-        /// Gets and set additional options. Additional options will be 
-        /// used for example as a placeholder for option parameters.
+        /// Gets and set additional options.
         /// </summary>
+        /// <remarks>
+        /// This property gets and set additional options. Additional 
+        /// options will be used for example as a placeholder for option 
+        /// parameters.
+        /// </remarks>
+        /// <value>
+        /// The options assigned to an instance of this attribute.
+        /// </value>
         public String Options
         {
             get
@@ -177,6 +254,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the options is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the options is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current options availability.
+        /// </value>
         public Boolean IsOptions
         {
             get
@@ -192,6 +276,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
+        /// <remarks>
+        /// This overwritten method returns a string representing the 
+        /// current object.
+        /// </remarks>
         /// <returns>
         /// A string that represents the current object.
         /// </returns>

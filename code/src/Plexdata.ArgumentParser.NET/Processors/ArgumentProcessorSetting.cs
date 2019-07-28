@@ -28,10 +28,28 @@ using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Processors
 {
+    /// <summary>
+    /// The argument processor setting implementation.
+    /// </summary>
+    /// <remarks>
+    /// This class represents the implementation of an argument processor setting.
+    /// </remarks>
     internal class ArgumentProcessorSetting
     {
         #region Construction
 
+        /// <summary>
+        /// Standard construction.
+        /// </summary>
+        /// <remarks>
+        /// The only one and default constructor of this class.
+        /// </remarks>
+        /// <param name="property">
+        /// An instance of property information to be applied.
+        /// </param>
+        /// <param name="attribute">
+        /// An instance of a parameter object attribute to be applied.
+        /// </param>
         public ArgumentProcessorSetting(PropertyInfo property, ParameterObjectAttribute attribute)
             : base()
         {
@@ -43,8 +61,26 @@ namespace Plexdata.ArgumentParser.Processors
 
         #region Properties
 
+        /// <summary>
+        /// Gets the assigned property information.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned instance of additional property information.
+        /// </remarks>
+        /// <value>
+        /// The assigned property information.
+        /// </value>
         public PropertyInfo Property { get; private set; }
 
+        /// <summary>
+        /// Gets the assigned attribute information.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned instance of attribute information.
+        /// </remarks>
+        /// <value>
+        /// The assigned attribute information.
+        /// </value>
         public ParameterObjectAttribute Attribute { get; private set; }
 
         #endregion

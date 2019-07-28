@@ -27,8 +27,11 @@ using System;
 namespace Plexdata.ArgumentParser.Constants
 {
     /// <summary>
-    /// This class provides access to all supported placeholders.
+    /// The list of all supported placeholders.
     /// </summary>
+    /// <remarks>
+    /// This class provides access to all supported placeholders.
+    /// </remarks>
     public static class Placeholders
     {
         /// <summary>
