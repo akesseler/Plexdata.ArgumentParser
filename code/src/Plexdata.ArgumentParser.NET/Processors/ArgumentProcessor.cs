@@ -34,10 +34,32 @@ using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Processors
 {
+    /// <summary>
+    /// The argument processor implementation.
+    /// </summary>
+    /// <remarks>
+    /// This class represents the implementation of the argument processor.
+    /// </remarks>
+    /// <typeparam name="TInstance">
+    /// The type descriptor of the user-defined argument class to be processed.
+    /// </typeparam>
     internal class ArgumentProcessor<TInstance> where TInstance : class
     {
         #region Construction
 
+        /// <summary>
+        /// Standard constructor that takes the type to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This constructor takes the type descriptor of an instance of the class to be processed.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <exception cref="Exception">
+        /// All exceptions of extension <see cref="ValidationExtension.ThrowIfNull{TType}(TType, String)"/> 
+        /// are possible.
+        /// </exception>
         public ArgumentProcessor(TInstance instance)
             : base()
         {
@@ -45,6 +67,23 @@ namespace Plexdata.ArgumentParser.Processors
             this.Instance = instance;
         }
 
+        /// <summary>
+        /// Extended constructor that takes the type and an array of arguments to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This constructor takes the type descriptor of an instance of the class as well as 
+        /// an array of arguments to be processed.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <param name="arguments">
+        /// The array of arguments to be processed.
+        /// </param>
+        /// <exception cref="Exception">
+        /// All exceptions of extension <see cref="ValidationExtension.ThrowIfNullOrEmpty{TType}(TType, String)"/> 
+        /// are possible.
+        /// </exception>
         public ArgumentProcessor(TInstance instance, String[] arguments)
             : this(instance)
         {
@@ -52,6 +91,23 @@ namespace Plexdata.ArgumentParser.Processors
             this.Arguments = new List<String>(arguments);
         }
 
+        /// <summary>
+        /// Extended constructor that takes the type and a list of arguments to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This constructor takes the type descriptor of an instance of the class as well as 
+        /// a list of arguments to be processed.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <param name="arguments">
+        /// The list of arguments to be processed.
+        /// </param>
+        /// <exception cref="Exception">
+        /// All exceptions of extension <see cref="ValidationExtension.ThrowIfNullOrEmpty{TType}(TType, String)"/> 
+        /// are possible.
+        /// </exception>
         public ArgumentProcessor(TInstance instance, List<String> arguments)
             : this(instance)
         {
@@ -63,18 +119,65 @@ namespace Plexdata.ArgumentParser.Processors
 
         #region Statics
 
+        /// <summary>
+        /// Validates the instance to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This method validates the instance to be processed by just calling method 
+        /// <see cref="Initialize"/> which in turn does the validation.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <exception cref="ArgumentParserException">
+        /// Any of an argument parser exception if necessary.
+        /// </exception>
         public static void Validate(TInstance instance)
         {
             ArgumentProcessor<TInstance> processor = new ArgumentProcessor<TInstance>(instance);
             processor.Initialize();
         }
 
+        /// <summary>
+        /// Validates the instance and its array of arguments to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This method validates the instance as well as its array of arguments to be 
+        /// processed by just calling method <see cref="Initialize"/> which in turn does 
+        /// the validation.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <param name="arguments">
+        /// The array of arguments to be processed.
+        /// </param>
+        /// <exception cref="ArgumentParserException">
+        /// Any of an argument parser exception if necessary.
+        /// </exception>
         public static void Process(TInstance instance, String[] arguments)
         {
             ArgumentProcessor<TInstance> processor = new ArgumentProcessor<TInstance>(instance, arguments);
             processor.Process();
         }
 
+        /// <summary>
+        /// Validates the instance and its list of arguments to be processed.
+        /// </summary>
+        /// <remarks>
+        /// This method validates the instance as well as its list of arguments to be 
+        /// processed by just calling method <see cref="Initialize"/> which in turn does 
+        /// the validation.
+        /// </remarks>
+        /// <param name="instance">
+        /// The instance of the class to be processed.
+        /// </param>
+        /// <param name="arguments">
+        /// The list of arguments to be processed.
+        /// </param>
+        /// <exception cref="ArgumentParserException">
+        /// Any of an argument parser exception if necessary.
+        /// </exception>
         public static void Process(TInstance instance, List<String> arguments)
         {
             ArgumentProcessor<TInstance> processor = new ArgumentProcessor<TInstance>(instance, arguments);
@@ -85,16 +188,50 @@ namespace Plexdata.ArgumentParser.Processors
 
         #region Properties
 
+        /// <summary>
+        /// Gets the applied instance.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the applied instance.
+        /// </remarks>
+        /// <value>
+        /// The applied instance.
+        /// </value>
         public TInstance Instance { get; private set; }
 
+        /// <summary>
+        /// Gets the applied list of arguments.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the applied list of arguments.
+        /// </remarks>
+        /// <value>
+        /// The applied list of arguments.
+        /// </value>
         public List<String> Arguments { get; private set; }
 
+        /// <summary>
+        /// Gets the list of property settings.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the list of property settings.
+        /// </remarks>
+        /// <value>
+        /// The list of property settings.
+        /// </value>
         public List<ArgumentProcessorSetting> Settings { get; private set; }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Initializes an instance of this class.
+        /// </summary>
+        /// <remarks>
+        /// This method initializes an instance of this class and implicitly 
+        /// performs an argument validation.
+        /// </remarks>
         public void Initialize()
         {
             try
@@ -204,6 +341,12 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Performs command line argument processing.
+        /// </summary>
+        /// <remarks>
+        /// This method performs the command line argument processing.
+        /// </remarks>
         public void Process()
         {
             try
@@ -332,6 +475,18 @@ namespace Plexdata.ArgumentParser.Processors
 
         #region Privates
 
+        /// <summary>
+        /// Try finding a particular setting.
+        /// </summary>
+        /// <remarks>
+        /// This method tries to retrieve a particular setting value from current settings list.
+        /// </remarks>
+        /// <param name="setting">
+        /// The found setting or <c>null</c>.
+        /// </param>
+        /// <returns>
+        /// True, if the setting could be found and false if not.
+        /// </returns>
         private Boolean TryFindSetting(out ArgumentProcessorSetting setting)
         {
             setting = null;
@@ -348,6 +503,21 @@ namespace Plexdata.ArgumentParser.Processors
             return false;
         }
 
+        /// <summary>
+        /// Try finding a particular setting by parameter name.
+        /// </summary>
+        /// <remarks>
+        /// This method tries to retrieve a particular setting value from current settings list.
+        /// </remarks>
+        /// <param name="parameter">
+        /// The parameter name to search for.
+        /// </param>
+        /// <param name="setting">
+        /// The found setting or <c>null</c>.
+        /// </param>
+        /// <returns>
+        /// True, if the setting could be found and false if not.
+        /// </returns>
         private Boolean TryFindSetting(String parameter, out ArgumentProcessorSetting setting)
         {
             setting = null;
@@ -367,6 +537,24 @@ namespace Plexdata.ArgumentParser.Processors
             return false;
         }
 
+        /// <summary>
+        /// Tries to get referenced items.
+        /// </summary>
+        /// <remarks>
+        /// This method tries to extract all referenced items from current settings list.
+        /// </remarks>
+        /// <param name="source">
+        /// The source setting.
+        /// </param>
+        /// <param name="others">
+        /// The list of source settings.
+        /// </param>
+        /// <param name="overall">
+        /// The list of referenced overall settings.
+        /// </param>
+        /// <returns>
+        /// The result list of referenced settings.
+        /// </returns>
         private IEnumerable<ArgumentProcessorSetting> TryGetReferencedItems(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, out IEnumerable<ArgumentProcessorSetting> overall)
         {
             // Get list of dependencies...
@@ -379,6 +567,18 @@ namespace Plexdata.ArgumentParser.Processors
             return others.Where(x => affected.Contains(x.Property.Name));
         }
 
+        /// <summary>
+        /// Validates all exclusive properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are marked as exclusive.
+        /// </remarks>
+        /// <param name="processed">
+        /// The list of settings to be validated.
+        /// </param>
+        /// <exception cref="ExclusiveViolationException">
+        /// This exception is thrown in case of an exclusive violaten takes place.
+        /// </exception>
         private void ValidateExclusiveProperties(List<ArgumentProcessorSetting> processed)
         {
             foreach (ArgumentProcessorSetting current in processed)
@@ -394,6 +594,18 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Validates all required properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are marked as required.
+        /// </remarks>
+        /// <param name="processed">
+        /// The list of settings to be validated.
+        /// </param>
+        /// <exception cref="RequiredViolationException">
+        /// This exception is thrown in case of a required violaten takes place.
+        /// </exception>
         private void ValidateRequiredProperties(List<ArgumentProcessorSetting> processed)
         {
             if (processed.Any())
@@ -412,6 +624,21 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Validates all dependency properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are marked as dependency.
+        /// </remarks>
+        /// <param name="processed">
+        /// The list of settings to be validated.
+        /// </param>
+        /// <exception cref="RequiredViolationException">
+        /// This exception is thrown in case of a required violaten takes place.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Any of the <see cref="ArgumentParserException"/> is possible.
+        /// </exception>
         private void ValidateDependencyProperties(List<ArgumentProcessorSetting> processed)
         {
             if (processed.Any())
@@ -446,6 +673,18 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Validates all referenced properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are referenced by other properties.
+        /// </remarks>
+        /// <param name="source">
+        /// The source setting.
+        /// </param>
+        /// <exception cref="DependentViolationException">
+        /// This exception is thrown in case of a dependency violation takes place.
+        /// </exception>
         private void ValidateReferencedProperties(ArgumentProcessorSetting source)
         {
             IEnumerable<String> candidates = source.Attribute.GetDependencies();
@@ -461,6 +700,24 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Validates all optional dependency properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are marked as optional dependency.
+        /// </remarks>
+        /// <param name="source">
+        /// The source setting.
+        /// </param>
+        /// <param name="others">
+        /// The list of other settings.
+        /// </param>
+        /// <param name="overall">
+        /// The list of overall dependency settings.
+        /// </param>
+        /// <exception cref="DependentViolationException">
+        /// This exception is thrown in case of a dependency violation takes place.
+        /// </exception>
         private void ValidateOptionalDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
         {
             if (overall.Any() && !others.Any())
@@ -469,6 +726,24 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Validates all required dependency properties.
+        /// </summary>
+        /// <remarks>
+        /// This method validates all properties that are marked as required dependency.
+        /// </remarks>
+        /// <param name="source">
+        /// The source setting.
+        /// </param>
+        /// <param name="others">
+        /// The list of other settings.
+        /// </param>
+        /// <param name="overall">
+        /// The list of overall dependency settings.
+        /// </param>
+        /// <exception cref="DependentViolationException">
+        /// This exception is thrown in case of a dependency violation takes place.
+        /// </exception>
         private void ValidateRequiredDependencies(ArgumentProcessorSetting source, IEnumerable<ArgumentProcessorSetting> others, IEnumerable<ArgumentProcessorSetting> overall)
         {
             if (overall.Count() != others.Count())

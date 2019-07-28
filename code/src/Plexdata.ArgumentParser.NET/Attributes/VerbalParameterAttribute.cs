@@ -27,15 +27,20 @@ using System;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
-    /// This attribute is intended to be used together with all unassignable command 
-    /// line parameters. Such a parameter is for example a list of file names. 
+    /// The verbal parameter attribute. 
     /// </summary>
     /// <remarks>
+    /// <para>
+    /// This attribute is intended to be used together with all unassignable command 
+    /// line parameters. Such a parameter is for example a list of file names. 
+    /// </para>
+    /// <para>
     /// Be aware, the usage of only one of this attribute is supported. Additionally 
     /// keep in mind, that only a list of strings or an array of strings are supported 
     /// for properties that are tagged by this attribute. On the other hand, if you want 
     /// to get for example a list of numbers from the command line, then you have to 
     /// convert all the strings by your self.
+    /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class VerbalParameterAttribute : ParameterObjectAttribute
@@ -45,6 +50,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public VerbalParameterAttribute()
             : base()
         {
@@ -58,7 +66,14 @@ namespace Plexdata.ArgumentParser.Attributes
         /// A getter to retrieve the solid label. Note, trying to use the setter with a string 
         /// other than empty will cause an exception.
         /// </summary>
-        public override string SolidLabel
+        /// <remarks>
+        /// This property getter retrieves the solid label. Note, trying to use the setter with 
+        /// a string other than empty will cause an exception.
+        /// </remarks>
+        /// <value>
+        /// The solid label assigned to an instance of this attribute.
+        /// </value>
+        public override String SolidLabel
         {
             get
             {
@@ -77,7 +92,14 @@ namespace Plexdata.ArgumentParser.Attributes
         /// A getter to retrieve the brief label. Note, trying to use the setter with a string 
         /// other than empty will cause an exception.
         /// </summary>
-        public override string BriefLabel
+        /// <remarks>
+        /// This property getter retrieves the brief label. Note, trying to use the setter with 
+        /// a string other than empty will cause an exception.
+        /// </remarks>
+        /// <value>
+        /// The brief label assigned to an instance of this attribute.
+        /// </value>
+        public override String BriefLabel
         {
             get
             {

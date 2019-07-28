@@ -28,14 +28,21 @@ namespace Plexdata.ArgumentParser.Exceptions
 {
     /// <summary>
     /// The exception is always thrown as soon as a violation of option rules take 
+    /// place.
+    /// </summary>
+    /// <remarks>
+    /// The exception is always thrown as soon as a violation of option rules take 
     /// place. Such a rule is for example the usage of an empty string for solid and/or 
     /// brief labels.
-    /// </summary>
+    /// </remarks>
     public class OptionAttributeException : ArgumentParserException
     {
         /// <summary>
-        /// This constructor creates an instance of this class using a given message.
+        /// The constructor with message argument.
         /// </summary>
+        /// <remarks>
+        /// This constructor creates an instance of this class using a given message.
+        /// </remarks>
         /// <param name="message">
         /// The message to be assigned to an instance of this class.
         /// </param>
@@ -45,9 +52,12 @@ namespace Plexdata.ArgumentParser.Exceptions
         }
 
         /// <summary>
+        /// The constructor with parameter and message arguments.
+        /// </summary>
+        /// <remarks>
         /// This constructor creates an instance of this class using a given message 
         /// as well as the name of the parameter that causes this exception.
-        /// </summary>
+        /// </remarks>
         /// <param name="parameter">
         /// The name of the parameter that has caused the exception.
         /// </param>

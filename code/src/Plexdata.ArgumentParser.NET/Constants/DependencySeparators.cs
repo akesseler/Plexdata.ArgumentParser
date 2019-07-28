@@ -27,39 +27,72 @@ using System;
 namespace Plexdata.ArgumentParser.Constants
 {
     /// <summary>
-    /// This class provides access to all supported dependency separators.
+    /// The list of supported dependency separators.
     /// </summary>
+    /// <remarks>
+    /// This class provides access to all supported dependency separators.
+    /// </remarks>
     public static class DependencySeparators
     {
+        #region Construction
+
+        /// <summary>
+        /// The static class constructor.
+        /// </summary>
+        /// <remarks>
+        /// The constructor initializes the static fields of this class.
+        /// </remarks>
+        static DependencySeparators() { }
+
+        #endregion
+
         /// <summary>
         /// A dependency list entry is separated by a space.
         /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but a space character.
+        /// </remarks>
         public const Char SpaceSeparator = ' ';
 
         /// <summary>
         /// A dependency list entry is separated by a colon.
         /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but a colon character.
+        /// </remarks>
         public const Char ColonSeparator = ':';
 
         /// <summary>
         /// A dependency list entry is separated by a comma.
         /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but a comma character.
+        /// </remarks>
         public const Char CommaSeparator = ',';
 
         /// <summary>
         /// A dependency list entry is separated by a semicolon.
         /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but a semicolon character.
+        /// </remarks>
         public const Char SemicolonSeparator = ';';
 
         /// <summary>
         /// The default separator for dependency processing.
         /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but the <see cref="DependencySeparators.CommaSeparator"/>.
+        /// </remarks>
         public const Char DefaultSeparator = DependencySeparators.CommaSeparator;
 
         /// <summary>
-        /// Represents a list of allowed delimiters that separates each item in a 
-        /// dependency list.
+        /// The list of allowed delimiters that separate each item in a dependency list.
         /// </summary>
+        /// <remarks>
+        /// This array represents a list of allowed delimiters that separate each item in 
+        /// a dependency list.
+        /// </remarks>
         public static readonly Char[] AllowedSeparators = new Char[] {
             DependencySeparators.CommaSeparator,
             DependencySeparators.ColonSeparator,

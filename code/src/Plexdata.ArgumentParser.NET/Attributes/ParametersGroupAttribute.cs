@@ -27,10 +27,13 @@ using System;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The parameters group attribute.
+    /// </summary>
+    /// <remarks>
     /// This attribute is intended to be used to tag classes with it that define all 
     /// possible respectively all supported command line arguments.Keep in mind, this 
     /// attribute is only on declarative nature and is not used internally.
-    /// </summary>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class ParametersGroupAttribute : Attribute
     {
@@ -39,6 +42,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public ParametersGroupAttribute()
             : base()
         {

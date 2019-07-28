@@ -30,20 +30,31 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The option parameter attribute.
+    /// </summary>
+    /// <remarks>
+    /// <para>
     /// This attribute is intended to be used together with command line parameters that 
     /// include further options. Such a parameter is for example the parameter "username" 
     /// that is followed by the name of the affected user.
-    /// </summary>
-    /// <remarks>
+    /// </para>
+    /// <para>
     /// This attribute supports various simple data types such as String, Integers, Date-Time, 
     /// Decimals, and so forth.The nullable version of all supported types are also supported. 
     /// The type of Boolean and any kind of lists or arrays are not supported.
+    /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class OptionParameterAttribute : ParameterObjectAttribute
     {
         #region Fields
 
+        /// <summary>
+        /// The separator field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the separator value.
+        /// </remarks>
         private Char separator = ParameterSeparators.DefaultSeparator;
 
         #endregion
@@ -53,6 +64,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public OptionParameterAttribute()
             : base()
         {
@@ -63,8 +77,16 @@ namespace Plexdata.ArgumentParser.Attributes
         #region Properties
 
         /// <summary>
-        /// The delimiter to be used to split the parameter from its option value.
+        /// Sets and gets the delimiter to be used to split the parameter 
+        /// from its option value.
         /// </summary>
+        /// <remarks>
+        /// This property sets and gets The delimiter to be used to split 
+        /// the parameter from its option value.
+        /// </remarks>
+        /// <value>
+        /// The separator assigned to an instance of this attribute.
+        /// </value>
         public Char Separator
         {
             get
@@ -89,10 +111,14 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
+        /// <remarks>
+        /// This overwritten method returns a string representing the 
+        /// current object.
+        /// </remarks>
         /// <returns>
         /// A string that represents the current object.
         /// </returns>
-        public override string ToString()
+        public override String ToString()
         {
             StringBuilder result = new StringBuilder(128);
 

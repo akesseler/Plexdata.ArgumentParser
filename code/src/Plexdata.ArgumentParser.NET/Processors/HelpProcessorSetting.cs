@@ -28,10 +28,31 @@ using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Processors
 {
+    /// <summary>
+    /// The help processor setting implementation.
+    /// </summary>
+    /// <remarks>
+    /// This class represents the implementation of an help processor setting.
+    /// </remarks>
     internal class HelpProcessorSetting
     {
         #region Construction
 
+        /// <summary>
+        /// Standard construction.
+        /// </summary>
+        /// <remarks>
+        /// The only one and default constructor of this class.
+        /// </remarks>
+        /// <param name="property">
+        /// An instance of property information to be applied.
+        /// </param>
+        /// <param name="setting">
+        /// An instance of a parameter object attribute to be applied.
+        /// </param>
+        /// <param name="summary">
+        /// An instance of a help summary attribute to be applied.
+        /// </param>
         public HelpProcessorSetting(PropertyInfo property, ParameterObjectAttribute setting, HelpSummaryAttribute summary)
             : base()
         {
@@ -44,12 +65,48 @@ namespace Plexdata.ArgumentParser.Processors
 
         #region Properties
 
+        /// <summary>
+        /// Gets the assigned property information.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned instance of additional property information.
+        /// </remarks>
+        /// <value>
+        /// The assigned property information.
+        /// </value>
         public PropertyInfo Property { get; private set; }
 
+        /// <summary>
+        /// Gets the assigned setting information.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned instance of setting information.
+        /// </remarks>
+        /// <value>
+        /// The assigned setting information.
+        /// </value>
         public ParameterObjectAttribute Setting { get; private set; }
 
+        /// <summary>
+        /// Gets the assigned summary information.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned instance of summary information.
+        /// </remarks>
+        /// <value>
+        /// The assigned summary information.
+        /// </value>
         public HelpSummaryAttribute Summary { get; private set; }
 
+        /// <summary>
+        /// Gets the assigned heading string.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned heading string.
+        /// </remarks>
+        /// <value>
+        /// The assigned heading string.
+        /// </value>
         public String Heading
         {
             get
@@ -65,6 +122,15 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Convenient property to check if heading is applied.
+        /// </summary>
+        /// <remarks>
+        /// This convenient property checks if heading is applied.
+        /// </remarks>
+        /// <value>
+        /// True if heading is applied and false otherwise.
+        /// </value>
         public Boolean IsHeading
         {
             get
@@ -73,6 +139,15 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Gets the assigned section string.
+        /// </summary>
+        /// <remarks>
+        /// This property gets the assigned section string.
+        /// </remarks>
+        /// <value>
+        /// The assigned section string.
+        /// </value>
         public String Section
         {
             get
@@ -88,6 +163,15 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Convenient property to check if section is applied.
+        /// </summary>
+        /// <remarks>
+        /// This convenient property checks if section is applied.
+        /// </remarks>
+        /// <value>
+        /// True if section is applied and false otherwise.
+        /// </value>
         public Boolean IsSection
         {
             get
@@ -96,8 +180,26 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Sets and Gets the assigned caption string.
+        /// </summary>
+        /// <remarks>
+        /// This property sets and gets the assigned caption string.
+        /// </remarks>
+        /// <value>
+        /// The assigned caption string.
+        /// </value>
         public String Caption { get; set; }
 
+        /// <summary>
+        /// Convenient property to check if caption is applied.
+        /// </summary>
+        /// <remarks>
+        /// This convenient property checks if caption is applied.
+        /// </remarks>
+        /// <value>
+        /// True if caption is applied and false otherwise.
+        /// </value>
         public Boolean IsCaption
         {
             get
@@ -106,8 +208,26 @@ namespace Plexdata.ArgumentParser.Processors
             }
         }
 
+        /// <summary>
+        /// Sets and Gets the assigned content string.
+        /// </summary>
+        /// <remarks>
+        /// This property sets and gets the assigned content string.
+        /// </remarks>
+        /// <value>
+        /// The assigned content string.
+        /// </value>
         public String Content { get; set; }
 
+        /// <summary>
+        /// Convenient property to check if content is applied.
+        /// </summary>
+        /// <remarks>
+        /// This convenient property checks if content is applied.
+        /// </remarks>
+        /// <value>
+        /// True if content is applied and false otherwise.
+        /// </value>
         public Boolean IsContent
         {
             get

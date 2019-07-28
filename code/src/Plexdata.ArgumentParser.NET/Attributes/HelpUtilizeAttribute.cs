@@ -29,16 +29,39 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The help utilize attribute.
+    /// </summary>
+    /// <remarks>
     /// The help utilize attribute is intended to be used to define 
     /// how a program's command lines arguments can be used.
-    /// </summary>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class HelpUtilizeAttribute : Attribute
     {
         #region Fields
 
+        /// <summary>
+        /// The utilize field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help utilize value.
+        /// </remarks>
         private String heading = "Usage:";
+
+        /// <summary>
+        /// The caption field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help caption value.
+        /// </remarks>
         private String caption = String.Empty;
+
+        /// <summary>
+        /// The content field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help content value.
+        /// </remarks>
         private String content = $"{Placeholders.Program} [options]";
 
         #endregion
@@ -48,6 +71,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public HelpUtilizeAttribute()
             : base()
         {
@@ -56,6 +82,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Attribute constructor that takes a content parameter.
         /// </summary>
+        /// <remarks>
+        /// This constructor calls its base class constructor and than it 
+        /// initializes its <see cref="Content"/> property.
+        /// </remarks>
         /// <param name="content">
         /// The text to be used as content.
         /// </param>
@@ -72,6 +102,12 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Sets and gets the value of the heading property. Default value is "Usage:".
         /// </summary>
+        /// <remarks>
+        /// This property sets and gets the value of the heading property.
+        /// </remarks>
+        /// <value>
+        /// The heading assigned to an instance of this attribute.
+        /// </value>
         public String Heading
         {
             get
@@ -87,6 +123,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the heading is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the heading is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current heading availability.
+        /// </value>
         public Boolean IsHeading
         {
             get
@@ -99,6 +142,12 @@ namespace Plexdata.ArgumentParser.Attributes
         /// Sets and gets the value of the caption property. Default value 
         /// is "empty".
         /// </summary>
+        /// <remarks>
+        /// This property sets and gets the value of the caption property. 
+        /// </remarks>
+        /// <value>
+        /// The section assigned to an instance of this attribute.
+        /// </value>
         public String Section
         {
             get
@@ -114,6 +163,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the caption is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the section is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current section availability.
+        /// </value>
         public Boolean IsSection
         {
             get
@@ -131,6 +187,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// by the real name of the executing assembly, but only if could be 
         /// determined. Otherwise the placeholder remains unchanged.
         /// </remarks>
+        /// <value>
+        /// The content assigned to an instance of this attribute.
+        /// </value>
         public String Content
         {
             get
@@ -146,6 +205,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the content is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the content is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current content availability.
+        /// </value>
         public Boolean IsContent
         {
             get
@@ -161,6 +227,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
+        /// <remarks>
+        /// This overwritten method returns a string representing the 
+        /// current object.
+        /// </remarks>
         /// <returns>
         /// A string that represents the current object.
         /// </returns>

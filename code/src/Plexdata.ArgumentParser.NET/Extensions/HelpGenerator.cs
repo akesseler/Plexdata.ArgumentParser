@@ -29,15 +29,23 @@ namespace Plexdata.ArgumentParser.Extensions
 {
     /// <summary>
     /// Task of class help generator is to create the help to be printed out to the 
+    /// user.
+    /// </summary>
+    /// <remarks>
+    /// Task of class help generator is to create the help to be printed out to the 
     /// user. The user help should always describe how a program can be utilized by 
     /// its command line arguments.
-    /// </summary>
+    /// </remarks>
     public static class HelpGenerator
     {
         /// <summary>
+        /// Performs help generation for the given instance. Each line of the generated 
+        /// help output is not longer than 80 characters.
+        /// </summary>
+        /// <remarks>
         /// The extension method performs help generation for the given instance. 
         /// Each line of the generated help output is not longer than 80 characters.
-        /// </summary>
+        /// </remarks>
         /// <typeparam name="TInstance">
         /// The generic type of a class that contains all help information.
         /// </typeparam>
@@ -54,9 +62,13 @@ namespace Plexdata.ArgumentParser.Extensions
         }
 
         /// <summary>
+        /// Performs help generation for the given instance but uses the given length 
+        /// as right limit.
+        /// </summary>
+        /// <remarks>
         /// The extension method performs help generation for the given instance 
         /// but uses the given length as right limit.
-        /// </summary>
+        /// </remarks>
         /// <typeparam name="TInstance">
         /// The generic type of a class that contains all help information.
         /// </typeparam>

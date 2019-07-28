@@ -28,14 +28,23 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Attributes
 {
     /// <summary>
+    /// The help closure attribute.
+    /// </summary>
+    /// <remarks>
     /// The help closure attribute is intended to be used to define a program's 
     /// summary that is appended at the end of the help output.
-    /// </summary>
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class HelpClosureAttribute : Attribute
     {
         #region Fields
 
+        /// <summary>
+        /// The content field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the help closure value.
+        /// </remarks>
         private String content = String.Empty;
 
         #endregion
@@ -45,6 +54,9 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Default attribute constructor.
         /// </summary>
+        /// <remarks>
+        /// This constructor just calls its base class constructor.
+        /// </remarks>
         public HelpClosureAttribute()
             : base()
         {
@@ -53,6 +65,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Attribute constructor that takes a content parameter.
         /// </summary>
+        /// <remarks>
+        /// This constructor calls its base class constructor and than it 
+        /// initializes its <see cref="Content"/> property.
+        /// </remarks>
         /// <param name="content">
         /// The text to be used as content.
         /// </param>
@@ -70,6 +86,12 @@ namespace Plexdata.ArgumentParser.Attributes
         /// Sets and gets the value of the content property. Default value 
         /// is "empty". 
         /// </summary>
+        /// <remarks>
+        /// This property sets and gets the value of the content property. 
+        /// </remarks>
+        /// <value>
+        /// The content assigned to an instance of this attribute.
+        /// </value>
         public String Content
         {
             get
@@ -85,6 +107,13 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Convenient getter to query if the content is used or not.
         /// </summary>
+        /// <remarks>
+        /// This property just represents a convenient getter to be able 
+        /// to query if the content is used or not.
+        /// </remarks>
+        /// <value>
+        /// True or false depending on current content availability.
+        /// </value>
         public Boolean IsContent
         {
             get
@@ -100,6 +129,10 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
+        /// <remarks>
+        /// This overwritten method returns a string representing the 
+        /// current object.
+        /// </remarks>
         /// <returns>
         /// A string that represents the current object.
         /// </returns>

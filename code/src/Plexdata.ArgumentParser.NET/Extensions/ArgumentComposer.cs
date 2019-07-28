@@ -32,14 +32,30 @@ using System.Text;
 namespace Plexdata.ArgumentParser.Extensions
 {
     /// <summary>
+    /// The argument composer extension.
+    /// </summary>
+    /// <remarks>
     /// Task of class argument composer is to provide some useful methods which might 
     /// be used by users.
-    /// </summary>
+    /// </remarks>
     public static class ArgumentComposer
     {
         #region Fields
 
+        /// <summary>
+        /// The double quotes field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the double quotes value.
+        /// </remarks>
         private const Char DoubleQuotes = '"';
+
+        /// <summary>
+        /// The zero termination field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the zero termination value.
+        /// </remarks>
         private const Char ZeroTermination = '\0';
 
         #endregion
@@ -266,8 +282,11 @@ namespace Plexdata.ArgumentParser.Extensions
         }
 
         /// <summary>
-        /// This methods checks if given string value contains any kind of whitespaces.
+        /// Checks if given string value contains any kind of whitespaces.
         /// </summary>
+        /// <remarks>
+        /// This methods checks if given string value contains any kind of whitespaces.
+        /// </remarks>
         /// <param name="value">
         /// The string value to be analyzed.
         /// </param>
@@ -372,6 +391,18 @@ namespace Plexdata.ArgumentParser.Extensions
 
         #region Privates
 
+        /// <summary>
+        /// Converts a string array into a string.
+        /// </summary>
+        /// <remarks>
+        /// This method converts a string array into a string.
+        /// </remarks>
+        /// <param name="items">
+        /// The list of strings to be stringified.
+        /// </param>
+        /// <returns>
+        /// The resulting string.
+        /// </returns>
         private static String Stringify(this String[] items)
         {
             if (items != null && items.Length > 0)
@@ -384,6 +415,18 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Converts a string array into a string.
+        /// </summary>
+        /// <remarks>
+        /// This method converts a string array into a string.
+        /// </remarks>
+        /// <param name="items">
+        /// The list of strings to be stringified.
+        /// </param>
+        /// <returns>
+        /// The resulting string.
+        /// </returns>
         private static String Stringify(this List<String> items)
         {
             if (items != null && items.Count > 0)

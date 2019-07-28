@@ -1,89 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B03740DD-05E6-45DF-8529-673F85772E35}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Plexdata.ArgumentParser</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>plexdata.de</Authors>
+    <Company>plexdata.de</Company>
+    <Copyright>Copyright © 2019 - plexdata.de</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/akesseler/Plexdata.ArgumentParser</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/icon.png?raw=true</PackageIconUrl>
+    <Description>This .NET Standard library is a simple command line argument parser. It uses attributes on classes that define which of the properties are used as command line arguments.</Description>
+    <PackageTags>command line commandline argument option parser parsing library syntax shell</PackageTags>
+    <PackageReleaseNotes>Package migration from .NET Framework 4.7.2 to .NET Standard 2.0 (BREAKING CHANGES).</PackageReleaseNotes>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
+    <FileVersion>1.0.2</FileVersion>
+    <Version>1.0.2</Version>
     <AssemblyName>Plexdata.ArgumentParser.NET</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Plexdata.ArgumentParser.NET.xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Plexdata.ArgumentParser.NET.xml</DocumentationFile>
+    <OutputPath>bin\Debug</OutputPath>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Plexdata.ArgumentParser.NET.xml</DocumentationFile>
+    <OutputPath>bin\Release</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Plexdata.ArgumentParser.NET.xml</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <None Include="..\..\..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Attributes\HelpClosureAttribute.cs" />
-    <Compile Include="Attributes\HelpLicenseAttribute.cs" />
-    <Compile Include="Attributes\HelpPrefaceAttribute.cs" />
-    <Compile Include="Attributes\HelpSummaryAttribute.cs" />
-    <Compile Include="Attributes\HelpUtilizeAttribute.cs" />
-    <Compile Include="Constants\DependencySeparators.cs" />
-    <Compile Include="Constants\DependencyType.cs" />
-    <Compile Include="Constants\Placeholders.cs" />
-    <Compile Include="Exceptions\ArgumentParserException.cs" />
-    <Compile Include="Exceptions\HelpGeneratorException.cs" />
-    <Compile Include="Exceptions\UtilizeViolationException.cs" />
-    <Compile Include="Exceptions\DependentViolationException.cs" />
-    <Compile Include="Exceptions\ExclusiveViolationException.cs" />
-    <Compile Include="Exceptions\OptionAttributeException.cs" />
-    <Compile Include="Exceptions\OptionViolationException.cs" />
-    <Compile Include="Exceptions\RequiredViolationException.cs" />
-    <Compile Include="Exceptions\SupportViolationException.cs" />
-    <Compile Include="Exceptions\SwitchAttributeException.cs" />
-    <Compile Include="Exceptions\VerbalAttributeException.cs" />
-    <Compile Include="Exceptions\VerbalViolationException.cs" />
-    <Compile Include="Extensions\HelpGenerator.cs" />
-    <Compile Include="Extensions\ProcessingExtension.cs" />
-    <Compile Include="Processors\ArgumentProcessor.cs" />
-    <Compile Include="Processors\ArgumentProcessorSetting.cs" />
-    <Compile Include="Attributes\OptionParameterAttribute.cs" />
-    <Compile Include="Attributes\ParameterObjectAttribute.cs" />
-    <Compile Include="Attributes\ParametersGroupAttribute.cs" />
-    <Compile Include="Attributes\SwitchParameterAttribute.cs" />
-    <Compile Include="Attributes\VerbalParameterAttribute.cs" />
-    <Compile Include="Constants\ParameterPrefixes.cs" />
-    <Compile Include="Constants\ParameterSeparators.cs" />
-    <Compile Include="Extensions\ArgumentResolver.cs" />
-    <Compile Include="Extensions\ArgumentComposer.cs" />
-    <Compile Include="Converters\OptionTypeConverter.cs" />
-    <Compile Include="Extensions\ValidationExtension.cs" />
-    <Compile Include="Processors\HelpProcessor.cs" />
-    <Compile Include="Processors\HelpProcessorSetting.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Plexdata.ArgumentParser.NET.nuspec" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+
 </Project>

@@ -32,8 +32,27 @@ using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Extensions
 {
+    /// <summary>
+    /// The processing extension.
+    /// </summary>
+    /// <remarks>
+    /// This extension class provides various methods needed to 
+    /// process an applied arguments list.
+    /// </remarks>
     internal static class ProcessingExtension
     {
+        /// <summary>
+        /// Removes the Prefix from a parameter.
+        /// </summary>
+        /// <remarks>
+        /// This method removes the Prefix from a parameter.
+        /// </remarks>
+        /// <param name="parameter">
+        /// The parameter to remove the prefix from.
+        /// </param>
+        /// <returns>
+        /// The prefix-free parameter.
+        /// </returns>
         public static String RemovePrefix(this String parameter)
         {
             if (!String.IsNullOrWhiteSpace(parameter))
@@ -75,6 +94,18 @@ namespace Plexdata.ArgumentParser.Extensions
             return parameter;
         }
 
+        /// <summary>
+        /// Convenient method to perform a parameter check.
+        /// </summary>
+        /// <remarks>
+        /// This convenient method performs a check if provided value represents a parameter.
+        /// </remarks>
+        /// <param name="parameter">
+        /// The value to check.
+        /// </param>
+        /// <returns>
+        /// True, if provided value represents a parameter and false otherwise.
+        /// </returns>
         public static Boolean IsParameter(this String parameter)
         {
             if (String.IsNullOrWhiteSpace(parameter))
@@ -125,6 +156,21 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Convenient method to check if a parameter type is one of the supported type.
+        /// </summary>
+        /// <remarks>
+        /// This convenient checks if a parameter type is one of the supported type.
+        /// </remarks>
+        /// <param name="parameter">
+        /// The parameter to check its type.
+        /// </param>
+        /// <param name="property">
+        /// The property information that contain additional type information.
+        /// </param>
+        /// <returns>
+        /// True, if type is supported and false otherwise.
+        /// </returns>
         public static Boolean IsSupportedDataType(this ParameterObjectAttribute parameter, PropertyInfo property)
         {
             if (parameter is SwitchParameterAttribute)
@@ -145,6 +191,18 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Convenient method to check for switch parameter types.
+        /// </summary>
+        /// <remarks>
+        /// This convenient method checks if a parameter is of type switch.
+        /// </remarks>
+        /// <param name="setting">
+        /// An instance of argument processor settings.
+        /// </param>
+        /// <returns>
+        /// True, if a parameter is of type switch and false otherwise.
+        /// </returns>
         public static Boolean IsSwitchParameter(this ArgumentProcessorSetting setting)
         {
             if (setting != null)
@@ -157,6 +215,18 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Convenient method to check for option parameter types.
+        /// </summary>
+        /// <remarks>
+        /// This convenient method checks if a parameter is of type option.
+        /// </remarks>
+        /// <param name="setting">
+        /// An instance of argument processor settings.
+        /// </param>
+        /// <returns>
+        /// True, if a parameter is of type option and false otherwise.
+        /// </returns>
         public static Boolean IsOptionParameter(this ArgumentProcessorSetting setting)
         {
             if (setting != null)
@@ -169,6 +239,18 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Convenient method to check for verbal parameter types.
+        /// </summary>
+        /// <remarks>
+        /// This convenient method checks if a parameter is of type verbal.
+        /// </remarks>
+        /// <param name="setting">
+        /// An instance of argument processor settings.
+        /// </param>
+        /// <returns>
+        /// True, if a parameter is of type verbal and false otherwise.
+        /// </returns>
         public static Boolean IsVerbalParameter(this ArgumentProcessorSetting setting)
         {
             if (setting != null)
@@ -181,6 +263,21 @@ namespace Plexdata.ArgumentParser.Extensions
             }
         }
 
+        /// <summary>
+        /// Extracts the applied parameter label.
+        /// </summary>
+        /// <remarks>
+        /// This method extracts the applied parameter label (solid or brief) from 
+        /// provided settings instance.
+        /// </remarks>
+        /// <param name="setting">
+        /// An instance of argument processor settings.
+        /// </param>
+        /// <returns>
+        /// The label value to be used. It is either the solid label or the brief 
+        /// label. But if none of both is used then the property name is assumed 
+        /// as parameter label.
+        /// </returns>
         public static String ToParameterLabel(this ArgumentProcessorSetting setting)
         {
             if (setting != null && setting.Attribute != null && setting.Property != null)

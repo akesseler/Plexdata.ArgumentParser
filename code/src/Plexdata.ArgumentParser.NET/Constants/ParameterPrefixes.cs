@@ -27,23 +27,35 @@ using System;
 namespace Plexdata.ArgumentParser.Constants
 {
     /// <summary>
-    /// This class provides access to all supported parameter prefixes.
+    /// The list of supported parameter prefixes.
     /// </summary>
+    /// <remarks>
+    /// This class provides access to all supported parameter prefixes.
+    /// </remarks>
     public static class ParameterPrefixes
     {
         /// <summary>
-        /// Represents the prefix to be used for solid label parameters.
+        /// The prefix for solid label parameters.
         /// </summary>
+        /// <remarks>
+        /// This value represents the prefix to be used for solid label parameters.
+        /// </remarks>
         public const String SolidPrefix = "--";
 
         /// <summary>
-        /// Represents the prefix to be used for brief label parameters.
+        /// The prefix for brief label parameters.
         /// </summary>
+        /// <remarks>
+        /// This value represents the prefix to be used for brief label parameters.
+        /// </remarks>
         public const String BriefPrefix = "-";
 
         /// <summary>
-        /// Represents the prefix to be used as alternative parameter prefix.
+        /// The alternative parameter prefix.
         /// </summary>
+        /// <remarks>
+        /// This value represents the prefix to be used as alternative parameter prefix.
+        /// </remarks>
         public const String OtherPrefix = "/";
     }
 }
