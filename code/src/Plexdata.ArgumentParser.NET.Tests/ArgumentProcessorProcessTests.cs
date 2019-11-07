@@ -29,6 +29,7 @@ using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
 using Plexdata.ArgumentParser.Processors;
 using System;
+using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Tests
 {
@@ -63,6 +64,11 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
+        private class ArgumentProcessorProcessHelperExtended : ArgumentProcessorProcessHelper
+        {
+            public dynamic Actual { get; set; }
+        }
+
         [ParametersGroup]
         private class TestClassSwitchProperties
         {
@@ -76,7 +82,7 @@ namespace Plexdata.ArgumentParser.Tests
             public Boolean Switch4 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] OnlySwitchTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] OnlySwitchTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1" },
@@ -120,7 +126,7 @@ namespace Plexdata.ArgumentParser.Tests
             public Int32? Option4 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] OnlyOptionTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] OnlyOptionTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--option1", "option-value-1" },
@@ -143,7 +149,7 @@ namespace Plexdata.ArgumentParser.Tests
             public String[] Verbal1 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] OnlyVerbalTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] OnlyVerbalTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "verbal1" },
@@ -162,7 +168,7 @@ namespace Plexdata.ArgumentParser.Tests
                 Expected = new TestClassVerbalProperties { Verbal1 = new String[] { "verbal 42" } } },
         };
 
-        private static ArgumentProcessorProcessHelper[] InvalidArgumentsTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] InvalidArgumentsTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = null,
@@ -185,7 +191,7 @@ namespace Plexdata.ArgumentParser.Tests
             public Boolean Dummy1 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] ExclusiveArgumentsTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] ExclusiveArgumentsTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1", "--dummy1" },
@@ -234,7 +240,7 @@ namespace Plexdata.ArgumentParser.Tests
             public Boolean Dummy1 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] RequiredArgumentsTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] RequiredArgumentsTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch-required" },
@@ -280,7 +286,7 @@ namespace Plexdata.ArgumentParser.Tests
             public Boolean Switch4 { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] DependencyArgumentsTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] DependencyArgumentsTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--swt1" },
@@ -339,7 +345,7 @@ namespace Plexdata.ArgumentParser.Tests
             public String[] Files { get; set; }
         }
 
-        private static ArgumentProcessorProcessHelper[] MixedArgumentsTestData = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] MixedArgumentsTestData = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -394,7 +400,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("OnlySwitchTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlySwitchTestData))]
         public void Process_TestClassSwitchProperties_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -408,7 +414,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("OnlyOptionTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlyOptionTestData))]
         public void Process_TestClassOptionProperties_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -422,7 +428,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("OnlyVerbalTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlyVerbalTestData))]
         public void Process_TestClassVerbalProperties_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -436,7 +442,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("InvalidArgumentsTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.InvalidArgumentsTestData))]
         public void Process_InvalidArguments_ThrowsException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -472,7 +478,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("ExclusiveArgumentsTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.ExclusiveArgumentsTestData))]
         public void Process_ExclusiveArguments_ThrowsException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -482,7 +488,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("RequiredArgumentsTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.RequiredArgumentsTestData))]
         public void Process_RequiredArguments_ThrowsException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -492,7 +498,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("DependencyArgumentsTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.DependencyArgumentsTestData))]
         public void Process_DependencyArguments_ThrowsException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -502,7 +508,7 @@ namespace Plexdata.ArgumentParser.Tests
         }
 
         [Test]
-        [TestCaseSource("MixedArgumentsTestData")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.MixedArgumentsTestData))]
         public void Process_MixedArguments_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -530,7 +536,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -562,10 +568,10 @@ namespace Plexdata.ArgumentParser.Tests
                 Arguments = new String[] { "--debug", "-d" },
                 Expected = new BugfixTestClassSwitchDebugDefaultA { Debug = true, Default = true },
             },
-         };
+        };
 
         [Test]
-        [TestCaseSource("BugfixTestDataSwitchDebugDefaultA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDebugDefaultA))]
         public void Process_BugfixTestDataSwitchDebugDefaultA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -593,7 +599,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDebugDefaultB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -628,7 +634,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataSwitchDebugDefaultB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDebugDefaultB))]
         public void Process_BugfixTestDataSwitchDebugDefaultB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -656,7 +662,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -691,7 +697,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataSwitchDefaultDebugA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDefaultDebugA))]
         public void Process_BugfixTestDataSwitchDefaultDebugA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -719,7 +725,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataSwitchDefaultDebugB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -754,7 +760,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataSwitchDefaultDebugB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDefaultDebugB))]
         public void Process_BugfixTestDataSwitchDefaultDebugB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -782,7 +788,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -814,10 +820,10 @@ namespace Plexdata.ArgumentParser.Tests
                 Arguments = new String[] { "--debug", "debug-value", "-d", "default-value" },
                 Expected = new BugfixTestClassOptionDebugDefaultA { Debug = "debug-value", Default = "default-value" },
             },
-   };
+        };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDebugDefaultA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultA))]
         public void Process_BugfixTestDataOptionDebugDefaultA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -845,7 +851,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultASeparator = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultASeparator = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -877,10 +883,10 @@ namespace Plexdata.ArgumentParser.Tests
                 Arguments = new String[] { "--debug=debug-value", "-d=default-value" },
                 Expected = new BugfixTestClassOptionDebugDefaultASeparator { Debug = "debug-value", Default = "default-value" },
             },
-   };
+        };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDebugDefaultASeparator")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultASeparator))]
         public void Process_BugfixTestDataOptionDebugDefaultASeparator_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -908,7 +914,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -943,7 +949,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDebugDefaultB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultB))]
         public void Process_BugfixTestDataOptionDebugDefaultB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -971,7 +977,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultBSeparator = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDebugDefaultBSeparator = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1006,7 +1012,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDebugDefaultBSeparator")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultBSeparator))]
         public void Process_BugfixTestDataOptionDebugDefaultBSeparator_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1034,7 +1040,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1069,7 +1075,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDefaultDebugA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugA))]
         public void Process_BugfixTestDataOptionDefaultDebugA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1097,7 +1103,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugASeparator = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugASeparator = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1132,7 +1138,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDefaultDebugASeparator")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugASeparator))]
         public void Process_BugfixTestDataOptionDefaultDebugASeparator_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1160,7 +1166,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1195,7 +1201,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDefaultDebugB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugB))]
         public void Process_BugfixTestDataOptionDefaultDebugB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1223,7 +1229,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugBSeparator = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataOptionDefaultDebugBSeparator = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1258,7 +1264,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataOptionDefaultDebugBSeparator")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugBSeparator))]
         public void Process_BugfixTestDataOptionDefaultDebugBSeparator_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1286,7 +1292,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1321,7 +1327,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDefaultDebugA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugA))]
         public void Process_BugfixTestDataMixedDefaultDebugA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1349,7 +1355,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1384,7 +1390,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDefaultDebugB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugB))]
         public void Process_BugfixTestDataMixedDefaultDebugB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1412,7 +1418,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugC = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugC = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1447,7 +1453,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDefaultDebugC")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugC))]
         public void Process_BugfixTestDataMixedDefaultDebugC_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1475,7 +1481,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugD = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDefaultDebugD = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1510,7 +1516,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDefaultDebugD")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugD))]
         public void Process_BugfixTestDataMixedDefaultDebugD_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1538,7 +1544,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultA = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultA = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1573,7 +1579,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDebugDefaultA")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultA))]
         public void Process_BugfixTestDataMixedDebugDefaultA_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1601,7 +1607,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultB = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultB = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1636,7 +1642,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDebugDefaultB")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultB))]
         public void Process_BugfixTestDataMixedDebugDefaultB_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1664,7 +1670,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultC = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultC = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1699,7 +1705,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDebugDefaultC")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultC))]
         public void Process_BugfixTestDataMixedDebugDefaultC_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1727,7 +1733,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultD = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] BugfixTestDataMixedDebugDefaultD = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1762,7 +1768,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("BugfixTestDataMixedDebugDefaultD")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultD))]
         public void Process_BugfixTestDataMixedDebugDefaultD_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1790,7 +1796,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataMixedSeparators = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataMixedSeparators = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1815,7 +1821,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("TestDataMixedSeparators")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataMixedSeparators))]
         public void Process_TestDataMixedSeparators_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1855,7 +1861,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataDependencySingleSingle = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataDependencySingleSingle = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1870,7 +1876,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("TestDataDependencySingleSingle")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencySingleSingle))]
         public void Process_TestDataDependencySingleSingle_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1901,7 +1907,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataDependencySingleDouble = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataDependencySingleDouble = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -1936,7 +1942,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("TestDataDependencySingleDouble")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencySingleDouble))]
         public void Process_TestDataDependencySingleDouble_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -1971,7 +1977,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataDependencyDoubleSingle = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataDependencyDoubleSingle = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2016,7 +2022,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("TestDataDependencyDoubleSingle")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencyDoubleSingle))]
         public void Process_TestDataDependencyDoubleSingle_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2054,7 +2060,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataDependencyDoubleDouble = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataDependencyDoubleDouble = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2139,7 +2145,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource("TestDataDependencyDoubleDouble")]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencyDoubleDouble))]
         public void Process_TestDataDependencyDoubleDouble_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2185,7 +2191,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2206,7 +2212,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitStrongInvalid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitStrongInvalid))]
         public void Process_TestDataOptionalRequiredImplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2215,7 +2221,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongValid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitStrongValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2235,7 +2241,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitStrongValid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitStrongValid))]
         public void Process_TestDataOptionalRequiredImplicitStrongValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2281,7 +2287,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2298,7 +2304,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitWeakInvalid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitWeakInvalid))]
         public void Process_TestDataOptionalRequiredImplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2307,7 +2313,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakValid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredImplicitWeakValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2332,7 +2338,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredImplicitWeakValid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitWeakValid))]
         public void Process_TestDataOptionalRequiredImplicitWeakValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2378,7 +2384,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2407,7 +2413,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitStrongInvalid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitStrongInvalid))]
         public void Process_TestDataOptionalRequiredExplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2416,7 +2422,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongValid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitStrongValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2426,7 +2432,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitStrongValid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitStrongValid))]
         public void Process_TestDataOptionalRequiredExplicitStrongValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2472,7 +2478,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2489,7 +2495,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitWeakInvalid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitWeakInvalid))]
         public void Process_TestDataOptionalRequiredExplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2498,7 +2504,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakValid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredExplicitWeakValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2523,7 +2529,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredExplicitWeakValid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitWeakValid))]
         public void Process_TestDataOptionalRequiredExplicitWeakValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2565,7 +2571,7 @@ namespace Plexdata.ArgumentParser.Tests
             }
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualInvalid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualInvalid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2578,7 +2584,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredMutualInvalid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredMutualInvalid))]
         public void Process_TestDataOptionalRequiredMutualInvalid_ThrowsDependentViolationException(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2587,7 +2593,7 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        private static ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualValid = new ArgumentProcessorProcessHelper[]
+        private static readonly ArgumentProcessorProcessHelper[] TestDataOptionalRequiredMutualValid = new ArgumentProcessorProcessHelper[]
         {
             new ArgumentProcessorProcessHelper
             {
@@ -2597,7 +2603,7 @@ namespace Plexdata.ArgumentParser.Tests
         };
 
         [Test]
-        [TestCaseSource(nameof(TestDataOptionalRequiredMutualValid))]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredMutualValid))]
         public void Process_TestDataOptionalRequiredMutualValid_ResultIsEqual(Object testObject)
         {
             ArgumentProcessorProcessHelper testHelper = testObject as ArgumentProcessorProcessHelper;
@@ -2608,6 +2614,148 @@ namespace Plexdata.ArgumentParser.Tests
             processor.Process();
 
             Assert.IsTrue(expected.IsEqual(actual));
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsStringWrongType
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = "12345.56")]
+            public Int32 Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsObjectWrongType
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = 12345.56)]
+            public Int32 Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsNotNullable
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = null)]
+            public Int32 Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        private static readonly ArgumentProcessorProcessHelperExtended[] TestDataOptionalDefaultValueWrongType = new ArgumentProcessorProcessHelperExtended[]
+        {
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-1" },
+                Actual    = new TestClassOptionalDefaultValueAsStringWrongType(),
+            },
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-2" },
+                Actual    = new TestClassOptionalDefaultValueAsObjectWrongType(),
+            },
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-3" },
+                Actual    = new TestClassOptionalDefaultValueAsNotNullable(),
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalDefaultValueWrongType))]
+        public void Process_TestDataOptionalDefaultValueWrongType_ThrowsDefaultValueException(Object testObject)
+        {
+            ArgumentProcessorProcessHelperExtended testHelper = testObject as ArgumentProcessorProcessHelperExtended;
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(testHelper.Actual, testHelper.Arguments);
+            Assert.That(() => processor.Process(), Throws.InstanceOf<DefaultValueException>());
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsStringValidType
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = "12345")]
+            public Int32 Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsObjectValidType
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = 54321)]
+            public Int32 Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsNullableWithNull
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = null)]
+            public Int32? Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalDefaultValueAsNullableWithData
+        {
+            [OptionParameter(SolidLabel = "value", DefaultValue = 99999)]
+            public Int32? Value { get; set; }
+
+            [OptionParameter(SolidLabel = "other")]
+            public String Other { get; set; }
+        }
+
+        private static readonly ArgumentProcessorProcessHelperExtended[] TestDataOptionalDefaultValueValidType = new ArgumentProcessorProcessHelperExtended[]
+        {
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-1" },
+                Expected  = 12345,
+                Actual    = new TestClassOptionalDefaultValueAsStringValidType(),
+            },
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-2" },
+                Expected  = 54321,
+                Actual    = new TestClassOptionalDefaultValueAsObjectValidType(),
+            },
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-3" },
+                Expected  = null,
+                Actual    = new TestClassOptionalDefaultValueAsNullableWithNull(),
+            },
+            new ArgumentProcessorProcessHelperExtended()
+            {
+                Arguments = new String[] { "--other", "data-4" },
+                Expected  = 99999,
+                Actual    = new TestClassOptionalDefaultValueAsNullableWithData(),
+            },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalDefaultValueValidType))]
+        public void Process_TestDataOptionalDefaultValueValidType_DefaultValueAsExpected(Object testObject)
+        {
+            ArgumentProcessorProcessHelperExtended testHelper = testObject as ArgumentProcessorProcessHelperExtended;
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(testHelper.Actual, testHelper.Arguments);
+            processor.Process();
+
+            Object actual = testHelper.Actual.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty).GetValue(testHelper.Actual);
+            Object expected = testHelper.Expected;
+
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

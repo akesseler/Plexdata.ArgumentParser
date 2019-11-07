@@ -1,4 +1,13 @@
 
+**1.0.3**
+- Support of `DefaultValue` attribute for optional parameters.
+- Package release notes point to file `HISTORY.md`.
+- Fixing of some code smells in tests.
+- Update of online documentation as well as Wiki.
+- Version number increased.
+- Package release on `nuget.org`.
+- Release uploaded on `github.com`.
+
 **1.0.2**
 - Package migration from .NET Framework 4.7.2 to .NET Standard 2.0 (BREAKING CHANGES).
 - Whole documentation reviewed and adding of missing parts.

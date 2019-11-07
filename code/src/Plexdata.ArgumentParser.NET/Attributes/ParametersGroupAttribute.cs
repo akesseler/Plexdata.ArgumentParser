@@ -31,7 +31,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// </summary>
     /// <remarks>
     /// This attribute is intended to be used to tag classes with it that define all 
-    /// possible respectively all supported command line arguments.Keep in mind, this 
+    /// possible respectively all supported command line arguments. Keep in mind, this 
     /// attribute is only on declarative nature and is not used internally.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

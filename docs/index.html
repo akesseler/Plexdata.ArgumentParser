@@ -298,6 +298,25 @@ With this class in background, users can for instance call the program as shown 
 </p>
 <pre><code>$&gt; program.exe --username &lt;username&gt; --password &lt;password&gt;
 $&gt; program.exe --password &lt;password&gt; --username &lt;username&gt;</code></pre>
+<p>
+Additionally, it is possible to use default values for optional parameters. How to use them is shown in 
+the next example.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "host", DefaultValue = "http://example.org")]
+    public String Host { get; set; }
+
+    [OptionParameter(SolidLabel = "port", DefaultValue = 12345)]
+    public UInt16 Port { get; set; }
+}</code></pre>
+<p>
+Here are some rules of how to use this feature. Each default value can be applied as type&ndash;save 
+constant value and as string literal as well for all of the supported types. An exception of type 
+<code>DefaultValueException</code> is thrown if applying a default value fails for any reason. Default 
+values are replaced by the argument parser as soon as they are provided as command line argument.
+</p>
 
 <h3 id="usage-verbal">Verbal</h3>
 
