@@ -12,10 +12,10 @@
     <PackageIconUrl>https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/icon.png?raw=true</PackageIconUrl>
     <Description>This .NET Standard library is a simple command line argument parser. It uses attributes on classes that define which of the properties are used as command line arguments.</Description>
     <PackageTags>command line commandline argument option parser parsing library syntax shell</PackageTags>
-    <PackageReleaseNotes>Package migration from .NET Framework 4.7.2 to .NET Standard 2.0 (BREAKING CHANGES).</PackageReleaseNotes>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <FileVersion>1.0.2</FileVersion>
-    <Version>1.0.2</Version>
+    <PackageReleaseNotes>See project history under https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/code/src/HISTORY.md</PackageReleaseNotes>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
+    <Version>1.0.3</Version>
     <AssemblyName>Plexdata.ArgumentParser.NET</AssemblyName>
   </PropertyGroup>
 

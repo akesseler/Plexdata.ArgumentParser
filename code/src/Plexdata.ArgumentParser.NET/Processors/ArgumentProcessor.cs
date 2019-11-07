@@ -321,7 +321,7 @@ namespace Plexdata.ArgumentParser.Processors
 
                                     if (attribute.IsSupportedDataType(property))
                                     {
-                                        this.Settings.Add(new ArgumentProcessorSetting(property, attribute));
+                                        this.Settings.Add(this.ApplyDefaultValue(new ArgumentProcessorSetting(property, attribute)));
                                     }
                                     else
                                     {
@@ -750,6 +750,50 @@ namespace Plexdata.ArgumentParser.Processors
             {
                 throw new DependentViolationException($"Parameter \"{source.ToParameterLabel()}\" requires {String.Join(" and ", overall.Select(x => $"\"{x.ToParameterLabel()}\""))}.");
             }
+        }
+
+        /// <summary>
+        /// Tries to apply a default value to its related property.
+        /// </summary>
+        /// <remarks>
+        /// This method tries to apply a default value to its related property. For 
+        /// the moment, only optional parameters support a usage of default values.
+        /// </remarks>
+        /// <param name="setting">
+        /// An instance of class <see cref="ArgumentProcessorSetting"/> to get the 
+        /// default value from to be applied.
+        /// </param>
+        /// <returns>
+        /// The same instance of class <see cref="ArgumentProcessorSetting"/> that 
+        /// has been provided as parameter.
+        /// </returns>
+        /// <exception cref="DefaultValueException">
+        /// This exception is thrown in all cases of applying a default value fails.
+        /// </exception>
+        private ArgumentProcessorSetting ApplyDefaultValue(ArgumentProcessorSetting setting)
+        {
+            if (!(setting.Attribute is OptionParameterAttribute attribute))
+            {
+                return setting;
+            }
+
+            if (!attribute.HasDefaultValue)
+            {
+                return setting;
+            }
+
+            try
+            {
+                setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(attribute.DefaultValue?.ToString(), setting.Property.PropertyType));
+            }
+            catch (Exception exception)
+            {
+                throw new DefaultValueException(
+                    $"Could not apply default value of \"{(attribute.DefaultValue is null ? "null" : attribute.DefaultValue.ToString())}\" " +
+                    $"to property \"{setting.Property.Name}\". See inner exception for more information.", exception);
+            }
+
+            return setting;
         }
 
         #endregion

@@ -46,15 +46,29 @@ namespace Plexdata.ArgumentParser.Tests
             Assert.Throws<OptionAttributeException>(() => { attribute.Separator = actual; });
         }
 
+        [Test]
         [TestCase('#', '#')]
         [TestCase(ParameterSeparators.SpaceSeparator, ParameterSeparators.SpaceSeparator)]
         [TestCase(ParameterSeparators.ColonSeparator, ParameterSeparators.ColonSeparator)]
         [TestCase(ParameterSeparators.EqualSeparator, ParameterSeparators.EqualSeparator)]
         public void Separator_SetProperty_ResultIsEqual(Char actual, Char expected)
         {
-            OptionParameterAttribute attribute = new OptionParameterAttribute();
-            attribute.Separator = actual;
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { Separator = actual };
             Assert.AreEqual(attribute.Separator, expected);
+        }
+
+        [Test]
+        public void DefaultValue_NotChanged_HasDefaultValueIsFalse()
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute();
+            Assert.That(attribute.HasDefaultValue, Is.False);
+        }
+
+        [Test]
+        public void DefaultValue_HasChanged_HasDefaultValueIsTrue()
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { DefaultValue = null };
+            Assert.That(attribute.HasDefaultValue, Is.True);
         }
     }
 }

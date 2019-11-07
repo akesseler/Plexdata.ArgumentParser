@@ -57,6 +57,14 @@ namespace Plexdata.ArgumentParser.Attributes
         /// </remarks>
         private Char separator = ParameterSeparators.DefaultSeparator;
 
+        /// <summary>
+        /// The default value field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the default value of an optional parameter.
+        /// </remarks>
+        private Object defaultValue = null;
+
         #endregion
 
         #region Construction
@@ -81,7 +89,7 @@ namespace Plexdata.ArgumentParser.Attributes
         /// from its option value.
         /// </summary>
         /// <remarks>
-        /// This property sets and gets The delimiter to be used to split 
+        /// This property sets and gets the delimiter to be used to split 
         /// the parameter from its option value.
         /// </remarks>
         /// <value>
@@ -104,6 +112,56 @@ namespace Plexdata.ArgumentParser.Attributes
             }
         }
 
+        /// <summary>
+        /// Sets and gets the default value of an optional parameter.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This property sets and gets the default value of an optional 
+        /// parameter. Be aware, the setter of this property also changes the 
+        /// state of <see cref="OptionParameterAttribute.HasDefaultValue"/>.
+        /// </para>
+        /// <para>
+        /// Each default value can be applied as type-ave constant value and as 
+        /// string literal as well for all of the supported types. An exception 
+        /// of type <see cref="DefaultValueException"/> is thrown if applying a 
+        /// default value fails for any reason. Default values are replaced by 
+        /// the argument parser as soon as they are provided as command line 
+        /// argument.
+        /// </para>
+        /// </remarks>
+        /// <value>
+        /// The default value assigned to an instance of this attribute.
+        /// </value>
+        /// <seealso cref="OptionParameterAttribute.HasDefaultValue"/>
+        public Object DefaultValue
+        {
+            get
+            {
+                return this.defaultValue;
+            }
+            set
+            {
+                this.defaultValue = value;
+                this.HasDefaultValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Determines the state of default value usage.
+        /// </summary>
+        /// <remarks>
+        /// This property determines the state of default value usage. The initial 
+        /// value of this property is <c>false</c> and only changes if the setter 
+        /// of <see cref="OptionParameterAttribute.DefaultValue"/> was called at 
+        /// least once.
+        /// </remarks>
+        /// <value>
+        /// True, if a default value has been applied, and false otherwise. 
+        /// </value>
+        /// <seealso cref="OptionParameterAttribute.DefaultValue"/>
+        public Boolean HasDefaultValue { get; private set; } = false;
+
         #endregion
 
         #region Publics 
@@ -122,7 +180,11 @@ namespace Plexdata.ArgumentParser.Attributes
         {
             StringBuilder result = new StringBuilder(128);
 
-            result.Append($"{base.ToString()}, Separator: {this.Separator}");
+            result.Append(
+                $"{base.ToString()}, " +
+                $"{nameof(this.Separator)}: {this.Separator}, " +
+                $"{nameof(this.DefaultValue)}: {(this.DefaultValue is null ? "null" : this.DefaultValue.ToString())}, " +
+                $"{nameof(this.HasDefaultValue)} : {this.HasDefaultValue}");
 
             return result.ToString();
         }
