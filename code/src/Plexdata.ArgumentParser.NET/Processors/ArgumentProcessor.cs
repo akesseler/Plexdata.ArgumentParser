@@ -323,6 +323,10 @@ namespace Plexdata.ArgumentParser.Processors
                                     {
                                         this.Settings.Add(this.ApplyDefaultValue(new ArgumentProcessorSetting(property, attribute)));
                                     }
+                                    else if (property.PropertyType.HasConverter())
+                                    {
+                                        this.Settings.Add(new ArgumentProcessorSetting(property, attribute));
+                                    }
                                     else
                                     {
                                         throw new SupportViolationException(
@@ -448,7 +452,16 @@ namespace Plexdata.ArgumentParser.Processors
                                 }
                                 else
                                 {
-                                    setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(argument, setting.Property.PropertyType));
+                                    if (setting.Property.PropertyType.HasConverter())
+                                    {
+                                        setting.Property.SetValue(this.Instance, setting.Property.PropertyType
+                                            .InvokeConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
+                                    }
+                                    else
+                                    {
+                                        setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(argument, setting.Property.PropertyType));
+                                    }
+
                                     processed.Add(setting);
                                 }
                             }

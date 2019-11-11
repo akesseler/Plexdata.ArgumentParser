@@ -367,6 +367,112 @@ As shown above, it is strictly recommended to surround any call to the command l
 <code>try&hellip;catch</code> block.
 </p>
 
+<h4 id="usage-custom-types">Custom Types</h4>
+
+<p>
+It is also possible to convert a special combination of command line arguments into custom types. For 
+this purpose the library supports the generic interface <code>ICustomConverter</code>. This interface 
+enables users to implement their own argument parsing algorithms. This section provides an example of 
+how to use this interface in combination with the argument parser. Below please find a fully qualified 
+example of how to use the feature of custom type conversion.
+</p>
+
+<pre><code>using Plexdata.ArgumentParser.Attributes;
+using Plexdata.ArgumentParser.Constants;
+using Plexdata.ArgumentParser.Extensions;
+using Plexdata.ArgumentParser.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace Plexdata.ArgumentParser.Tester
+{
+    class Program
+    {
+        public class CustomType
+        {
+            public Int32 Top { get; set; }
+            public Int32 Left { get; set; }
+            public Int32 Height { get; set; }
+            public Int32 Width { get; set; }
+        }
+
+        [ParametersGroup]
+        public class CmdLineArgs
+        {
+            [OptionParameter(SolidLabel = "region", BriefLabel = "r")]
+            public CustomType Region { get; set; }
+        }
+
+        public class CustomConverter : ICustomConverter&lt;CustomType&gt;
+        {
+            public CustomType Convert(String parameter, String argument, String delimiter)
+            {
+                if (argument is null)
+                {
+                    return null;
+                }
+
+                delimiter = delimiter ?? ArgumentDelimiters.DefaultDelimiter;
+
+                String[] splitted = argument.Split(delimiter.ToCharArray());
+
+                return new CustomType
+                {
+                    Top = Int32.Parse(splitted[0]),
+                    Left = Int32.Parse(splitted[1]),
+                    Height = Int32.Parse(splitted[2]),
+                    Width = Int32.Parse(splitted[3])
+                };
+            }
+        }
+
+        static void Main(String[] args)
+        {
+            try
+            {
+                // Adding of custom type converter.
+                CustomConverter converter = new CustomConverter();
+                converter.AddConverter();
+
+                List&lt;String&gt; options = new List&lt;String&gt;(Environment.CommandLine.Extract());
+                if (options != null && options.Count &gt; 1)
+                {
+                    // Removing of first line because it contains the executable name.
+                    options.RemoveAt(0);
+
+                    // Parsing of remaining command line arguments.
+                    CmdLineArgs cmdLineArgs = new CmdLineArgs();
+                    cmdLineArgs.Process(options);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+        }
+    }
+}</code></pre>
+
+<p>
+As shown in the above example, the very first step in using custom type conversion is the implementation 
+of a class representing the custom type. As next, a class representing all command line arguments is 
+needed and this uses the custom type as optional parameter. Thereafter, an implementation of interface 
+<code>ICustomConverter</code> is shown that example. Finally, the program&rsquo;s <code>Main</code> method 
+registers that interface implementation and then it parses the actual command line arguments.
+</p>
+
+<p>
+Calling the program as shown below will than trigger the custom type parsing.
+</p>
+
+<pre><code>$&gt; program.exe --region 10:20:30:40</code></pre>
+
+<p>
+Finally, one note to mention is still left. The attribute <code>OptionParameter</code> supports a new 
+property called <code>Delimiter</code> that allows users to customize the delimiter. This delimiter is 
+passed as parameter of the interface method <code>Convert</code>.
+</p>
+
 <h3 id="usage-problem">Problem</h3>
 
 <p>

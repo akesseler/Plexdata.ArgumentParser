@@ -1,4 +1,12 @@
 
+**1.0.4**
+- Introduction on interface `ICustomConverter`.
+- Adding of help file (CHM) generation.
+- TBD: Update of online documentation as well as Wiki.
+- TBD: Version number increased.
+- TBD: Package release on `nuget.org`.
+- TBD: Release uploaded on `github.com`.
+
 **1.0.3**
 - Support of `DefaultValue` attribute for optional parameters.
 - Package release notes point to file `HISTORY.md`.
