@@ -14,16 +14,16 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>Cross-platform (.NET Core/.NET Standard)</FrameworkVersion>
-    <OutputPath>wiki\</OutputPath>
+    <OutputPath>help\</OutputPath>
     <HtmlHelpName>Plexdata.ArgumentParser.NET</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\src\Plexdata.ArgumentParser.NET\bin\Release\netstandard2.0\Plexdata.ArgumentParser.NET.dll" />
       <DocumentationSource sourceFile="..\src\Plexdata.ArgumentParser.NET\bin\Release\netstandard2.0\Plexdata.ArgumentParser.NET.xml" />
     </DocumentationSources>
-    <HelpFileFormat>Markdown</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <SyntaxFilters>C#</SyntaxFilters>
-    <PresentationStyle>Markdown</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>

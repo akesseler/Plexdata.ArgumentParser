@@ -35,6 +35,16 @@ namespace Plexdata.ArgumentParser.Tests
     public class OptionParameterAttributeTests
     {
         [Test]
+        public void OptionParameter_Construction_ResultAsExpected()
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute();
+            Assert.That(attribute.Separator, Is.EqualTo(ParameterSeparators.DefaultSeparator));
+            Assert.That(attribute.Delimiter, Is.EqualTo(ArgumentDelimiters.DefaultDelimiter));
+            Assert.That(attribute.DefaultValue, Is.Null);
+            Assert.That(attribute.HasDefaultValue, Is.False);
+        }
+
+        [Test]
         [TestCase('\u0000')]
         [TestCase('\u001F')]
         [TestCase('\u007F')]
@@ -43,7 +53,7 @@ namespace Plexdata.ArgumentParser.Tests
         public void Separator_SetProperty_ThrowsException(Char actual)
         {
             OptionParameterAttribute attribute = new OptionParameterAttribute();
-            Assert.Throws<OptionAttributeException>(() => { attribute.Separator = actual; });
+            Assert.That(() => { attribute.Separator = actual; }, Throws.InstanceOf<OptionAttributeException>());
         }
 
         [Test]
@@ -54,7 +64,18 @@ namespace Plexdata.ArgumentParser.Tests
         public void Separator_SetProperty_ResultIsEqual(Char actual, Char expected)
         {
             OptionParameterAttribute attribute = new OptionParameterAttribute() { Separator = actual };
-            Assert.AreEqual(attribute.Separator, expected);
+            Assert.That(attribute.Separator, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase(null, "")]
+        [TestCase("#", "#")]
+        [TestCase(ArgumentDelimiters.CommaDelimiter, ArgumentDelimiters.CommaDelimiter)]
+        [TestCase(ArgumentDelimiters.ColonDelimiter, ArgumentDelimiters.ColonDelimiter)]
+        public void Delimiter_SetProperty_ResultIsEqual(String actual, String expected)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { Delimiter = actual };
+            Assert.That(attribute.Delimiter, Is.EqualTo(expected));
         }
 
         [Test]

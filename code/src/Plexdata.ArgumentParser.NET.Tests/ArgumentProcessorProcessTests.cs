@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
+using Moq;
 using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
 using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
+using Plexdata.ArgumentParser.Interfaces;
 using Plexdata.ArgumentParser.Processors;
 using System;
 using System.Reflection;
@@ -2756,6 +2758,51 @@ namespace Plexdata.ArgumentParser.Tests
             Object expected = testHelper.Expected;
 
             Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        public class ComplexType
+        {
+            public String Width { get; set; }
+            public String Height { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalWithComplexType
+        {
+            [OptionParameter(SolidLabel = "complex", Delimiter = "@")]
+            public ComplexType Complex { get; set; }
+        }
+
+        [Test]
+        public void Process_ComplexTypeUnregistered_ThrowsSupportViolationException()
+        {
+            String[] arguments = new String[] { "--complex", "width,height" };
+
+            TestClassOptionalWithComplexType actual = new TestClassOptionalWithComplexType();
+
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
+
+            Assert.That(() => processor.Process(), Throws.InstanceOf<SupportViolationException>());
+        }
+
+        [Test]
+        [Category("IntegrationTest")]
+        public void Process_ComplexTypeIsRegistered_InterfaceConvertWasCalledAsExpected()
+        {
+            String[] arguments = new String[] { "--complex", "width,height" };
+
+            Mock<ICustomConverter<ComplexType>> converter = new Mock<ICustomConverter<ComplexType>>();
+
+            converter.Object.AddConverter();
+
+            TestClassOptionalWithComplexType actual = new TestClassOptionalWithComplexType();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
+
+            processor.Process();
+
+            converter.Object.RemoveConverter();
+
+            converter.Verify(x => x.Convert("--complex", "width,height", "@"), Times.Once);
         }
     }
 }

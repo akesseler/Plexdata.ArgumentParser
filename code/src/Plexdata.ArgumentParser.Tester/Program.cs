@@ -141,10 +141,93 @@ namespace Plexdata.ArgumentParser.Tester
           --debug         Run program in Debug mode.
         */
 
-        static void Main(string[] args)
+        static void Main(String[] args)
         {
             Console.WriteLine("Do something useful...");
             Console.ReadKey();
         }
     }
 }
+
+/* Custom type example
+ * using Plexdata.ArgumentParser.Attributes;
+ * using Plexdata.ArgumentParser.Constants;
+ * using Plexdata.ArgumentParser.Extensions;
+ * using Plexdata.ArgumentParser.Interfaces;
+ * using System;
+ * using System.Collections.Generic;
+ * 
+ * namespace Plexdata.ArgumentParser.Tester
+ * {
+ *     class Program
+ *     {
+ *         public class CustomType
+ *         {
+ *             public Int32 Top { get; set; }
+ *             public Int32 Left { get; set; }
+ *             public Int32 Height { get; set; }
+ *             public Int32 Width { get; set; }
+ *         }
+ * 
+ *         [ParametersGroup]
+ *         public class CmdLineArgs
+ *         {
+ *             [OptionParameter(SolidLabel = "region", BriefLabel = "r")]
+ *             public CustomType Region { get; set; }
+ *         }
+ * 
+ *         public class CustomConverter : ICustomConverter<CustomType>
+ *         {
+ *             public CustomType Convert(String parameter, String argument, String delimiter)
+ *             {
+ *                 if (argument is null)
+ *                 {
+ *                     return null;
+ *                 }
+ * 
+ *                 delimiter = delimiter ?? ArgumentDelimiters.DefaultDelimiter;
+ * 
+ *                 String[] splitted = argument.Split(delimiter.ToCharArray());
+ * 
+ *                 return new CustomType
+ *                 {
+ *                     Top = Int32.Parse(splitted[0]),
+ *                     Left = Int32.Parse(splitted[1]),
+ *                     Height = Int32.Parse(splitted[2]),
+ *                     Width = Int32.Parse(splitted[3])
+ *                 };
+ *             }
+ *         }
+ * 
+ *         static void Main(string[] args)
+ *         {
+ *             try
+ *             {
+ *                 // Adding of custom type converter.
+ *                 CustomConverter converter = new CustomConverter();
+ *                 converter.AddConverter();
+ * 
+ *                 List<String> options = new List<String>(Environment.CommandLine.Extract());
+ * 
+ *                 if (options != null && options.Count > 1)
+ *                 {
+ *                     // Removing of first line because it contains the executable name.
+ *                     options.RemoveAt(0);
+ * 
+ *                     // Parsing of remaining command line arguments.
+ *                     CmdLineArgs cmdLineArgs = new CmdLineArgs();
+ *                     cmdLineArgs.Process(options);
+ *                 }
+ *             }
+ *             catch (Exception exception)
+ *             {
+ *                 Console.WriteLine(exception);
+ *             }
+ *         }
+ *     }
+ * }
+ *
+ * $> program.exe --region 10:20:30:40
+ *
+ */
+

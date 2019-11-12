@@ -58,6 +58,14 @@ namespace Plexdata.ArgumentParser.Attributes
         private Char separator = ParameterSeparators.DefaultSeparator;
 
         /// <summary>
+        /// The delimiter field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the delimiter value.
+        /// </remarks>
+        private String delimiter = ArgumentDelimiters.DefaultDelimiter;
+
+        /// <summary>
         /// The default value field.
         /// </summary>
         /// <remarks>
@@ -85,11 +93,11 @@ namespace Plexdata.ArgumentParser.Attributes
         #region Properties
 
         /// <summary>
-        /// Sets and gets the delimiter to be used to split the parameter 
+        /// Sets and gets the separator to be used to split the parameter 
         /// from its option value.
         /// </summary>
         /// <remarks>
-        /// This property sets and gets the delimiter to be used to split 
+        /// This property sets and gets the separator to be used to split 
         /// the parameter from its option value.
         /// </remarks>
         /// <value>
@@ -109,6 +117,30 @@ namespace Plexdata.ArgumentParser.Attributes
                 }
 
                 this.separator = value;
+            }
+        }
+
+        /// <summary>
+        /// Sets and gets the delimiter to be used to split the value of 
+        /// a parameter.
+        /// </summary>
+        /// <remarks>
+        /// This property sets and gets the delimiter to be used to split 
+        /// the argument of a parameter. The delimiter is set to <c>empty</c> 
+        /// if provided value is <c>null</c>.
+        /// </remarks>
+        /// <value>
+        /// The delimiter assigned to an instance of this attribute.
+        /// </value>
+        public String Delimiter
+        {
+            get
+            {
+                return this.delimiter;
+            }
+            set
+            {
+                this.delimiter = value ?? String.Empty;
             }
         }
 
