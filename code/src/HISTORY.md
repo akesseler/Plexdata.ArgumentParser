@@ -4,8 +4,8 @@
 - Adding of help file (CHM) generation.
 - Update of online documentation as well as Wiki.
 - Version number increased.
-- TBD: Package release on `nuget.org`.
-- TBD: Release uploaded on `github.com`.
+- Package release on `nuget.org`.
+- Release uploaded on `github.com`.
 
 **1.0.3**
 - Support of `DefaultValue` attribute for optional parameters.
