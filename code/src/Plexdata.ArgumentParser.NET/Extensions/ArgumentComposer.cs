@@ -77,7 +77,29 @@ namespace Plexdata.ArgumentParser.Extensions
         /// </returns>
         public static String[] Extract(this String arguments)
         {
-            return ArgumentComposer.Extract(arguments, ParameterSeparators.DefaultSeparator);
+            return arguments.Extract(ParameterSeparators.DefaultSeparator, false);
+        }
+
+        /// <summary>
+        /// This method tries to split a given string into its pieces and tries 
+        /// to remove the path of the executable.
+        /// </summary>
+        /// <remarks>
+        /// If the given string contains a subsequence that is surrounded 
+        /// by double quotes then this subsequence is kept together.
+        /// </remarks>
+        /// <param name="arguments">
+        /// A typical command line argument string that should be split into pieces.
+        /// </param>
+        /// <param name="cleaned">
+        /// True if the path of the executable shall be removed and false if not.
+        /// </param>
+        /// <returns>
+        /// A string list representing all items of the processed argument string.
+        /// </returns>
+        public static String[] Extract(this String arguments, Boolean cleaned)
+        {
+            return arguments.Extract(ParameterSeparators.DefaultSeparator, cleaned);
         }
 
         /// <summary>
@@ -99,72 +121,95 @@ namespace Plexdata.ArgumentParser.Extensions
         /// </returns>
         public static String[] Extract(this String arguments, Char separator)
         {
-            if (arguments != null)
-            {
-                if (separator == ArgumentComposer.DoubleQuotes)
-                {
-                    throw new NotSupportedException("Double quotes are not supported as separator.");
-                }
+            return arguments.Extract(separator, false);
+        }
 
-                Boolean inside = false;
-
-                List<String> results = new List<String>();
-
-                StringBuilder builder = new StringBuilder(512);
-
-                foreach (Char current in arguments)
-                {
-                    if (!inside && current == ArgumentComposer.DoubleQuotes)
-                    {
-                        inside = true;
-                        continue;
-                    }
-
-                    if (inside)
-                    {
-                        if (current != ArgumentComposer.DoubleQuotes)
-                        {
-                            builder.Append(current);
-                        }
-                        else
-                        {
-                            if (builder.Length > 0)
-                            {
-                                results.Add(builder.ToString());
-                                builder.Length = 0;
-                            }
-
-                            inside = false;
-                        }
-                        continue;
-                    }
-
-                    if (current == separator)
-                    {
-                        if (builder.Length > 0)
-                        {
-                            results.Add(builder.ToString());
-                            builder.Length = 0;
-                        }
-                    }
-                    else
-                    {
-                        builder.Append(current);
-                    }
-                }
-
-                if (builder.Length > 0)
-                {
-                    results.Add(builder.ToString());
-                    builder.Length = 0;
-                }
-
-                return results.ToArray();
-            }
-            else
+        /// <summary>
+        /// This method tries to split a given string into its pieces using given 
+        /// separator and tries to remove the path of the executable.
+        /// </summary>
+        /// <remarks>
+        /// If the given string contains a subsequence that is surrounded 
+        /// by double quotes then this subsequence is kept together.
+        /// </remarks>
+        /// <param name="arguments">
+        /// A typical command line argument string that should be split into pieces.
+        /// </param>
+        /// <param name="separator">
+        /// The separator to be used to split the arguments.
+        /// </param>
+        /// <param name="cleaned">
+        /// True if the path of the executable shall be removed and false if not.
+        /// </param>
+        /// <returns>
+        /// A string list representing all items of the processed argument string.
+        /// </returns>
+        public static String[] Extract(this String arguments, Char separator, Boolean cleaned)
+        {
+            if (arguments is null)
             {
                 return new String[0];
             }
+
+            if (separator == ArgumentComposer.DoubleQuotes)
+            {
+                throw new NotSupportedException("Double quotes are not supported as separator.");
+            }
+
+            Boolean inside = false;
+
+            List<String> results = new List<String>();
+
+            StringBuilder builder = new StringBuilder(512);
+
+            foreach (Char current in arguments)
+            {
+                if (!inside && current == ArgumentComposer.DoubleQuotes)
+                {
+                    inside = true;
+                    continue;
+                }
+
+                if (inside)
+                {
+                    if (current != ArgumentComposer.DoubleQuotes)
+                    {
+                        builder.Append(current);
+                    }
+                    else
+                    {
+                        if (builder.Length > 0)
+                        {
+                            results.TryAddValue(builder.ToString(), cleaned);
+                            builder.Length = 0;
+                        }
+
+                        inside = false;
+                    }
+                    continue;
+                }
+
+                if (current == separator)
+                {
+                    if (builder.Length > 0)
+                    {
+                        results.TryAddValue(builder.ToString(), cleaned);
+                        builder.Length = 0;
+                    }
+                }
+                else
+                {
+                    builder.Append(current);
+                }
+            }
+
+            if (builder.Length > 0)
+            {
+                results.TryAddValue(builder.ToString(), cleaned);
+                builder.Length = 0;
+            }
+
+            return results.ToArray();
         }
 
         /// <summary>
@@ -451,6 +496,70 @@ namespace Plexdata.ArgumentParser.Extensions
             {
                 return String.Empty;
             }
+        }
+
+        /// <summary>
+        /// Tries to add provided <paramref name="value"/> to the list 
+        /// of <paramref name="values"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method tries to add provided <paramref name="value"/> 
+        /// to the list of <paramref name="values"/>.
+        /// </remarks>
+        /// <param name="values">
+        /// The list of values to add provided value to.
+        /// </param>
+        /// <param name="value">
+        /// The value to be added to list of values.
+        /// </param>
+        /// <param name="cleaned">
+        /// True, if a verification should be done at all and false to 
+        /// skip verification.
+        /// </param>
+        /// <seealso cref="Extract(String, Char, Boolean)"/>
+        /// <seealso cref="IsIgnorable(String, Boolean, Int32)"/>
+        private static void TryAddValue(this List<String> values, String value, Boolean cleaned)
+        {
+            if (!value.IsIgnorable(cleaned, values.Count))
+            {
+                values.Add(value);
+            }
+        }
+
+        /// <summary>
+        /// Checks whether provided value can be ignored.
+        /// </summary>
+        /// <remarks>
+        /// This method determines whether provided value can be ignored. For the moment, 
+        /// this only applies to the very first item inside the resulting list. The very 
+        /// first item is indicated by provided index.
+        /// </remarks>
+        /// <param name="value">
+        /// The value to be verified.
+        /// </param>
+        /// <param name="cleaned">
+        /// True, if a verification should be done at all and false to skip verification.
+        /// </param>
+        /// <param name="index">
+        /// The currently affected index. The index must be zero to perform verification 
+        /// at all. Otherwise the verification is skipped.
+        /// </param>
+        /// <returns>
+        /// True if provided value can be ignored and false otherwise.
+        /// </returns>
+        /// <seealso cref="TryAddValue(List{String}, String, Boolean)"/>
+        private static Boolean IsIgnorable(this String value, Boolean cleaned, Int32 index)
+        {
+            try
+            {
+                return cleaned && index == 0 && System.IO.File.Exists(value);
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine(exception);
+            }
+
+            return false;
         }
 
         #endregion

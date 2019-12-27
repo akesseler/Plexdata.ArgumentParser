@@ -25,9 +25,11 @@
 using Plexdata.ArgumentParser.Attributes;
 using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Converters;
+using Plexdata.ArgumentParser.Interfaces;
 using Plexdata.ArgumentParser.Processors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Plexdata.ArgumentParser.Extensions
@@ -160,7 +162,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// Convenient method to check if a parameter type is one of the supported type.
         /// </summary>
         /// <remarks>
-        /// This convenient checks if a parameter type is one of the supported type.
+        /// This convenient method checks if a parameter type is one of the supported type.
         /// </remarks>
         /// <param name="parameter">
         /// The parameter to check its type.
@@ -189,6 +191,55 @@ namespace Plexdata.ArgumentParser.Extensions
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Determines whether a property contains a custom converter attribute.
+        /// </summary>
+        /// <remarks>
+        /// This method determines whether a property contains a custom converter 
+        /// attribute.
+        /// </remarks>
+        /// <param name="parameter">
+        /// The attribute type to be checked. At the moment, this attribute must 
+        /// be of type <see cref="OptionParameterAttribute"/>.
+        /// </param>
+        /// <param name="property">
+        /// The property information that contain additional attribute information.
+        /// </param>
+        /// <returns>
+        /// True, if a custom type converter attribute with a fitting data type 
+        /// is supported and false if not.
+        /// </returns>
+        /// <seealso cref="OptionParameterAttribute"/>
+        /// <seealso cref="CustomConverterAttribute"/>
+        /// <seealso cref="ICustomConverter{TTarget}"/>
+        public static Boolean IsConverterSupported(this ParameterObjectAttribute parameter, PropertyInfo property)
+        {
+            if (parameter is OptionParameterAttribute)
+            {
+                foreach (Attribute attribute in property.GetCustomAttributes())
+                {
+                    if (attribute is CustomConverterAttribute converter)
+                    {
+                        if (converter.Instance is null)
+                        {
+                            continue;
+                        }
+
+                        foreach (Type realization in converter.Instance.GetInterfaces())
+                        {
+                            if (!realization.IsGenericType) { continue; }
+                            if (realization.GetGenericTypeDefinition() != typeof(ICustomConverter<>)) { continue; }
+                            if (!realization.GetGenericArguments().Any(x => x == property.PropertyType)) { continue; }
+
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

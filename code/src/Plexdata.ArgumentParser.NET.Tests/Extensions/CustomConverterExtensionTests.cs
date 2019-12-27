@@ -31,10 +31,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Extensions
 {
     [TestFixture]
     [TestOf(nameof(CustomConverterExtension))]
+    // TODO: Remove obsolete test class later on.
     public class CustomConverterExtensionTests
     {
         private Mock<ICustomConverter<Int16>> mockConverter1;

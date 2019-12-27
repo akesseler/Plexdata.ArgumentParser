@@ -24,38 +24,44 @@
 
 using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
-using Plexdata.ArgumentParser.Constants;
-using Plexdata.ArgumentParser.Exceptions;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
-    [TestOf(nameof(VerbalParameterAttribute))]
-    public class VerbalParameterAttributeTests
+    [TestOf(nameof(HelpPrefaceAttribute))]
+    public class HelpPrefaceAttributeTests
     {
         [Test]
-        [TestCase("value")]
-        [TestCase("   value   ")]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value")]
-        public void SolidLabel_SetProperty_ThrowsException(String actual)
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  \t \v \n\r  ")]
+        public void HelpPreface_Construction_ResultIsEmptyContent(String actual)
         {
-            VerbalParameterAttribute attribute = new VerbalParameterAttribute();
-            Assert.Throws<VerbalAttributeException>(() => { attribute.SolidLabel = actual; });
+            HelpPrefaceAttribute attribute = new HelpPrefaceAttribute(actual);
+            Assert.IsEmpty(attribute.Content);
         }
 
         [Test]
-        [TestCase("value")]
-        [TestCase("   value   ")]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value")]
-        public void BriefLabel_SetProperty_ThrowsException(String actual)
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  \t \v \n\r  ")]
+        public void HelpPreface_SetProperty_ResultIsEmptyContent(String actual)
         {
-            VerbalParameterAttribute attribute = new VerbalParameterAttribute();
-            Assert.Throws<VerbalAttributeException>(() => { attribute.BriefLabel = actual; });
+            HelpPrefaceAttribute attribute = new HelpPrefaceAttribute();
+            attribute.Content = actual;
+            Assert.IsEmpty(attribute.Content);
+        }
+
+        [Test]
+        [TestCase("Hello World")]
+        [TestCase("  Hello World ")]
+        [TestCase("  \t \v Hello World \n\r  ")]
+        public void HelpPreface_SetProperty_TrimmedContent(String actual)
+        {
+            HelpPrefaceAttribute attribute = new HelpPrefaceAttribute();
+            attribute.Content = actual;
+            Assert.AreEqual(attribute.Content, "Hello World");
         }
     }
 }

@@ -26,7 +26,7 @@ using NUnit.Framework;
 using Plexdata.ArgumentParser.Extensions;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Extensions
 {
     [TestFixture]
     [TestOf(nameof(ArgumentComposer))]
@@ -149,6 +149,23 @@ namespace Plexdata.ArgumentParser.Tests
         {
             ArgumentComposerHelper testHelper = testObject as ArgumentComposerHelper;
             Assert.AreEqual(testHelper.Actual.Extract(testHelper.Separator), testHelper.Expected);
+        }
+
+        [Test]
+        [Category("IntegrationTest")]
+        [TestCase("--port 424242", false, 2)]
+        [TestCase("--port 424242", true, 2)]
+        [TestCase("c:\\windows\\system.ini", false, 1)]
+        [TestCase("c:\\windows\\system.ini", true, 0)]
+        [TestCase("\"c:\\windows\\system.ini\"", false, 1)]
+        [TestCase("\"c:\\windows\\system.ini\"", true, 0)]
+        [TestCase("c:\\windows\\system.ini --port 424242", false, 3)]
+        [TestCase("c:\\windows\\system.ini --port 424242", true, 2)]
+        [TestCase("\"c:\\windows\\system.ini\" --port 424242", false, 3)]
+        [TestCase("\"c:\\windows\\system.ini\" --port 424242", true, 2)]
+        public void Extract_InvokeMethod_ResultIsCleanedAsExpected(String command, Boolean cleaned, Int32 expected)
+        {
+            Assert.That(command.Extract(cleaned).Length, Is.EqualTo(expected));
         }
     }
 }

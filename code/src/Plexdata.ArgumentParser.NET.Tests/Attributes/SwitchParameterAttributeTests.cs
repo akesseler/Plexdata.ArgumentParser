@@ -28,7 +28,7 @@ using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Exceptions;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
     [TestOf(nameof(SwitchParameterAttribute))]
@@ -55,8 +55,8 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(ParameterPrefixes.OtherPrefix + "value", "value")]
         public void SolidLabel_SetProperty_ResultIsEqual(String actual, String expected)
         {
-            SwitchParameterAttribute attribute = new SwitchParameterAttribute();
-            attribute.SolidLabel = actual;
+            SwitchParameterAttribute attribute = new SwitchParameterAttribute() { SolidLabel = actual };
+
             Assert.AreEqual(attribute.SolidLabel, expected);
         }
 
@@ -70,6 +70,7 @@ namespace Plexdata.ArgumentParser.Tests
         public void BriefLabel_SetProperty_ThrowsException(String actual)
         {
             SwitchParameterAttribute attribute = new SwitchParameterAttribute();
+
             Assert.Throws<SwitchAttributeException>(() => { attribute.BriefLabel = actual; });
         }
 
@@ -81,8 +82,8 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(ParameterPrefixes.OtherPrefix + "value", "value")]
         public void BriefLabel_SetProperty_ResultIsEqual(String actual, String expected)
         {
-            SwitchParameterAttribute attribute = new SwitchParameterAttribute();
-            attribute.BriefLabel = actual;
+            SwitchParameterAttribute attribute = new SwitchParameterAttribute() { BriefLabel = actual };
+
             Assert.AreEqual(attribute.BriefLabel, expected);
         }
     }

@@ -323,10 +323,17 @@ namespace Plexdata.ArgumentParser.Processors
                                     {
                                         this.Settings.Add(this.ApplyDefaultValue(new ArgumentProcessorSetting(property, attribute)));
                                     }
+                                    else if (attribute.IsConverterSupported(property))
+                                    {
+                                        this.Settings.Add(new ArgumentProcessorSetting(property, attribute, true));
+                                    }
+                                    // TODO: Remove obsolete code later on.
+                                    /* obsolete start */
                                     else if (property.PropertyType.HasConverter())
                                     {
                                         this.Settings.Add(new ArgumentProcessorSetting(property, attribute));
                                     }
+                                    /* obsolete end */
                                     else
                                     {
                                         throw new SupportViolationException(
@@ -450,20 +457,25 @@ namespace Plexdata.ArgumentParser.Processors
                                     throw new OptionViolationException(
                                         $"The argument of parameter \"{parameter}\" is missing.");
                                 }
+
+                                if (setting.HasCustomConverter)
+                                {
+                                    setting.Property.SetValue(this.Instance, setting.InvokeCustomConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
+                                }
+                                // TODO: Remove obsolete code later on.
+                                /* obsolete start */
+                                else if (setting.Property.PropertyType.HasConverter())
+                                {
+                                    setting.Property.SetValue(this.Instance, setting.Property.PropertyType
+                                        .InvokeConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
+                                }
+                                /* obsolete end */
                                 else
                                 {
-                                    if (setting.Property.PropertyType.HasConverter())
-                                    {
-                                        setting.Property.SetValue(this.Instance, setting.Property.PropertyType
-                                            .InvokeConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
-                                    }
-                                    else
-                                    {
-                                        setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(argument, setting.Property.PropertyType));
-                                    }
-
-                                    processed.Add(setting);
+                                    setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(argument, setting.Property.PropertyType));
                                 }
+
+                                processed.Add(setting);
                             }
                         }
                         else

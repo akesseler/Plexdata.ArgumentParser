@@ -35,7 +35,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// The help utilize attribute is intended to be used to define 
     /// how a program's command lines arguments can be used.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class HelpUtilizeAttribute : Attribute
     {
         #region Fields

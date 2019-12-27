@@ -26,7 +26,7 @@ using NUnit.Framework;
 using Plexdata.ArgumentParser.Converters;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Converters
 {
     [TestFixture]
     [TestOf(nameof(OptionTypeConverter))]

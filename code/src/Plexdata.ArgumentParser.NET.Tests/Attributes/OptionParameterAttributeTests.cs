@@ -28,7 +28,7 @@ using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Exceptions;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
     [TestOf(nameof(OptionParameterAttribute))]

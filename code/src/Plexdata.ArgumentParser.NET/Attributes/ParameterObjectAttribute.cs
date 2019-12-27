@@ -36,7 +36,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// This attribute serves as the base class of all other supported property attributes 
     /// and should not be used directly. Use instead one of the derived attributes.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class ParameterObjectAttribute : Attribute
     {
         #region Fields
@@ -110,30 +110,28 @@ namespace Plexdata.ArgumentParser.Attributes
                 {
                     this.ThrowException(nameof(this.SolidLabel), "The solid label must be a valid string.");
                 }
-                else
+
+                value = value.Trim();
+
+                if (value.StartsWith(ParameterPrefixes.SolidPrefix))
                 {
-                    value = value.Trim();
-
-                    if (value.StartsWith(ParameterPrefixes.SolidPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.SolidPrefix.Length);
-                    }
-                    else if (value.StartsWith(ParameterPrefixes.BriefPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.BriefPrefix.Length);
-                    }
-                    else if (value.StartsWith(ParameterPrefixes.OtherPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
-                    }
-
-                    if (value.Length <= 0)
-                    {
-                        this.ThrowException(nameof(this.SolidLabel), "The solid label must consist of a valid descriptor.");
-                    }
-
-                    this.solidLabel = value;
+                    value = value.Substring(ParameterPrefixes.SolidPrefix.Length);
                 }
+                else if (value.StartsWith(ParameterPrefixes.BriefPrefix))
+                {
+                    value = value.Substring(ParameterPrefixes.BriefPrefix.Length);
+                }
+                else if (value.StartsWith(ParameterPrefixes.OtherPrefix))
+                {
+                    value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
+                }
+
+                if (value.Length <= 0)
+                {
+                    this.ThrowException(nameof(this.SolidLabel), "The solid label must consist of a valid descriptor.");
+                }
+
+                this.solidLabel = value;
             }
         }
 
@@ -178,30 +176,28 @@ namespace Plexdata.ArgumentParser.Attributes
                 {
                     this.ThrowException(nameof(this.BriefLabel), "The brief label must be a valid string.");
                 }
-                else
+
+                value = value.Trim();
+
+                if (value.StartsWith(ParameterPrefixes.SolidPrefix))
                 {
-                    value = value.Trim();
-
-                    if (value.StartsWith(ParameterPrefixes.SolidPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.SolidPrefix.Length);
-                    }
-                    else if (value.StartsWith(ParameterPrefixes.BriefPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.BriefPrefix.Length);
-                    }
-                    else if (value.StartsWith(ParameterPrefixes.OtherPrefix))
-                    {
-                        value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
-                    }
-
-                    if (value.Length <= 0)
-                    {
-                        this.ThrowException(nameof(this.BriefLabel), "The brief label must consist of a valid descriptor.");
-                    }
-
-                    this.briefLabel = value;
+                    value = value.Substring(ParameterPrefixes.SolidPrefix.Length);
                 }
+                else if (value.StartsWith(ParameterPrefixes.BriefPrefix))
+                {
+                    value = value.Substring(ParameterPrefixes.BriefPrefix.Length);
+                }
+                else if (value.StartsWith(ParameterPrefixes.OtherPrefix))
+                {
+                    value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
+                }
+
+                if (value.Length <= 0)
+                {
+                    this.ThrowException(nameof(this.BriefLabel), "The brief label must consist of a valid descriptor.");
+                }
+
+                this.briefLabel = value;
             }
         }
 
@@ -256,23 +252,6 @@ namespace Plexdata.ArgumentParser.Attributes
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Sets and gets the dependencies of this parameter.
-        /// </summary>
-        /// <remarks>
-        /// This property is no longer supported and will be removed in later 
-        /// versions! Use property <see cref="DependencyList"/> instead.
-        /// </remarks>
-        /// <value>
-        /// The value of property <see cref="DependencyList"/>.
-        /// </value>
-        [Obsolete("Property is no longer supported and will be removed in later versions! Use property \"DependencyList\" instead.")]
-        public String Dependencies
-        {
-            get { return this.DependencyList; }
-            set { this.DependencyList = value; }
         }
 
         /// <summary>

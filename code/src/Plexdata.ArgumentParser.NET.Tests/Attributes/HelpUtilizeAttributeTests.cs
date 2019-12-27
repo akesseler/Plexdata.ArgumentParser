@@ -26,19 +26,19 @@ using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
-    [TestOf(nameof(HelpSummaryAttribute))]
-    public class HelpSummaryAttributeTests
+    [TestOf(nameof(HelpUtilizeAttribute))]
+    public class HelpUtilizeAttributeTests
     {
         [Test]
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpSummary_Construction_ResultIsEmptyContent(String actual)
+        public void HelpUtilize_Construction_ResultIsEmptyContent(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute(actual);
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute(actual);
             Assert.IsEmpty(attribute.Content);
         }
 
@@ -46,9 +46,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpSummary_SetProperty_ResultIsEmptyContent(String actual)
+        public void HelpUtilize_SetProperty_ResultIsEmptyContent(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Content = actual;
             Assert.IsEmpty(attribute.Content);
         }
@@ -57,9 +57,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase("Hello World")]
         [TestCase("  Hello World ")]
         [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpSummary_SetProperty_TrimmedContent(String actual)
+        public void HelpUtilize_SetProperty_TrimmedContent(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Content = actual;
             Assert.AreEqual(attribute.Content, "Hello World");
         }
@@ -68,9 +68,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpSummary_SetProperty_ResultIsEmptyHeading(String actual)
+        public void HelpUtilize_SetProperty_ResultIsEmptyHeading(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Heading = actual;
             Assert.IsEmpty(attribute.Heading);
         }
@@ -79,9 +79,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase("Hello World")]
         [TestCase("  Hello World ")]
         [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpSummary_SetProperty_TrimmedHeading(String actual)
+        public void HelpUtilize_SetProperty_TrimmedHeading(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Heading = actual;
             Assert.AreEqual(attribute.Heading, "Hello World");
         }
@@ -90,9 +90,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpSummary_SetProperty_ResultIsEmptySection(String actual)
+        public void HelpUtilize_SetProperty_ResultIsEmptySection(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Section = actual;
             Assert.IsEmpty(attribute.Section);
         }
@@ -101,33 +101,11 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase("Hello World")]
         [TestCase("  Hello World ")]
         [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpSummary_SetProperty_TrimmedSection(String actual)
+        public void HelpUtilize_SetProperty_TrimmedSection(String actual)
         {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
+            HelpUtilizeAttribute attribute = new HelpUtilizeAttribute();
             attribute.Section = actual;
             Assert.AreEqual(attribute.Section, "Hello World");
-        }
-
-        [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase("  \t \v \n\r  ")]
-        public void HelpSummary_SetProperty_ResultIsEmptyOptions(String actual)
-        {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
-            attribute.Options = actual;
-            Assert.IsEmpty(attribute.Options);
-        }
-
-        [Test]
-        [TestCase("Hello World")]
-        [TestCase("  Hello World ")]
-        [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpSummary_SetProperty_TrimmedOptions(String actual)
-        {
-            HelpSummaryAttribute attribute = new HelpSummaryAttribute();
-            attribute.Options = actual;
-            Assert.AreEqual(attribute.Options, "Hello World");
         }
     }
 }

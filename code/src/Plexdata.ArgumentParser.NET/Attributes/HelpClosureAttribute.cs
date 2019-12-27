@@ -34,7 +34,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// The help closure attribute is intended to be used to define a program's 
     /// summary that is appended at the end of the help output.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class HelpClosureAttribute : Attribute
     {
         #region Fields

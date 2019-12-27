@@ -26,26 +26,19 @@ using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
-    [TestOf(nameof(HelpLicenseAttribute))]
-    public class HelpLicenseAttributeTests
+    [TestOf(nameof(HelpClosureAttribute))]
+    public class HelpClosureAttributeTests
     {
-        [Test]
-        public void HelpLicense_DefaultConstruction_ResultIsDefaultContent()
-        {
-            HelpLicenseAttribute attribute = new HelpLicenseAttribute();
-            Assert.AreEqual(attribute.Content, "Copyright © <company>");
-        }
-
         [Test]
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpLicense_Construction_ResultIsEmptyContent(String actual)
+        public void HelpClosure_Construction_ResultIsEmptyContent(String actual)
         {
-            HelpLicenseAttribute attribute = new HelpLicenseAttribute(actual);
+            HelpClosureAttribute attribute = new HelpClosureAttribute(actual);
             Assert.IsEmpty(attribute.Content);
         }
 
@@ -53,9 +46,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase(null)]
         [TestCase("")]
         [TestCase("  \t \v \n\r  ")]
-        public void HelpLicense_SetProperty_ResultIsEmptyContent(String actual)
+        public void HelpClosure_SetProperty_ResultIsEmptyContent(String actual)
         {
-            HelpLicenseAttribute attribute = new HelpLicenseAttribute();
+            HelpClosureAttribute attribute = new HelpClosureAttribute();
             attribute.Content = actual;
             Assert.IsEmpty(attribute.Content);
         }
@@ -64,9 +57,9 @@ namespace Plexdata.ArgumentParser.Tests
         [TestCase("Hello World")]
         [TestCase("  Hello World ")]
         [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpLicense_SetProperty_TrimmedContent(String actual)
+        public void HelpClosure_SetProperty_TrimmedContent(String actual)
         {
-            HelpLicenseAttribute attribute = new HelpLicenseAttribute();
+            HelpClosureAttribute attribute = new HelpClosureAttribute();
             attribute.Content = actual;
             Assert.AreEqual(attribute.Content, "Hello World");
         }

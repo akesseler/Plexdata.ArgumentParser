@@ -27,7 +27,7 @@ using Plexdata.ArgumentParser.Attributes;
 using Plexdata.ArgumentParser.Processors;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Processors
 {
     [TestFixture]
     [TestOf(nameof(HelpProcessorInitialize))]

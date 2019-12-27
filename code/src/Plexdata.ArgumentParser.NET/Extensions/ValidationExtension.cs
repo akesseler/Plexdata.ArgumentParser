@@ -59,7 +59,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// </exception>
         public static void ThrowIfNull<TType>(this TType type, String name = "unknown") where TType : class
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(name, $"The value of \"{name}\" must not be null.");
             }
@@ -95,12 +95,9 @@ namespace Plexdata.ArgumentParser.Extensions
         {
             type.ThrowIfNull(name);
 
-            if (type is IEnumerable<Object>)
+            if (type is IEnumerable<Object> && !(type as IEnumerable<Object>).Any())
             {
-                if (!(type as IEnumerable<Object>).Any())
-                {
-                    throw new ArgumentNullException(name, $"The value of \"{name}\" must not be empty.");
-                }
+                throw new ArgumentNullException(name, $"The value of \"{name}\" must not be empty.");
             }
         }
 

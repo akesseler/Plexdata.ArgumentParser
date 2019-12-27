@@ -33,7 +33,7 @@ using Plexdata.ArgumentParser.Processors;
 using System;
 using System.Reflection;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Processors
 {
     [TestFixture]
     [TestOf(nameof(ArgumentProcessorProcess))]
@@ -2789,6 +2789,7 @@ namespace Plexdata.ArgumentParser.Tests
         [Category("IntegrationTest")]
         public void Process_ComplexTypeIsRegistered_InterfaceConvertWasCalledAsExpected()
         {
+            // TODO: Remove obsolete test later on.
             String[] arguments = new String[] { "--complex", "width,height" };
 
             Mock<ICustomConverter<ComplexType>> converter = new Mock<ICustomConverter<ComplexType>>();
@@ -2803,6 +2804,42 @@ namespace Plexdata.ArgumentParser.Tests
             converter.Object.RemoveConverter();
 
             converter.Verify(x => x.Convert("--complex", "width,height", "@"), Times.Once);
+        }
+
+        public class ComplexTypeCustomConverter : ICustomConverter<ComplexType>
+        {
+            public ComplexType Convert(String parameter, String argument, String delimiter)
+            {
+                return new ComplexType()
+                {
+                    Width = "111",
+                    Height = "222"
+                };
+            }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionalWithComplexTypeAndConverter
+        {
+            [OptionParameter(SolidLabel = "complex", Delimiter = "@")]
+            [CustomConverter(typeof(ComplexTypeCustomConverter))]
+            public ComplexType Complex { get; set; }
+        }
+
+        [Test]
+        [Category("IntegrationTest")]
+        public void Process_ComplexTypeAsConverter_InterfaceConvertWasCalledAsExpected()
+        {
+            String[] arguments = new String[] { "--complex", "width,height" };
+
+            TestClassOptionalWithComplexTypeAndConverter actual = new TestClassOptionalWithComplexTypeAndConverter();
+            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
+
+            processor.Process();
+
+            Assert.That(actual.Complex, Is.Not.Null);
+            Assert.That(actual.Complex.Width, Is.EqualTo("111"));
+            Assert.That(actual.Complex.Height, Is.EqualTo("222"));
         }
     }
 }
