@@ -35,7 +35,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// provide a details description what the purpose of this particular 
     /// command line option is.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class HelpSummaryAttribute : Attribute
     {
         #region Fields

@@ -37,6 +37,7 @@ namespace Plexdata.ArgumentParser.Extensions
     /// This extension class provides all methods to manage 
     /// custom converter specific type conversions.
     /// </remarks>
+    [Obsolete("Extension no longer supported. Use attribute `CustomConverter` instead.", false)]
     public static class CustomConverterExtension
     {
         #region Fields
@@ -89,6 +90,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// The instance that implements the custom converter for a particular 
         /// type to be added.
         /// </param>
+        [Obsolete("Method no longer supported. Use attribute `CustomConverter` instead.", false)]
         public static void AddConverter<TTarget>(this ICustomConverter<TTarget> converter)
         {
             if (converter == null)
@@ -119,6 +121,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// The instance that implements the custom converter for a particular 
         /// type to be removed.
         /// </param>
+        [Obsolete("Method no longer supported. Use attribute `CustomConverter` instead.", false)]
         public static void RemoveConverter<TTarget>(this ICustomConverter<TTarget> converter)
         {
             if (converter == null)
@@ -149,6 +152,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// True, if a custom converter is registered for provided type, 
         /// and false otherwise.
         /// </returns>
+        [Obsolete("Method no longer supported. Use attribute `CustomConverter` instead.", false)]
         public static Boolean HasConverter(this Type type)
         {
             if (type is null)
@@ -177,6 +181,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// True, if a custom converter is registered for provided type, 
         /// and false otherwise.
         /// </returns>
+        [Obsolete("Method no longer supported. Use attribute `CustomConverter` instead.", false)]
         public static Boolean HasConverter<TTarget>(this TTarget target)
         {
             return (target as Type).HasConverter();
@@ -214,6 +219,7 @@ namespace Plexdata.ArgumentParser.Extensions
         /// interface's method <see cref="ICustomConverter{TTarget}.Convert"/> has 
         /// caused any kind of an issue.
         /// </exception>
+        [Obsolete("Method no longer supported. Use attribute `CustomConverter` instead.", false)]
         public static Object InvokeConverter<TTarget>(this TTarget target, String parameter, String argument, String delimiter)
         {
             if (!target.HasConverter())

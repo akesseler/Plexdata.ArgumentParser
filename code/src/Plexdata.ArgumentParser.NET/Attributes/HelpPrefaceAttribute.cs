@@ -35,7 +35,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// The help preface attribute is intended to be used to define a program's 
     /// general description that is inserted above of the usage statement.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class HelpPrefaceAttribute : Attribute
     {
         #region Fields

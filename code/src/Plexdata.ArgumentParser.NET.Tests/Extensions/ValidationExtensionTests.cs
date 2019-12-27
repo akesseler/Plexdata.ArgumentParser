@@ -28,44 +28,44 @@ using Plexdata.ArgumentParser.Extensions;
 using System;
 using System.Collections.Generic;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Extensions
 {
     [TestFixture]
     [TestOf(nameof(ValidationExtension))]
     public class ValidationExtensionTests
     {
-        private static Object[] NullObjects = { (Object)null, (String)null, (Object[])null, (String[])null, (Int32[])null, };
-        private static IEnumerable<Object>[] EmptyObjects = { new Object[] { }, new String[] { }, };
-        private static String[] EmptyStrings = { (String)null, String.Empty, " ", "  \t \v \n\r  ", };
-        private static Exception[] ExceptionList = {
+        private static readonly Object[] NullObjects = { (Object)null, (String)null, (Object[])null, (String[])null, (Int32[])null, };
+        private static readonly IEnumerable<Object>[] EmptyObjects = { new Object[] { }, new String[] { }, };
+        private static readonly String[] EmptyStrings = { (String)null, String.Empty, " ", "  \t \v \n\r  ", };
+        private static readonly Exception[] ExceptionList = {
             new NotImplementedException("Outer Exception", new ArgumentException("Inner Exception", new ArgumentParserException("Expected Exception"))),
             new ArgumentException("Outer Exception", new ArgumentParserException("Expected Exception", new NotImplementedException("Inner Exception"))),
             new ArgumentParserException("Expected Exception", new NotImplementedException("Outer Exception", new ArgumentException("Inner Exception"))),
         };
 
         [Test]
-        [TestCaseSource("NullObjects")]
+        [TestCaseSource(nameof(NullObjects))]
         public void ThrowIfNull_MultipleTypes_ThrowsException(Object actual)
         {
             Assert.Throws<ArgumentNullException>(() => { actual.ThrowIfNull(); });
         }
 
         [Test]
-        [TestCaseSource("EmptyObjects")]
+        [TestCaseSource(nameof(EmptyObjects))]
         public void ThrowIfNullOrEmpty_MultipleTypes_ThrowsException(IEnumerable<Object> actual)
         {
             Assert.Throws<ArgumentNullException>(() => { actual.ThrowIfNullOrEmpty(); });
         }
 
         [Test]
-        [TestCaseSource("EmptyStrings")]
+        [TestCaseSource(nameof(EmptyStrings))]
         public void ThrowIfNullOrWhiteSpace_MultipleTypes_ThrowsException(String actual)
         {
             Assert.Throws<ArgumentNullException>(() => { actual.ThrowIfNullOrWhiteSpace(); });
         }
 
         [Test]
-        [TestCaseSource("ExceptionList")]
+        [TestCaseSource(nameof(ExceptionList))]
         public void ThrowArgumentParserException_MultipleTypes_ThrowsException(Exception exception)
         {
             Assert.Throws<ArgumentParserException>(() => { exception.ThrowArgumentParserException(); });

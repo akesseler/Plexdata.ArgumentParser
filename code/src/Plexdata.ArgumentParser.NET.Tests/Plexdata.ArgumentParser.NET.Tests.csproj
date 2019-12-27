@@ -25,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,24 +57,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentComposerTests.cs" />
-    <Compile Include="ArgumentProcessorProcessTests.cs" />
-    <Compile Include="ArgumentProcessorSettingTests.cs" />
-    <Compile Include="ArgumentProcessorInitializeTests.cs" />
-    <Compile Include="CustomConverterExtensionTests.cs" />
-    <Compile Include="HelpClosureAttributeTests.cs" />
-    <Compile Include="HelpLicenseAttributeTests.cs" />
-    <Compile Include="HelpPrefaceAttributeTests.cs" />
-    <Compile Include="HelpProcessorGenerateTests.cs" />
-    <Compile Include="HelpProcessorInitializeTests.cs" />
-    <Compile Include="HelpSummaryAttributeTests.cs" />
-    <Compile Include="HelpUtilizeAttributeTests.cs" />
-    <Compile Include="OptionParameterAttributeTests.cs" />
-    <Compile Include="OptionTypeConverterTests.cs" />
+    <Compile Include="Attributes\ParameterObjectAttributeTests.cs" />
+    <Compile Include="Extensions\ArgumentComposerTests.cs" />
+    <Compile Include="Processors\ArgumentProcessorProcessTests.cs" />
+    <Compile Include="Processors\ArgumentProcessorSettingTests.cs" />
+    <Compile Include="Processors\ArgumentProcessorInitializeTests.cs" />
+    <Compile Include="Attributes\CustomConverterAttributeTests.cs" />
+    <Compile Include="Extensions\CustomConverterExtensionTests.cs" />
+    <Compile Include="Extensions\ProcessingExtensionTests.cs" />
+    <Compile Include="Attributes\HelpClosureAttributeTests.cs" />
+    <Compile Include="Attributes\HelpLicenseAttributeTests.cs" />
+    <Compile Include="Attributes\HelpPrefaceAttributeTests.cs" />
+    <Compile Include="Processors\HelpProcessorGenerateTests.cs" />
+    <Compile Include="Processors\HelpProcessorInitializeTests.cs" />
+    <Compile Include="Attributes\HelpSummaryAttributeTests.cs" />
+    <Compile Include="Attributes\HelpUtilizeAttributeTests.cs" />
+    <Compile Include="Attributes\OptionParameterAttributeTests.cs" />
+    <Compile Include="Converters\OptionTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchParameterAttributeTests.cs" />
-    <Compile Include="ValidationExtensionTests.cs" />
-    <Compile Include="VerbalParameterAttributeTests.cs" />
+    <Compile Include="Attributes\SwitchParameterAttributeTests.cs" />
+    <Compile Include="Extensions\ValidationExtensionTests.cs" />
+    <Compile Include="Attributes\VerbalParameterAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

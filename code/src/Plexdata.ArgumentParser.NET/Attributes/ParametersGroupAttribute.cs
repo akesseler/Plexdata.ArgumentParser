@@ -34,7 +34,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// possible respectively all supported command line arguments. Keep in mind, this 
     /// attribute is only on declarative nature and is not used internally.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class ParametersGroupAttribute : Attribute
     {
         #region Construction

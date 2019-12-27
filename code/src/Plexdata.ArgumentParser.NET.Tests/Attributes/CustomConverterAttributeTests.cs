@@ -24,44 +24,45 @@
 
 using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
+using Plexdata.ArgumentParser.Interfaces;
 using System;
 
-namespace Plexdata.ArgumentParser.Tests
+namespace Plexdata.ArgumentParser.Tests.Attributes
 {
     [TestFixture]
-    [TestOf(nameof(HelpClosureAttribute))]
-    public class HelpClosureAttributeTests
+    [TestOf(nameof(CustomConverterAttribute))]
+    public class CustomConverterAttributeTests
     {
+        #region Test helpers
+
+        private class TestCustomConverter : ICustomConverter<Object>
+        {
+            public Object Convert(String parameter, String argument, String delimiter)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
         [Test]
         [TestCase(null)]
-        [TestCase("")]
-        [TestCase("  \t \v \n\r  ")]
-        public void HelpClosure_Construction_ResultIsEmptyContent(String actual)
+        [TestCase(typeof(Object))]
+        [TestCase(typeof(TestCustomConverter))]
+        public void CustomConverterAttribute_WithTypes_ThrowsNothing(Type type)
         {
-            HelpClosureAttribute attribute = new HelpClosureAttribute(actual);
-            Assert.IsEmpty(attribute.Content);
+            Assert.That(() => new CustomConverterAttribute(type), Throws.Nothing);
         }
 
         [Test]
         [TestCase(null)]
-        [TestCase("")]
-        [TestCase("  \t \v \n\r  ")]
-        public void HelpClosure_SetProperty_ResultIsEmptyContent(String actual)
+        [TestCase(typeof(Object))]
+        [TestCase(typeof(TestCustomConverter))]
+        public void CustomConverterAttribute_WithTypes_InstanceTypeAsExpected(Type type)
         {
-            HelpClosureAttribute attribute = new HelpClosureAttribute();
-            attribute.Content = actual;
-            Assert.IsEmpty(attribute.Content);
-        }
+            CustomConverterAttribute actual = new CustomConverterAttribute(type);
 
-        [Test]
-        [TestCase("Hello World")]
-        [TestCase("  Hello World ")]
-        [TestCase("  \t \v Hello World \n\r  ")]
-        public void HelpClosure_SetProperty_TrimmedContent(String actual)
-        {
-            HelpClosureAttribute attribute = new HelpClosureAttribute();
-            attribute.Content = actual;
-            Assert.AreEqual(attribute.Content, "Hello World");
+            Assert.That(actual.Instance, Is.EqualTo(type));
         }
     }
 }

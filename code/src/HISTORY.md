@@ -1,6 +1,19 @@
 
+
+**1.0.5**
+- Introduction of attribute `CustomConverter`.
+- Complete class `CustomConverterExtension` marked as obsolete.
+- Obsolete property `Dependencies` of class `ParameterObjectAttribute` removed.
+- Method `Extract` of class `ArgumentComposer` extended by parameter `cleaned`.
+- New tests added and (some) old tests reviewed.
+- Test project restructured.
+- Update of online documentation as well as Wiki.
+- Version number increased.
+- Package release on `nuget.org`.
+- Release uploaded on `github.com`.
+
 **1.0.4**
-- Introduction on interface `ICustomConverter`.
+- Introduction of interface `ICustomConverter`.
 - Adding of help file (CHM) generation.
 - Update of online documentation as well as Wiki.
 - Version number increased.

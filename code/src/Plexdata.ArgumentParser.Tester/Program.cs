@@ -173,6 +173,7 @@ namespace Plexdata.ArgumentParser.Tester
  *         public class CmdLineArgs
  *         {
  *             [OptionParameter(SolidLabel = "region", BriefLabel = "r")]
+ *             [CustomConverter(typeof(CustomConverter))]
  *             public CustomType Region { get; set; }
  *         }
  * 
@@ -180,10 +181,7 @@ namespace Plexdata.ArgumentParser.Tester
  *         {
  *             public CustomType Convert(String parameter, String argument, String delimiter)
  *             {
- *                 if (argument is null)
- *                 {
- *                     return null;
- *                 }
+ *                 if (argument is null) { return null; }
  * 
  *                 delimiter = delimiter ?? ArgumentDelimiters.DefaultDelimiter;
  * 
@@ -199,21 +197,14 @@ namespace Plexdata.ArgumentParser.Tester
  *             }
  *         }
  * 
- *         static void Main(string[] args)
+ *         static void Main(String[] args)
  *         {
  *             try
  *             {
- *                 // Adding of custom type converter.
- *                 CustomConverter converter = new CustomConverter();
- *                 converter.AddConverter();
- * 
- *                 List<String> options = new List<String>(Environment.CommandLine.Extract());
- * 
+ *                 // Extract all command line arguments but remove filename of executable.
+ *                 List<String> options = new List<String>(Environment.CommandLine.Extract(true));
  *                 if (options != null && options.Count > 1)
  *                 {
- *                     // Removing of first line because it contains the executable name.
- *                     options.RemoveAt(0);
- * 
  *                     // Parsing of remaining command line arguments.
  *                     CmdLineArgs cmdLineArgs = new CmdLineArgs();
  *                     cmdLineArgs.Process(options);

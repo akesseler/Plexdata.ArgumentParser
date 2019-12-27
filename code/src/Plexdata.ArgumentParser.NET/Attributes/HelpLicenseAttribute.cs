@@ -35,7 +35,7 @@ namespace Plexdata.ArgumentParser.Attributes
     /// The help license attribute is intended to be used to define 
     /// a program's copyright statement.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class HelpLicenseAttribute : Attribute
     {
         #region Fields
