@@ -354,7 +354,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithMinimumHelpAttributes_ResultIsMinimumHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n" +
                 "  --property2  \r\n\r\n";
 
@@ -369,7 +369,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithShortHelpSummary_ResultIsShortHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  Short help on switch 1.\r\n\r\n" +
                 "  --property2  Short help on option 2.\r\n\r\n";
 
@@ -384,7 +384,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithLongHelpSummary_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  Long help on switch 1. Long help on switch 1. Long help on\r\n" +
                 "               switch 1. Long help on switch 1. Long help on switch 1. Long\r\n" +
                 "               help on switch 1.\r\n\r\n" +
@@ -402,7 +402,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithLongHelpSummaryDifferentParameterLength_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --less          Long help on switch 1. Long help on switch 1. Long help on\r\n" +
                 "                  switch 1. Long help on switch 1. Long help on switch 1.\r\n" +
                 "                  Long help on switch 1.\r\n\r\n" +
@@ -420,7 +420,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassHelpSummaryAndOptionArguments_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --string-option [-so] str-val  String option with additional arguments in\r\n" +
                 "                                 help output.\r\n\r\n" +
                 "  --int-option [-io] num-val     Integer option with additional arguments in\r\n" +
@@ -437,7 +437,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassHelpSectionAndSummary_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  Section A\r\n\r\n" +
                 "  --switcha1  Switch 1 in section A.\r\n\r\n" +
                 "  --switcha2  Switch 2 in section A.\r\n\r\n" +
@@ -463,7 +463,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithShortCopyright_ResultIsShortHelp()
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortCopyright instance = new TestClassWithShortCopyright();
@@ -477,7 +477,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithShortPrologue_ResultIsShortHelp()
         {
             String expected = "\r\nThis is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortPrologue instance = new TestClassWithShortPrologue();
@@ -490,7 +490,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         [Test]
         public void Generate_TestClassWithShortEpilogue_ResultIsShortHelp()
         {
-            String expected = "\r\nUsage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -506,7 +506,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
                 "This is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortCopyrightPrologue instance = new TestClassWithShortCopyrightPrologue();
@@ -520,7 +520,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithShortCopyrightEpilogue_ResultIsShortHelp()
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -535,7 +535,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         public void Generate_TestClassWithShortPrologueEpilogue_ResultIsShortHelp()
         {
             String expected = "\r\nThis is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -551,7 +551,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
                 "This is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -569,7 +569,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
                 "data set 2 to fill the line up to its end.\r\n\r\n" +
                 "This is a pretty short prologue. Test data set 1 to fill the line up to its\r\n" +
                 "end. Test data set 2 to fill the line up to its end.\r\n\r\n" +
-                "Usage:\r\n\r\n  <program> [options]\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\n" +
                 "Options:\r\n\r\n  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue. Test data set 1 to fill the line up to its\r\n" +
                 "end. Test data set 2 to fill the line up to its end.\r\n";
@@ -584,7 +584,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         [Test]
         public void Generate_TestClassWithMinimumHelpAttributesButVeryLongParameterName_ResultIsMinimumHelpButLineBreak()
         {
-            String expected = "\r\nUsage:\r\n\r\n  <program> [options]\r\n\r\nOptions:\r\n\r\n" +
+            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --this-is-a-very-long-parameter-name-longer-than-line-with  \r\n" +
                 "               The summary of the very long parameter name.\r\n\r\n" +
                 "  --property2                                                 \r\n" +
@@ -600,7 +600,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         [Test]
         public void Generate_TestClassTwoEmptyUtilize_ResultIsTwoWithDefaultUsages()
         {
-            String expected = "\r\nUsage:\r\n\r\n  <program> [options]\r\n  <program> [options]\r\n\r\n";
+            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n  testhost.x86.exe [options]\r\n\r\n";
 
             TestClassTwoEmptyUtilize instance = new TestClassTwoEmptyUtilize();
             HelpProcessor<TestClassTwoEmptyUtilize> processor = new HelpProcessor<TestClassTwoEmptyUtilize>(instance);
