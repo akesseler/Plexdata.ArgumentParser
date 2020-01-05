@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2019 plexdata.de
+ * Copyright (c) 2020 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ using Plexdata.ArgumentParser.Exceptions;
 using Plexdata.ArgumentParser.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -604,7 +605,7 @@ namespace Plexdata.ArgumentParser.Processors
                     }
                     catch (Exception exception)
                     {
-                        System.Diagnostics.Debug.WriteLine(exception);
+                        Debug.WriteLine(exception);
                     }
                 }
 
@@ -622,7 +623,7 @@ namespace Plexdata.ArgumentParser.Processors
                     }
                     catch (Exception exception)
                     {
-                        System.Diagnostics.Debug.WriteLine(exception);
+                        Debug.WriteLine(exception);
                     }
                 }
 
@@ -639,7 +640,7 @@ namespace Plexdata.ArgumentParser.Processors
                     }
                     catch (Exception exception)
                     {
-                        System.Diagnostics.Debug.WriteLine(exception);
+                        Debug.WriteLine(exception);
                     }
                 }
             }
@@ -677,7 +678,7 @@ namespace Plexdata.ArgumentParser.Processors
                     }
                     catch (Exception exception)
                     {
-                        System.Diagnostics.Debug.WriteLine(exception);
+                        Debug.WriteLine(exception);
                     }
                 }
             }
@@ -701,21 +702,35 @@ namespace Plexdata.ArgumentParser.Processors
         {
             if (value.IsContent)
             {
-                if (value.Content.Contains(Placeholders.Program))
+                try
                 {
-                    try
+                    if (value.Content.Contains(Placeholders.Product))
                     {
-                        String filename = Path.GetFileName(Assembly.GetEntryAssembly().Location);
+                        AssemblyProductAttribute product = Assembly.GetEntryAssembly().GetCustomAttributes()
+                            .Where(x => x is AssemblyProductAttribute).FirstOrDefault() as AssemblyProductAttribute;
+
+                        if (product != null && !String.IsNullOrWhiteSpace(product.Product))
+                        {
+                            value.Content = value.Content.Replace(Placeholders.Product, product.Product);
+                            return value;
+                        }
+
+                        value.Content = value.Content.Replace(Placeholders.Product, Placeholders.Program);
+                    }
+
+                    if (value.Content.Contains(Placeholders.Program))
+                    {
+                        String filename = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
 
                         if (!String.IsNullOrWhiteSpace(filename))
                         {
                             value.Content = value.Content.Replace(Placeholders.Program, filename);
                         }
                     }
-                    catch (Exception exception)
-                    {
-                        System.Diagnostics.Debug.WriteLine(exception);
-                    }
+                }
+                catch (Exception exception)
+                {
+                    Debug.WriteLine(exception);
                 }
             }
 
@@ -753,6 +768,11 @@ namespace Plexdata.ArgumentParser.Processors
             if (value.Summary.IsOptions)
             {
                 value.Caption += $" {value.Summary.Options}";
+            }
+
+            if (String.IsNullOrWhiteSpace(value.Caption))
+            {
+                value.Caption = String.Empty;
             }
 
             value.Caption = value.Caption.Trim();

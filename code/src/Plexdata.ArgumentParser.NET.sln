@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plexdata.ArgumentParser.NET", "Plexdata.ArgumentParser.NET\Plexdata.ArgumentParser.NET.csproj", "{B03740DD-05E6-45DF-8529-673F85772E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexdata.ArgumentParser.NET", "Plexdata.ArgumentParser.NET\Plexdata.ArgumentParser.NET.csproj", "{B03740DD-05E6-45DF-8529-673F85772E35}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plexdata.ArgumentParser.Tester", "Plexdata.ArgumentParser.Tester\Plexdata.ArgumentParser.Tester.csproj", "{35AC2F52-86E5-4BE0-B6BC-142B9D1E4A02}"
 EndProject

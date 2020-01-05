@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2019 plexdata.de
+ * Copyright (c) 2020 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -92,7 +92,23 @@ namespace Plexdata.ArgumentParser.Tester
         }
         */
 
-        /* Help Configuration
+        /* Main Method - Help Generation
+        static void Main(string[] args)
+        {
+            try
+            {
+                CmdLineArgs cmdLineArgs = new CmdLineArgs();
+                Console.WriteLine(cmdLineArgs.Generate());
+                Console.ReadKey();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+        }
+        */
+
+        /* Simple Help Configuration
         [HelpLicense]
         [HelpUtilize]
         [HelpPreface("This program does something useful.")]
@@ -109,23 +125,7 @@ namespace Plexdata.ArgumentParser.Tester
         }
         */
 
-        /* Main Method
-        static void Main(string[] args)
-        {
-            try
-            {
-                CmdLineArgs cmdLineArgs = new CmdLineArgs();
-                Console.WriteLine(cmdLineArgs.Generate());
-                Console.ReadKey();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-        }
-        */
-
-        /* Help Output
+        /* Simple Help Output
         Copyright © <company>
 
         This program does something useful.
@@ -139,6 +139,45 @@ namespace Plexdata.ArgumentParser.Tester
           --verbose [-v]  More output during runtime.
 
           --debug         Run program in Debug mode.
+        */
+
+        /* Options Help Configuration
+        [HelpLicense]
+        [HelpUtilize]
+        [HelpPreface("This program does something useful.")]
+        [ParametersGroup]
+        class CmdLineArgs
+        {
+            [HelpSummary(
+                Options = "<method>",
+                Content = "Apply the name of the method to be used.")]
+            [OptionParameter(SolidLabel = "method", BriefLabel = "m")]
+            public String File { get; set; }
+
+            [HelpSummary(
+                Options = "<files>",
+                Content = "Provide a list of fully qualified file names. " +
+                          "Wild cards such as '*' and '?' can be used.")]
+            [VerbalParameter]
+            public String[] Files { get; set; }
+        }
+        */
+
+        /* Options Help Output
+        Copyright © <company>
+
+        This program does something useful.
+
+        Usage:
+
+          <program> [options]
+
+        Options:
+
+          --method [-m] <method>  Apply the name of the method to be used.
+
+          <files>                 Provide a list of fully qualified file names. Wild
+                                  cards such as '*' and '?' can be used.
         */
 
         static void Main(String[] args)

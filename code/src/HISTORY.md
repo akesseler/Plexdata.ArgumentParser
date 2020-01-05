@@ -1,5 +1,19 @@
 
 
+**1.0.6**
+- Testing library and testing console application moved to _.NET Framework 4.8_.
+- Bugfix for `HelpSummary` used with `VerbalParameter`.
+- Usage of `Process.GetCurrentProcess().MainModule.FileName` instead of 
+  `Assembly.GetEntryAssembly().Location` to resolve the executable name.
+- Introduction of new `Product` placeholder and supporting it in method 
+  `FixupUtilize()`.
+- Source code documentation as well as online documentation reviewed and extended.
+- Changing of the copyright year in all files into 2020.
+- Update of online documentation as well as Wiki.
+- Version number increased.
+- Package release on `nuget.org`.
+- Release uploaded on `github.com`.
+
 **1.0.5**
 - Introduction of attribute `CustomConverter`.
 - Complete class `CustomConverterExtension` marked as obsolete.
