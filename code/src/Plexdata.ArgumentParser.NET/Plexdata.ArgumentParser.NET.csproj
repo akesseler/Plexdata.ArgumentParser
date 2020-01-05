@@ -3,20 +3,21 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Plexdata.ArgumentParser</RootNamespace>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>plexdata.de</Authors>
     <Company>plexdata.de</Company>
-    <Copyright>Copyright © 2019 - plexdata.de</Copyright>
+    <Copyright>Copyright © 2020 - plexdata.de</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/akesseler/Plexdata.ArgumentParser</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/icon.png?raw=true</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
     <Description>This .NET Standard library is a simple command line argument parser. It uses attributes on classes that define which of the properties are used as command line arguments. Custom types can be processed by implementing and registering interface `ICustomConverter`.</Description>
     <PackageTags>command line commandline argument option parser parsing library syntax shell</PackageTags>
     <PackageReleaseNotes>See project history under https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/code/src/HISTORY.md</PackageReleaseNotes>
-    <AssemblyVersion>1.0.5</AssemblyVersion>
-    <FileVersion>1.0.5</FileVersion>
-    <Version>1.0.5</Version>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
+    <FileVersion>1.0.6</FileVersion>
+    <Version>1.0.6</Version>
     <AssemblyName>Plexdata.ArgumentParser.NET</AssemblyName>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -36,6 +37,10 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Include="..\..\..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\..\..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 

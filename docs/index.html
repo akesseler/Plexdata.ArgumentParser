@@ -129,7 +129,7 @@ The software has been published under the terms of
 <h3>MIT License</h3>
 
 <p>
-Copyright &copy; 2019 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
+Copyright &copy; 2020 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
 </p>
 <p>
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
@@ -735,6 +735,47 @@ For sure, this is a pretty simple example. In other words, the help generator is
 For example it is possible to take some of the &ldquo;properties&rdquo; from the executing assembly 
 and put them into the help text. The help usage part as well as the help option section can be 
 grouped and so on.
+</p>
+<p>
+It is also possible to enrich the help summary of a command line argument by for instance 
+additional information. For such a purpose the attribute provides the property <code>Options</code>. 
+How to use this property is demonstrated in the following example.
+</p>
+<pre><code>[HelpLicense]
+[HelpUtilize]
+[HelpPreface("This program does something useful.")]
+[ParametersGroup]
+class CmdLineArgs
+{
+    [HelpSummary(Options = "&lt;method&gt;", Content = "Apply the name of the method to be used.")]
+    [OptionParameter(SolidLabel = "method", BriefLabel = "m")]
+    public String File { get; set; }
+
+    [HelpSummary(Options = "&lt;files&gt;", Content = "Provide a list of fully qualified file names. Wild cards such as '*' and '?' can be used.")]
+    [VerbalParameter]
+    public String[] Files { get; set; }
+}</code></pre>
+<p>
+When the help has been generated, as shown in method <code>Main()</code> from above, the output would 
+look like as shown below.
+</p>
+<pre><code>Copyright &copy; &lt;company&gt;
+
+This program does something useful.
+
+Usage:
+
+  &lt;program&gt; [options]
+
+Options:
+
+  --method [-m] &lt;method&gt;  Apply the name of the method to be used.
+
+  &lt;files&gt;                 Provide a list of fully qualified file names. Wild
+                          cards such as '*' and '?' can be used.</code></pre>
+<p>
+Finally, please be aware, the <code>Options</code> property is available for arguments of type <i>Switch</i> 
+as well. But for sure, it doesn&rsquo;t make any sense to use this feature together with <i>Switch</i> arguments.
 </p>
 
 <h2 id="limitations">Limitations</h2>

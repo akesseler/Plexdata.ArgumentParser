@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2019 plexdata.de
+ * Copyright (c) 2020 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +38,16 @@ namespace Plexdata.ArgumentParser.Constants
         /// The internal placeholder for the company name.
         /// </summary>
         /// <remarks>
-        /// Users may combine the Company, the Version and the Copyright placeholders. 
-        /// In such a case a combination of the company name, the version number as well 
-        /// as the copyright statement is generated.
+        /// <para>
+        /// Users may combine the <see cref="Placeholders.Company"/>, the <see cref="Placeholders.Version"/> 
+        /// and the <see cref="Placeholders.Copyright"/> placeholders. In such a case a combination of the 
+        /// company name, the version number as well as the copyright statement is generated.
+        /// </para>
+        /// <para>
+        /// This placeholder is replaced in each license attribute that includes this label.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Attributes.HelpLicenseAttribute"/>
         public const String Company = "<company>";
 
         /// <summary>
@@ -49,40 +55,84 @@ namespace Plexdata.ArgumentParser.Constants
         /// of license statement by the copyright of executing assembly.
         /// </summary>
         /// <remarks>
-        /// Users may combine the Company, the Version and the Copyright placeholders. 
-        /// In such a case a combination of the company name, the version number as well 
-        /// as the copyright statement is generated.
+        /// <para>
+        /// Users may combine the <see cref="Placeholders.Company"/>, the <see cref="Placeholders.Version"/> 
+        /// and the <see cref="Placeholders.Copyright"/> placeholders. In such a case a combination of the 
+        /// company name, the version number as well as the copyright statement is generated.
+        /// </para>
+        /// <para>
+        /// This placeholder is replaced in each license attribute that includes this label.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Attributes.HelpLicenseAttribute"/>
         public const String Copyright = "<copyright>";
 
         /// <summary>
         /// The internal placeholder for the program version.
         /// </summary>
         /// <remarks>
-        /// Users may combine the Company, the Version and the Copyright placeholders. 
-        /// In such a case a combination of the company name, the version number as well 
-        /// as the copyright statement is generated. But keep in mind, a program's version 
-        /// attribute is used and not its file version attribute!
+        /// <para>
+        /// Users may combine the <see cref="Placeholders.Company"/>, the <see cref="Placeholders.Version"/> 
+        /// and the <see cref="Placeholders.Copyright"/> placeholders. In such a case a combination of the 
+        /// company name, the version number as well as the copyright statement is generated.
+        /// </para>
+        /// <para>
+        /// Please be aware, a program's version attribute is used and not its file version attribute.
+        /// </para>
+        /// <para>
+        /// This placeholder is replaced in each license attribute that includes this label.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Attributes.HelpLicenseAttribute"/>
         public const String Version = "<version>";
 
         /// <summary>
         /// The internal placeholder for a program's name.
         /// </summary>
         /// <remarks>
-        /// Keep in mind, the program placeholder is replaced in 
-        /// each utilize attribute that includes this label.
+        /// <para>
+        /// This placeholder causes to take the name of the executing program.
+        /// </para>
+        /// <para>
+        /// This placeholder is replaced in each utilize attribute that includes this label.
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Placeholders.Product"/>
+        /// <seealso cref="Attributes.HelpUtilizeAttribute"/>
         public const String Program = "<program>";
+
+        /// <summary>
+        /// The internal placeholder for the product name.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// In contrast to placeholder <see cref="Placeholders.Program"/>, this placeholder causes to take 
+        /// the value of <see cref="System.Reflection.AssemblyProductAttribute"/>. And only if it fails, 
+        /// this placeholder is replaced by the name of the executing program.
+        /// </para>
+        /// <para>
+        /// This placeholder might be used as an alternative to placeholder <see cref="Placeholders.Program"/>.
+        /// </para>
+        /// <para>
+        /// This placeholder is replaced in each utilize attribute that includes this label.
+        /// </para>
+        /// </remarks>
+        /// <seealso cref="Placeholders.Program"/>
+        /// <seealso cref="Attributes.HelpUtilizeAttribute"/>
+        public const String Product = "<product>";
 
         /// <summary>
         /// The internal placeholder for a program's description.
         /// </summary>
         /// <remarks>
-        /// Keep in mind, the description placeholder is only available 
-        /// for the preface attribute. This placeholder will replaced 
-        /// by a program's real description.
+        /// <para>
+        /// This placeholder will be replaced by a program's real description.
+        /// </para>
+        /// <para>
+        /// The description placeholder is only available for the preface attribute. 
+        /// </para>
         /// </remarks>
+        /// <seealso cref="Attributes.HelpPrefaceAttribute"/>
         public const String Description = "<description>";
     }
 }

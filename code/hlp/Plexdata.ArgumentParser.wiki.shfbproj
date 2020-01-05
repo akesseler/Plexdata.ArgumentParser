@@ -30,7 +30,7 @@
     <IndentHtml>False</IndentHtml>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpTitle>Plexdata Argument Parser</HelpTitle>
-    <HelpFileVersion>1.0.5</HelpFileVersion>
+    <HelpFileVersion>1.0.6</HelpFileVersion>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceContainer>True</RootNamespaceContainer>
@@ -78,7 +78,7 @@
       <Argument Key="baseSourceCodeUrl" Value="" />
       <Argument Key="requestExampleUrl" Value="" />
     </TransformComponentArguments>
-    <CopyrightText>Copyright &amp;#169%3b 2019 - plexdata.de</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2020 - plexdata.de</CopyrightText>
     <CopyrightHref>http://www.plexdata.de/</CopyrightHref>
     <NamespaceSummaries>
     </NamespaceSummaries>
