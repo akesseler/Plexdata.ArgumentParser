@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
     [TestOf(nameof(ArgumentProcessorInitialize))]
     public class ArgumentProcessorInitializeTests
     {
-        private class ArgumentProcessorInitialize
-        {
-        }
+        private class ArgumentProcessorInitialize { }
 
         [ParametersGroup]
         private class TestClassZeroProperties
@@ -91,12 +89,22 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         }
 
         [ParametersGroup]
-        private class TestClassSwitchPropertiesSameBriefLabels
+        private class TestClassSwitchPropertiesSameBriefLabelsSingle
         {
             [SwitchParameter(BriefLabel = "sl")]
             public Boolean Switch1 { get; set; }
 
             [SwitchParameter(BriefLabel = "sl")]
+            public Boolean Switch2 { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassSwitchPropertiesSameBriefLabelsMultiple
+        {
+            [SwitchParameter(BriefLabel = "sl,s2")]
+            public Boolean Switch1 { get; set; }
+
+            [SwitchParameter(BriefLabel = "s3,sl")]
             public Boolean Switch2 { get; set; }
         }
 
@@ -141,12 +149,22 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         }
 
         [ParametersGroup]
-        private class TestClassOptionPropertiesSameBriefLabels
+        private class TestClassOptionPropertiesSameBriefLabelsSingle
         {
             [OptionParameter(BriefLabel = "sl")]
             public Int32 Option1 { get; set; }
 
             [OptionParameter(BriefLabel = "sl")]
+            public Int32 Option2 { get; set; }
+        }
+
+        [ParametersGroup]
+        private class TestClassOptionPropertiesSameBriefLabelsMultiple
+        {
+            [OptionParameter(BriefLabel = "sl,s2")]
+            public Int32 Option1 { get; set; }
+
+            [OptionParameter(BriefLabel = "s3,sl")]
             public Int32 Option2 { get; set; }
         }
 
@@ -259,10 +277,18 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         }
 
         [Test]
-        public void Initialize_TestClassSwitchPropertiesSameBriefLabels_ThrowsException()
+        public void Initialize_TestClassSwitchPropertiesSameBriefLabelsSingle_ThrowsException()
         {
-            TestClassSwitchPropertiesSameBriefLabels instance = new TestClassSwitchPropertiesSameBriefLabels();
-            ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabels> processor = new ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabels>(instance);
+            TestClassSwitchPropertiesSameBriefLabelsSingle instance = new TestClassSwitchPropertiesSameBriefLabelsSingle();
+            ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabelsSingle> processor = new ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabelsSingle>(instance);
+            Assert.Throws<UtilizeViolationException>(() => { processor.Initialize(); });
+        }
+
+        [Test]
+        public void Initialize_TestClassSwitchPropertiesSameBriefLabelsMultiple_ThrowsException()
+        {
+            TestClassSwitchPropertiesSameBriefLabelsMultiple instance = new TestClassSwitchPropertiesSameBriefLabelsMultiple();
+            ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabelsMultiple> processor = new ArgumentProcessor<TestClassSwitchPropertiesSameBriefLabelsMultiple>(instance);
             Assert.Throws<UtilizeViolationException>(() => { processor.Initialize(); });
         }
 
@@ -308,10 +334,18 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         }
 
         [Test]
-        public void Initialize_TestClassOptionPropertiesSameBriefLabels_ThrowsException()
+        public void Initialize_TestClassOptionPropertiesSameBriefLabelsSingle_ThrowsException()
         {
-            TestClassOptionPropertiesSameBriefLabels instance = new TestClassOptionPropertiesSameBriefLabels();
-            ArgumentProcessor<TestClassOptionPropertiesSameBriefLabels> processor = new ArgumentProcessor<TestClassOptionPropertiesSameBriefLabels>(instance);
+            TestClassOptionPropertiesSameBriefLabelsSingle instance = new TestClassOptionPropertiesSameBriefLabelsSingle();
+            ArgumentProcessor<TestClassOptionPropertiesSameBriefLabelsSingle> processor = new ArgumentProcessor<TestClassOptionPropertiesSameBriefLabelsSingle>(instance);
+            Assert.Throws<UtilizeViolationException>(() => { processor.Initialize(); });
+        }
+
+        [Test]
+        public void Initialize_TestClassOptionPropertiesSameBriefLabelsMultiple_ThrowsException()
+        {
+            TestClassOptionPropertiesSameBriefLabelsMultiple instance = new TestClassOptionPropertiesSameBriefLabelsMultiple();
+            ArgumentProcessor<TestClassOptionPropertiesSameBriefLabelsMultiple> processor = new ArgumentProcessor<TestClassOptionPropertiesSameBriefLabelsMultiple>(instance);
             Assert.Throws<UtilizeViolationException>(() => { processor.Initialize(); });
         }
 

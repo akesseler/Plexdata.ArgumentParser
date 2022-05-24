@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -76,19 +76,19 @@ namespace Plexdata.ArgumentParser.Tests.Extensions
                 Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1 --arg2 --opt1 string",
-                Expected  = new String[] { "--arg1", "--arg2","--opt1", "string" },
+                Expected  = new String[] { "--arg1", "--arg2", "--opt1", "string" },
                 Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1 --arg2 --opt1 \"string with spaces\"",
-                Expected  = new String[] { "--arg1", "--arg2","--opt1", "string with spaces" },
+                Expected  = new String[] { "--arg1", "--arg2", "--opt1", "string with spaces" },
                 Separator = ' ' },
             new ArgumentComposerHelper {
                 Actual    = "--arg1,--arg2,--opt1,\"string_without_spaces\"",
-                Expected  = new String[] { "--arg1", "--arg2","--opt1", "string_without_spaces" },
+                Expected  = new String[] { "--arg1", "--arg2", "--opt1", "string_without_spaces" },
                 Separator = ',' },
             new ArgumentComposerHelper {
                 Actual    = "   --arg1      --arg2     --opt1 \"   string\twith\tspaces   \"",
-                Expected  = new String[] { "--arg1", "--arg2","--opt1", "   string\twith\tspaces   " },
+                Expected  = new String[] { "--arg1", "--arg2", "--opt1", "   string\twith\tspaces   " },
                 Separator = ' ' },
         };
 

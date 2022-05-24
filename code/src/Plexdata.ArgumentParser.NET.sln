@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plexdata.ArgumentParser.NET
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{D57C3808-DB6E-47C3-A637-C53D9B520C14}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		clean.cmd = clean.cmd
 		HISTORY.md = HISTORY.md
 		README.md = README.md

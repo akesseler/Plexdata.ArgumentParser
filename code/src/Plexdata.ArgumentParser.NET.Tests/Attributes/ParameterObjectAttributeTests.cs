@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ using NUnit.Framework;
 using Plexdata.ArgumentParser.Attributes;
 using Plexdata.ArgumentParser.Constants;
 using System;
+using System.Linq;
 
 namespace Plexdata.ArgumentParser.Tests.Attributes
 {
@@ -49,7 +50,6 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.IsDependencies, Is.False);
         }
 
-        [Test]
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
@@ -60,7 +60,6 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(() => actual.SolidLabel = value, Throws.InstanceOf<NotImplementedException>());
         }
 
-        [Test]
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
@@ -71,10 +70,9 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(() => actual.BriefLabel = value, Throws.InstanceOf<NotImplementedException>());
         }
 
-        [Test]
-        [TestCase(ParameterPrefixes.SolidPrefix)]
-        [TestCase(ParameterPrefixes.BriefPrefix)]
-        [TestCase(ParameterPrefixes.OtherPrefix)]
+        [TestCase("--")]
+        [TestCase("-")]
+        [TestCase("/")]
         public void SolidLabel_LengthInvalid_ThrowsException(String value)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass();
@@ -82,21 +80,26 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(() => actual.SolidLabel = value, Throws.InstanceOf<NotImplementedException>());
         }
 
-        [Test]
-        [TestCase(ParameterPrefixes.SolidPrefix)]
-        [TestCase(ParameterPrefixes.BriefPrefix)]
-        [TestCase(ParameterPrefixes.OtherPrefix)]
+        [TestCase("--")]
+        [TestCase("-")]
+        [TestCase("/")]
+        [TestCase("--,-,/")]
+        [TestCase("-,--,/")]
+        [TestCase("/,--,-")]
         public void BriefLabel_LengthInvalid_ThrowsException(String value)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass();
 
             Assert.That(() => actual.BriefLabel = value, Throws.InstanceOf<NotImplementedException>());
+            Assert.That(actual.BriefLabels.Count(), Is.Zero);
         }
 
-        [Test]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value")]
+        [TestCase("--value")]
+        [TestCase("-value")]
+        [TestCase("/value")]
+        [TestCase("  --value  ")]
+        [TestCase("  -value   ")]
+        [TestCase("  /value   ")]
         public void IsSolidLabel_ValueValid_ResultIsTrue(String value)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = value };
@@ -104,12 +107,14 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.IsSolidLabel, Is.True);
         }
 
-        [Test]
         [TestCase("value", "value")]
         [TestCase("   value   ", "value")]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value", "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value", "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value", "value")]
+        [TestCase("--value", "value")]
+        [TestCase("-value", "value")]
+        [TestCase("/value", "value")]
+        [TestCase("  --value  ", "value")]
+        [TestCase("  -value  ", "value")]
+        [TestCase("  /value  ", "value")]
         public void SolidLabel_ValueValid_ResultAsExpected(String value, String expected)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = value };
@@ -117,10 +122,12 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.SolidLabel, Is.EqualTo(expected));
         }
 
-        [Test]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value")]
+        [TestCase("--value")]
+        [TestCase("-value")]
+        [TestCase("/value")]
+        [TestCase("  --value  ")]
+        [TestCase("  -value  ")]
+        [TestCase("  /value  ")]
         public void IsBriefLabel_ValueValid_ResultIsTrue(String value)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = value };
@@ -128,12 +135,14 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.IsBriefLabel, Is.True);
         }
 
-        [Test]
         [TestCase("value", "value")]
         [TestCase("   value   ", "value")]
-        [TestCase(ParameterPrefixes.SolidPrefix + "value", "value")]
-        [TestCase(ParameterPrefixes.BriefPrefix + "value", "value")]
-        [TestCase(ParameterPrefixes.OtherPrefix + "value", "value")]
+        [TestCase("--value", "value")]
+        [TestCase("-value", "value")]
+        [TestCase("/value", "value")]
+        [TestCase("  --value  ", "value")]
+        [TestCase("  -value  ", "value")]
+        [TestCase("  /value  ", "value")]
         public void BriefLabel_ValueValid_ResultAsExpected(String value, String expected)
         {
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = value };
@@ -141,7 +150,18 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.BriefLabel, Is.EqualTo(expected));
         }
 
-        [Test]
+        [TestCase("a,b,c", "a,b,c")]
+        [TestCase("-a,-b,-c", "a,b,c")]
+        [TestCase("   , a, b,,c", "a,b,c")]
+        [TestCase("   , /a, -b,,--c", "a,b,c")]
+        [TestCase(" -  , /a, -b,--,  ,--c, /,  ", "a,b,c")]
+        public void BriefLabels_ValueWithCommaSeparatedList_ResultAsExpected(String value, String expected)
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = value };
+
+            Assert.That(actual.BriefLabel, Is.EqualTo(expected));
+        }
+
         [TestCase(false, false)]
         [TestCase(true, true)]
         public void IsRequired_VariousValues_ResultAsExpected(Boolean value, Boolean expected)
@@ -151,7 +171,6 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.IsRequired, Is.EqualTo(expected));
         }
 
-        [Test]
         [TestCase(false, false)]
         [TestCase(true, true)]
         public void IsExclusive_VariousValues_ResultAsExpected(Boolean value, Boolean expected)
@@ -161,7 +180,6 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.IsExclusive, Is.EqualTo(expected));
         }
 
-        [Test]
         [TestCase(null, "")]
         [TestCase("", "")]
         [TestCase("  ", "")]
@@ -174,7 +192,6 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(actual.DependencyList, Is.EqualTo(expected));
         }
 
-        [Test]
         [TestCase(null, false)]
         [TestCase("", false)]
         [TestCase("  ", false)]
@@ -185,6 +202,90 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { DependencyList = value };
 
             Assert.That(actual.IsDependencies, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsFalseAndOtherIsValid_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass();
+
+            Assert.That(actual.IsSolidLabelAndStartsWith("other"), Is.False);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  ")]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsTrueButOtherIsInvalid_ResultIsFalse(String other)
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = "value" };
+
+            Assert.That(actual.IsSolidLabelAndStartsWith(other), Is.False);
+        }
+
+        [Test]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsTrueAndOtherIsDifferent_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = "value" };
+
+            Assert.That(actual.IsSolidLabelAndStartsWith("other"), Is.False);
+        }
+
+        [Test]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsTrueAndOtherIsSame_ResultIsTrue()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = "label" };
+
+            Assert.That(actual.IsSolidLabelAndStartsWith("label"), Is.True);
+        }
+
+        [Test]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsTrueAndOtherIsSameButUpperCase_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { SolidLabel = "label" };
+
+            Assert.That(actual.IsSolidLabelAndStartsWith("LABEL"), Is.False);
+        }
+
+        [Test]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsFalseAndOtherIsValid_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass();
+
+            Assert.That(actual.IsBriefLabelAndStartsWith("other"), Is.False);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("  ")]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsTrueButOtherIsInvalid_ResultIsFalse(String other)
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = "value" };
+
+            Assert.That(actual.IsBriefLabelAndStartsWith(other), Is.False);
+        }
+
+        [Test]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsTrueAndOtherIsDifferent_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = "value" };
+
+            Assert.That(actual.IsBriefLabelAndStartsWith("other"), Is.False);
+        }
+
+        [Test]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsTrueAndOtherIsSame_ResultIsTrue()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = "label" };
+
+            Assert.That(actual.IsBriefLabelAndStartsWith("label"), Is.True);
+        }
+
+        [Test]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsTrueAndOtherIsSameButUpperCase_ResultIsFalse()
+        {
+            ParameterObjectAttribute actual = new ParameterObjectAttributeTestClass() { BriefLabel = "label" };
+
+            Assert.That(actual.IsBriefLabelAndStartsWith("LABEL"), Is.False);
         }
 
         private class ParameterObjectAttributeTestClass : ParameterObjectAttribute

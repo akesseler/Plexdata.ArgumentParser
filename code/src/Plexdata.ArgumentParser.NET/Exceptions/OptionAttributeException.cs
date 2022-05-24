@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ namespace Plexdata.ArgumentParser.Exceptions
         /// The message to be assigned to an instance of this class.
         /// </param>
         public OptionAttributeException(String parameter, String message)
-            : base(message, parameter)
+            : base(parameter, message)
         {
         }
     }

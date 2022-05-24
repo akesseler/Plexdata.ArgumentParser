@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -339,7 +339,7 @@ namespace Plexdata.ArgumentParser.Extensions
                 }
                 else if (setting.Attribute.IsBriefLabel)
                 {
-                    return $"{ParameterPrefixes.BriefPrefix}{setting.Attribute.BriefLabel}";
+                    return $"{ParameterPrefixes.BriefPrefix}{setting.Attribute.BriefLabels.First()}";
                 }
                 else
                 {

@@ -6,16 +6,16 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>plexdata.de</Authors>
     <Company>plexdata.de</Company>
-    <Copyright>Copyright © 2020 - plexdata.de</Copyright>
+    <Copyright>Copyright © 2022 - plexdata.de</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/akesseler/Plexdata.ArgumentParser</PackageProjectUrl>
     <PackageIconUrl></PackageIconUrl>
     <Description>This .NET Standard library is a simple command line argument parser. It uses attributes on classes that define which of the properties are used as command line arguments. Custom types can be processed by implementing and registering interface `ICustomConverter`.</Description>
     <PackageTags>command line commandline argument option parser parsing library syntax shell</PackageTags>
     <PackageReleaseNotes>See project history under https://github.com/akesseler/Plexdata.ArgumentParser/blob/master/code/src/HISTORY.md</PackageReleaseNotes>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
-    <FileVersion>1.0.6</FileVersion>
-    <Version>1.0.6</Version>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
+    <Version>1.0.7</Version>
     <AssemblyName>Plexdata.ArgumentParser.NET</AssemblyName>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
@@ -32,10 +32,8 @@
     <OutputPath>bin\Release</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <!-- TODO: Remove next line after all obsoletes have been removed. -->
-    <WarningsNotAsErrors>618</WarningsNotAsErrors>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Include="..\..\..\icon.png">
       <Pack>True</Pack>

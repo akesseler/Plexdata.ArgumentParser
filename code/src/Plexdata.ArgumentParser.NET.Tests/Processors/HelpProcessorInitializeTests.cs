@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +33,9 @@ namespace Plexdata.ArgumentParser.Tests.Processors
     [TestOf(nameof(HelpProcessorInitialize))]
     public class HelpProcessorInitializeTests
     {
-        private class HelpProcessorInitialize
-        {
-        }
+        private class HelpProcessorInitialize { }
 
-        private class TestClassZeroProperties
-        {
-        }
+        private class TestClassZeroProperties { }
 
         private class TestClassUntaggedProperties
         {
@@ -79,29 +75,20 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         }
 
         [HelpLicense]
-        private class TestClassOnlyHelpLicense
-        {
-        }
+        private class TestClassOnlyHelpLicense { }
+
         [HelpPreface]
-        private class TestClassOnlyHelpPreface
-        {
-        }
+        private class TestClassOnlyHelpPreface { }
 
         [HelpClosure]
-        private class TestClassOnlyHelpClosure
-        {
-        }
+        private class TestClassOnlyHelpClosure { }
 
         [HelpUtilize]
-        private class TestClassOnlyOneHelpUtilize
-        {
-        }
+        private class TestClassOnlyOneHelpUtilize { }
 
         [HelpUtilize]
         [HelpUtilize]
-        private class TestClassOnlyTwoHelpUtilize
-        {
-        }
+        private class TestClassOnlyTwoHelpUtilize { }
 
         [Test]
         public void Initialize_TestClassIsNull_ThrowsException()

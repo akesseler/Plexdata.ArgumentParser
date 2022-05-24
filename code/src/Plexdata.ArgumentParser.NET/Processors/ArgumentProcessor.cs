@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -280,15 +280,18 @@ namespace Plexdata.ArgumentParser.Processors
 
                                             if (attribute.IsBriefLabel)
                                             {
-                                                if (!briefLabels.ContainsKey(attribute.BriefLabel))
+                                                foreach (String actual in attribute.BriefLabels)
                                                 {
-                                                    briefLabels[attribute.BriefLabel] = property;
-                                                }
-                                                else
-                                                {
-                                                    throw new UtilizeViolationException(
-                                                        $"The brief label \"{attribute.BriefLabel}\" of property \"{property.Name}\" is already used " +
-                                                        $"by property \"{briefLabels[attribute.BriefLabel].Name}\". All brief labels must be unique.");
+                                                    if (!briefLabels.ContainsKey(actual))
+                                                    {
+                                                        briefLabels[actual] = property;
+                                                    }
+                                                    else
+                                                    {
+                                                        throw new UtilizeViolationException(
+                                                            $"The brief label \"{actual}\" of property \"{property.Name}\" is already used " +
+                                                            $"by property \"{briefLabels[actual].Name}\". All brief labels must be unique.");
+                                                    }
                                                 }
                                             }
                                         }
@@ -327,13 +330,6 @@ namespace Plexdata.ArgumentParser.Processors
                                     {
                                         this.Settings.Add(new ArgumentProcessorSetting(property, attribute, true));
                                     }
-                                    // TODO: Remove obsolete code later on.
-                                    /* obsolete start */
-                                    else if (property.PropertyType.HasConverter())
-                                    {
-                                        this.Settings.Add(new ArgumentProcessorSetting(property, attribute));
-                                    }
-                                    /* obsolete end */
                                     else
                                     {
                                         throw new SupportViolationException(
@@ -462,14 +458,6 @@ namespace Plexdata.ArgumentParser.Processors
                                 {
                                     setting.Property.SetValue(this.Instance, setting.InvokeCustomConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
                                 }
-                                // TODO: Remove obsolete code later on.
-                                /* obsolete start */
-                                else if (setting.Property.PropertyType.HasConverter())
-                                {
-                                    setting.Property.SetValue(this.Instance, setting.Property.PropertyType
-                                        .InvokeConverter(parameter, argument, (setting.Attribute as OptionParameterAttribute).Delimiter));
-                                }
-                                /* obsolete end */
                                 else
                                 {
                                     setting.Property.SetValue(this.Instance, OptionTypeConverter.Convert(argument, setting.Property.PropertyType));
