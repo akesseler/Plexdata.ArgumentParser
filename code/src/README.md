@@ -10,8 +10,7 @@ The help file with the whole API documentation is not yet available.
 
 ## Breaking Changes
 
-The property `Dependencies` of class `ParameterObjectAttribute` has been marked as obsolete 
-and is no longer supported!
+Anything marked as obsolete has been removed and may cause compiler errors when still in use!
 
 ## Trouble Shooting
 

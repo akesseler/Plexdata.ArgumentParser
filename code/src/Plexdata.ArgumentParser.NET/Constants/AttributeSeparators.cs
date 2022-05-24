@@ -24,49 +24,48 @@
 
 using System;
 
-namespace Plexdata.ArgumentParser.Exceptions
+namespace Plexdata.ArgumentParser.Constants
 {
     /// <summary>
-    /// The exception is always thrown as soon as a violation of verbal rules take 
-    /// place.
+    /// The list of all supported attribute separators.
     /// </summary>
     /// <remarks>
-    /// The exception is always thrown as soon as a violation of verbal rules take 
-    /// place. Such a rule is for example that a verbal parameter is used more than 
-    /// once.
+    /// This class provides access to all supported attribute separators.
     /// </remarks>
-    public class VerbalViolationException : ArgumentParserException
+    internal static class AttributeSeparators
     {
-        /// <summary>
-        /// The constructor with message argument.
-        /// </summary>
-        /// <remarks>
-        /// This constructor creates an instance of this class using a given message.
-        /// </remarks>
-        /// <param name="message">
-        /// The message to be assigned to an instance of this class.
-        /// </param>
-        public VerbalViolationException(String message)
-            : base(message)
-        {
-        }
+        #region Construction
 
         /// <summary>
-        /// The constructor with parameter and message arguments.
+        /// The static class constructor.
         /// </summary>
         /// <remarks>
-        /// This constructor creates an instance of this class using a given message 
-        /// as well as the name of the parameter that causes this exception.
+        /// The constructor initializes the static fields of this class.
         /// </remarks>
-        /// <param name="parameter">
-        /// The name of the parameter that has caused the exception.
-        /// </param>
-        /// <param name="message">
-        /// The message to be assigned to an instance of this class.
-        /// </param>
-        public VerbalViolationException(String parameter, String message)
-            : base(parameter, message)
+        static AttributeSeparators() { }
+
+        #endregion
+
+        /// <summary>
+        /// An attribute's argument is separated by comma.
+        /// </summary>
+        /// <remarks>
+        /// This separator in nothing else but a comma character.
+        /// </remarks>
+        public const String CommaSeparator = ",";
+
+        /// <summary>
+        /// Gets the list of supported attribute separators.
+        /// </summary>
+        /// <remarks>
+        /// This method returns the list of supported attribute separators.
+        /// </remarks>
+        /// <returns>
+        /// The list of supported attribute separators.
+        /// </returns>
+        internal static Char[] GetSeparators()
         {
+            return AttributeSeparators.CommaSeparator.ToCharArray();
         }
     }
 }

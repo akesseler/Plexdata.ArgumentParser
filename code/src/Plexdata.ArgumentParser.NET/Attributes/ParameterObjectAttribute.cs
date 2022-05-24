@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@
 using Plexdata.ArgumentParser.Constants;
 using Plexdata.ArgumentParser.Exceptions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Plexdata.ArgumentParser.Attributes
@@ -47,6 +49,8 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <remarks>
         /// The field contains the solid label value.
         /// </remarks>
+        /// <seealso cref="ParameterObjectAttribute.SolidLabel"/>
+        /// <seealso cref="ParameterObjectAttribute.IsSolidLabel"/>
         private String solidLabel = String.Empty;
 
         /// <summary>
@@ -55,7 +59,22 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <remarks>
         /// The field contains the brief label value.
         /// </remarks>
+        /// <seealso cref="ParameterObjectAttribute.briefLabels"/>
+        /// <seealso cref="ParameterObjectAttribute.BriefLabel"/>
+        /// <seealso cref="ParameterObjectAttribute.IsBriefLabel"/>
         private String briefLabel = String.Empty;
+
+        /// <summary>
+        /// The brief label list field.
+        /// </summary>
+        /// <remarks>
+        /// The field contains the brief label list values.
+        /// </remarks>
+        /// <seealso cref="ParameterObjectAttribute.briefLabel"/>
+        /// <seealso cref="ParameterObjectAttribute.BriefLabel"/>
+        /// <seealso cref="ParameterObjectAttribute.BriefLabels"/>
+        /// <seealso cref="ParameterObjectAttribute.IsBriefLabel"/>
+        private List<String> briefLabels = new List<String>();
 
         /// <summary>
         /// The dependencies field.
@@ -63,6 +82,8 @@ namespace Plexdata.ArgumentParser.Attributes
         /// <remarks>
         /// The field contains the dependencies value.
         /// </remarks>
+        /// <seealso cref="ParameterObjectAttribute.DependencyList"/>
+        /// <seealso cref="ParameterObjectAttribute.IsDependencies"/>
         private String dependencies = String.Empty;
 
         #endregion
@@ -126,7 +147,7 @@ namespace Plexdata.ArgumentParser.Attributes
                     value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
                 }
 
-                if (value.Length <= 0)
+                if (value.Length < 1)
                 {
                     this.ThrowException(nameof(this.SolidLabel), "The solid label must consist of a valid descriptor.");
                 }
@@ -158,12 +179,19 @@ namespace Plexdata.ArgumentParser.Attributes
         /// but without any prefix.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// This property sets and gets the label to be used as brief label for 
         /// this parameter but without any prefix.
+        /// </para>
+        /// <para>
+        /// A comma separated argument list can be used to take advantage of multiple 
+        /// brief labels (e.g. <c>h,?</c> for standard help parameters).
+        /// </para>
         /// </remarks>
         /// <value>
         /// The brief label assigned to an instance of this attribute.
         /// </value>
+        /// <seealso cref="ParameterObjectAttribute.BriefLabels"/>
         public virtual String BriefLabel
         {
             get
@@ -177,27 +205,62 @@ namespace Plexdata.ArgumentParser.Attributes
                     this.ThrowException(nameof(this.BriefLabel), "The brief label must be a valid string.");
                 }
 
-                value = value.Trim();
+                this.briefLabels = value
+                    .Split(AttributeSeparators.GetSeparators(), StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .Where(x => x.Length > 0)
+                    .ToList();
 
-                if (value.StartsWith(ParameterPrefixes.SolidPrefix))
+                for (Int32 index = 0; index < this.briefLabels.Count; index++)
                 {
-                    value = value.Substring(ParameterPrefixes.SolidPrefix.Length);
-                }
-                else if (value.StartsWith(ParameterPrefixes.BriefPrefix))
-                {
-                    value = value.Substring(ParameterPrefixes.BriefPrefix.Length);
-                }
-                else if (value.StartsWith(ParameterPrefixes.OtherPrefix))
-                {
-                    value = value.Substring(ParameterPrefixes.OtherPrefix.Length);
+                    String current = this.briefLabels[index];
+
+                    if (current.StartsWith(ParameterPrefixes.SolidPrefix))
+                    {
+                        current = current.Substring(ParameterPrefixes.SolidPrefix.Length);
+                    }
+                    else if (current.StartsWith(ParameterPrefixes.BriefPrefix))
+                    {
+                        current = current.Substring(ParameterPrefixes.BriefPrefix.Length);
+                    }
+                    else if (current.StartsWith(ParameterPrefixes.OtherPrefix))
+                    {
+                        current = current.Substring(ParameterPrefixes.OtherPrefix.Length);
+                    }
+
+                    this.briefLabels[index] = current;
                 }
 
-                if (value.Length <= 0)
+                this.briefLabel = String.Join(AttributeSeparators.CommaSeparator, this.briefLabels.Where(x => !String.IsNullOrWhiteSpace(x)));
+
+                if (this.briefLabel.Length < 1)
                 {
+                    this.briefLabels.Clear();
                     this.ThrowException(nameof(this.BriefLabel), "The brief label must consist of a valid descriptor.");
                 }
+            }
+        }
 
-                this.briefLabel = value;
+        /// <summary>
+        /// Gets assigned brief labels as list.
+        /// </summary>
+        /// <remarks>
+        /// Since support of multiple brief labels it became possible to use a list of 
+        /// brief labels for one and the same <see cref="ParameterObjectAttribute"/>. 
+        /// All list items are separated by commas. This has been made especially to 
+        /// support different brief labels for a help parameter, which are usually 
+        /// <c>-h</c> and <c>-?</c> (respectively <c>/h</c> and <c>/?</c>). This property 
+        /// returns the list of these multiple brief label, but at least one.
+        /// </remarks>
+        /// <value>
+        /// The assigned brief labels as list.
+        /// </value>
+        /// <seealso cref="ParameterObjectAttribute.BriefLabel"/>
+        public IEnumerable<String> BriefLabels
+        {
+            get
+            {
+                return this.briefLabels;
             }
         }
 
@@ -366,7 +429,7 @@ namespace Plexdata.ArgumentParser.Attributes
             {
                 if (!String.IsNullOrWhiteSpace(other))
                 {
-                    return this.BriefLabel.Equals(this.TailorOther(other));
+                    return this.briefLabels.Contains(this.TailorOther(other));
                 }
             }
 

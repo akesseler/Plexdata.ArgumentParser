@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,34 +44,32 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
             Assert.That(attribute.HasDefaultValue, Is.False);
         }
 
-        [Test]
-        [TestCase('\u0000')]
-        [TestCase('\u001F')]
-        [TestCase('\u007F')]
-        [TestCase('\u0080')]
-        [TestCase('\u009F')]
-        public void Separator_SetProperty_ThrowsException(Char actual)
+        [TestCase(0x0000)] // '\u0000'
+        [TestCase(0x001F)] // '\u001F'
+        [TestCase(0x007F)] // '\u007F'
+        [TestCase(0x0080)] // '\u0080'
+        [TestCase(0x009F)] // '\u009F'
+        public void Separator_SetProperty_ThrowsException(Int16 actual)
         {
+            // The test explorer may have an issue with unicode characters.
             OptionParameterAttribute attribute = new OptionParameterAttribute();
-            Assert.That(() => { attribute.Separator = actual; }, Throws.InstanceOf<OptionAttributeException>());
+            Assert.That(() => { attribute.Separator = (Char)actual; }, Throws.InstanceOf<OptionAttributeException>());
         }
 
-        [Test]
         [TestCase('#', '#')]
-        [TestCase(ParameterSeparators.SpaceSeparator, ParameterSeparators.SpaceSeparator)]
-        [TestCase(ParameterSeparators.ColonSeparator, ParameterSeparators.ColonSeparator)]
-        [TestCase(ParameterSeparators.EqualSeparator, ParameterSeparators.EqualSeparator)]
+        [TestCase(' ', ' ')]
+        [TestCase(':', ':')]
+        [TestCase('=', '=')]
         public void Separator_SetProperty_ResultIsEqual(Char actual, Char expected)
         {
             OptionParameterAttribute attribute = new OptionParameterAttribute() { Separator = actual };
             Assert.That(attribute.Separator, Is.EqualTo(expected));
         }
 
-        [Test]
         [TestCase(null, "")]
         [TestCase("#", "#")]
-        [TestCase(ArgumentDelimiters.CommaDelimiter, ArgumentDelimiters.CommaDelimiter)]
-        [TestCase(ArgumentDelimiters.ColonDelimiter, ArgumentDelimiters.ColonDelimiter)]
+        [TestCase(",", ",")]
+        [TestCase(":", ":")]
         public void Delimiter_SetProperty_ResultIsEqual(String actual, String expected)
         {
             OptionParameterAttribute attribute = new OptionParameterAttribute() { Delimiter = actual };
@@ -90,6 +88,86 @@ namespace Plexdata.ArgumentParser.Tests.Attributes
         {
             OptionParameterAttribute attribute = new OptionParameterAttribute() { DefaultValue = null };
             Assert.That(attribute.HasDefaultValue, Is.True);
+        }
+
+        [TestCase("other")]
+        [TestCase("other:")]
+        [TestCase("other:value")]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsValidAndSeparatorIsColonAndOtherIsDifferent_ResultIsFalse(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { SolidLabel = "label", Separator = ':' };
+
+            Assert.That(attribute.IsSolidLabelAndStartsWith(other), Is.False);
+        }
+
+        [TestCase("label")]
+        [TestCase("label:")]
+        [TestCase("label:value")]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsValidAndSeparatorIsColonAndOtherIsSame_ResultIsTrue(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { SolidLabel = "label", Separator = ':' };
+
+            Assert.That(attribute.IsSolidLabelAndStartsWith(other), Is.True);
+        }
+
+        [TestCase("other")]
+        [TestCase("other=")]
+        [TestCase("other=value")]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsValidAndSeparatorIsEqualAndOtherIsDifferent_ResultIsFalse(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { SolidLabel = "label", Separator = '=' };
+
+            Assert.That(attribute.IsSolidLabelAndStartsWith(other), Is.False);
+        }
+
+        [TestCase("label")]
+        [TestCase("label=")]
+        [TestCase("label=value")]
+        public void IsSolidLabelAndStartsWith_SolidLabelIsValidAndSeparatorIsEqualAndOtherIsSame_ResultIsTrue(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { SolidLabel = "label", Separator = '=' };
+
+            Assert.That(attribute.IsSolidLabelAndStartsWith(other), Is.True);
+        }
+
+        [TestCase("other")]
+        [TestCase("other:")]
+        [TestCase("other:value")]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsValidAndSeparatorIsColonAndOtherIsDifferent_ResultIsFalse(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { BriefLabel = "label", Separator = ':' };
+
+            Assert.That(attribute.IsBriefLabelAndStartsWith(other), Is.False);
+        }
+
+        [TestCase("label")]
+        [TestCase("label:")]
+        [TestCase("label:value")]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsValidAndSeparatorIsColonAndOtherIsSame_ResultIsTrue(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { BriefLabel = "label", Separator = ':' };
+
+            Assert.That(attribute.IsBriefLabelAndStartsWith(other), Is.True);
+        }
+
+        [TestCase("other")]
+        [TestCase("other=")]
+        [TestCase("other=value")]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsValidAndSeparatorIsEqualAndOtherIsDifferent_ResultIsFalse(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { BriefLabel = "label", Separator = '=' };
+
+            Assert.That(attribute.IsBriefLabelAndStartsWith(other), Is.False);
+        }
+
+        [TestCase("label")]
+        [TestCase("label=")]
+        [TestCase("label=value")]
+        public void IsBriefLabelAndStartsWith_BriefLabelIsValidAndSeparatorIsEqualAndOtherIsSame_ResultIsTrue(String other)
+        {
+            OptionParameterAttribute attribute = new OptionParameterAttribute() { BriefLabel = "label", Separator = '=' };
+
+            Assert.That(attribute.IsBriefLabelAndStartsWith(other), Is.True);
         }
     }
 }

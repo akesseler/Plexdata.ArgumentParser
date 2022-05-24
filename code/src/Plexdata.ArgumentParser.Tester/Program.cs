@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -178,6 +178,48 @@ namespace Plexdata.ArgumentParser.Tester
 
           <files>                 Provide a list of fully qualified file names. Wild
                                   cards such as '*' and '?' can be used.
+        */
+
+        /* Multiple Brief Labels Configuration...
+        [HelpLicense]
+        [HelpUtilize]
+        [HelpPreface("This program does something useful.")]
+        [ParametersGroup]
+        class CmdLineArgs
+        {
+            [HelpSummary(
+                Options = "<method>",
+                Content = "Apply the method name.")]
+            [OptionParameter(SolidLabel = "method", BriefLabel = "m,M")]
+            public String Method { get; set; }
+
+            [HelpSummary("Shows this program help.")]
+            [SwitchParameter(SolidLabel = "help", BriefLabel = "h,?")]
+            public Boolean IsHelp { get; set; }
+        }
+
+        $> program.exe --method SHA
+        $> program.exe -m SHA
+        $> program.exe -M SHA
+        $> program.exe --help
+        $> program.exe -h
+        $> program.exe -?
+        */
+
+        /* Multiple Brief Labels Help Output...
+        Copyright © <company>
+
+        This program does something useful.
+
+        Usage:
+
+          <program> [options]
+
+        Options:
+
+          --method [-m,-M] <method>  Apply the method name.
+
+          --help [-h,-?]             Shows this program help.
         */
 
         static void Main(String[] args)

@@ -1,7 +1,7 @@
 
 ## Overview
 
-The help file project named ``Plexdata.ArgumentParser.wiki.shfbproj`` has been created using [Sandcastle Help File Builder](https://ewsoftware.github.io/SHFB/html/bd1ddb51-1c4f-434f-bb1a-ce2135d3a909.htm) version v2018.12.10.0.
+The help file project named ``Plexdata.ArgumentParser.wiki.shfbproj`` has been created using [Sandcastle Help File Builder](https://ewsoftware.github.io/SHFB/html/bd1ddb51-1c4f-434f-bb1a-ce2135d3a909.htm) version v2020.3.6.0.
 
 ## Building the Help
 

@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
     [TestOf(nameof(HelpProcessorGenerate))]
     public class HelpProcessorGenerateTests
     {
-        private class HelpProcessorGenerate
-        {
-        }
+        private class HelpProcessorGenerate { }
 
         private class TestClassWithEmptyHelpAttributes
         {
@@ -240,27 +238,19 @@ namespace Plexdata.ArgumentParser.Tests.Processors
 
         [HelpUtilize]
         [HelpUtilize]
-        private class TestClassTwoEmptyUtilize
-        {
-        }
+        private class TestClassTwoEmptyUtilize { }
 
         [HelpUtilize("Content AAA")]
         [HelpUtilize("Content BBB")]
-        private class TestClassTwoContentUtilize
-        {
-        }
+        private class TestClassTwoContentUtilize { }
 
         [HelpUtilize("Content AAA", Heading = "Other:")]
         [HelpUtilize("Content BBB", Heading = "Other:")]
-        private class TestClassTwoContentUtilizeHeadingOther
-        {
-        }
+        private class TestClassTwoContentUtilizeHeadingOther { }
 
         [HelpUtilize("Content AAA", Section = "Hello:")]
         [HelpUtilize("Content BBB", Section = "Hello:")]
-        private class TestClassTwoContentUtilizeWithSection
-        {
-        }
+        private class TestClassTwoContentUtilizeWithSection { }
 
         [HelpUtilize("D-A")]
         [HelpUtilize("D-B")]
@@ -282,9 +272,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         [HelpUtilize("U-2.2.3", Heading = "H-2", Section = "C-1.2")]
         [HelpUtilize("U-2.0.1", Heading = "H-2")]
         [HelpUtilize("U-2.0.2", Heading = "H-2")]
-        private class TestClassUtilizeFullFeatured
-        {
-        }
+        private class TestClassUtilizeFullFeatured { }
 
         private class TestClassSummaryTwoHeadings
         {
@@ -333,6 +321,40 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             public Boolean P2H2S2 { get; set; }
         }
 
+        [HelpUtilize]
+        private class TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels
+        {
+            [HelpSummary("Switch with solid label and one brief label.")]
+            [SwitchParameter(SolidLabel = "switch-1", BriefLabel = "s1")]
+            public Boolean Switch1 { get; set; }
+            [HelpSummary("Switch with solid label and two brief labels.")]
+            [SwitchParameter(SolidLabel = "switch-2", BriefLabel = "s2a,s2b")]
+            public Boolean Switch2 { get; set; }
+            [HelpSummary("Switch without solid label and one brief label.")]
+            [SwitchParameter(BriefLabel = "s3")]
+            public Boolean Switch3 { get; set; }
+            [HelpSummary("Switch without solid label and three brief labels.")]
+            [OptionParameter(BriefLabel = "s4a,s4b,s4c")]
+            public Boolean Switch4 { get; set; }
+        }
+
+        [HelpUtilize]
+        private class TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels
+        {
+            [HelpSummary("String option with solid label and additional arguments in help output.", Options = "str-val")]
+            [OptionParameter(SolidLabel = "string-option", BriefLabel = "so1,so2")]
+            public String StringOption1 { get; set; }
+            [HelpSummary("Integer option with solid label and additional arguments in help output.", Options = "num-val")]
+            [OptionParameter(SolidLabel = "int-option", BriefLabel = "io1,io2,io3")]
+            public Int32 IntOption1 { get; set; }
+            [HelpSummary("String option without solid label and additional arguments in help output.", Options = "str-val")]
+            [OptionParameter(BriefLabel = "so1,so2")]
+            public String StringOption2 { get; set; }
+            [HelpSummary("Integer option without solid label and additional arguments in help output.", Options = "num-val")]
+            [OptionParameter(BriefLabel = "io1,io2,io3")]
+            public Int32 IntOption2 { get; set; }
+        }
+
         [Test]
         public void Generate_ZeroBounds_ThrowsException()
         {
@@ -347,14 +369,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             TestClassWithEmptyHelpAttributes instance = new TestClassWithEmptyHelpAttributes();
             HelpProcessor<TestClassWithEmptyHelpAttributes> processor = new HelpProcessor<TestClassWithEmptyHelpAttributes>(instance);
             processor.Generate();
-            Assert.AreEqual(processor.Results, String.Empty);
+            Assert.That(processor.Results, Is.Empty);
         }
 
         [Test]
         public void Generate_TestClassWithMinimumHelpAttributes_ResultIsMinimumHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n" +
                 "  --property2  \r\n\r\n";
 
@@ -362,14 +384,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithMinimumHelpAttributes> processor = new HelpProcessor<TestClassWithMinimumHelpAttributes>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortHelpSummary_ResultIsShortHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  Short help on switch 1.\r\n\r\n" +
                 "  --property2  Short help on option 2.\r\n\r\n";
 
@@ -377,14 +399,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithShortHelpSummary> processor = new HelpProcessor<TestClassWithShortHelpSummary>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithLongHelpSummary_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  Long help on switch 1. Long help on switch 1. Long help on\r\n" +
                 "               switch 1. Long help on switch 1. Long help on switch 1. Long\r\n" +
                 "               help on switch 1.\r\n\r\n" +
@@ -395,14 +417,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithLongHelpSummary> processor = new HelpProcessor<TestClassWithLongHelpSummary>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithLongHelpSummaryDifferentParameterLength_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --less          Long help on switch 1. Long help on switch 1. Long help on\r\n" +
                 "                  switch 1. Long help on switch 1. Long help on switch 1.\r\n" +
                 "                  Long help on switch 1.\r\n\r\n" +
@@ -413,14 +435,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithLongHelpSummaryDifferentParameterLength> processor = new HelpProcessor<TestClassWithLongHelpSummaryDifferentParameterLength>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassHelpSummaryAndOptionArguments_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --string-option [-so] str-val  String option with additional arguments in\r\n" +
                 "                                 help output.\r\n\r\n" +
                 "  --int-option [-io] num-val     Integer option with additional arguments in\r\n" +
@@ -430,14 +452,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassHelpSummaryAndOptionArguments> processor = new HelpProcessor<TestClassHelpSummaryAndOptionArguments>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassHelpSectionAndSummary_ResultIsLongtHelp()
         {
             String expected = "\r\nUsage:\r\n\r\n" +
-                "  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  Section A\r\n\r\n" +
                 "  --switcha1  Switch 1 in section A.\r\n\r\n" +
                 "  --switcha2  Switch 2 in section A.\r\n\r\n" +
@@ -456,41 +478,41 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             System.Diagnostics.Debug.WriteLine(expected);
             System.Diagnostics.Debug.WriteLine("------------------------");
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortCopyright_ResultIsShortHelp()
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortCopyright instance = new TestClassWithShortCopyright();
             HelpProcessor<TestClassWithShortCopyright> processor = new HelpProcessor<TestClassWithShortCopyright>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortPrologue_ResultIsShortHelp()
         {
             String expected = "\r\nThis is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortPrologue instance = new TestClassWithShortPrologue();
             HelpProcessor<TestClassWithShortPrologue> processor = new HelpProcessor<TestClassWithShortPrologue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortEpilogue_ResultIsShortHelp()
         {
-            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+            String expected = "\r\nUsage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -498,7 +520,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithShortEpilogue> processor = new HelpProcessor<TestClassWithShortEpilogue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -506,21 +528,21 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
                 "This is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n";
 
             TestClassWithShortCopyrightPrologue instance = new TestClassWithShortCopyrightPrologue();
             HelpProcessor<TestClassWithShortCopyrightPrologue> processor = new HelpProcessor<TestClassWithShortCopyrightPrologue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortCopyrightEpilogue_ResultIsShortHelp()
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -528,14 +550,14 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithShortCopyrightEpilogue> processor = new HelpProcessor<TestClassWithShortCopyrightEpilogue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithShortPrologueEpilogue_ResultIsShortHelp()
         {
             String expected = "\r\nThis is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -543,7 +565,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithShortPrologueEpilogue> processor = new HelpProcessor<TestClassWithShortPrologueEpilogue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -551,7 +573,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
         {
             String expected = "\r\nCopyright (c) company\r\n\r\n" +
                 "This is a pretty short prologue.\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue.\r\n";
 
@@ -559,7 +581,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithShortCopyrightPrologueEpilogue> processor = new HelpProcessor<TestClassWithShortCopyrightPrologueEpilogue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -569,7 +591,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
                 "data set 2 to fill the line up to its end.\r\n\r\n" +
                 "This is a pretty short prologue. Test data set 1 to fill the line up to its\r\n" +
                 "end. Test data set 2 to fill the line up to its end.\r\n\r\n" +
-                "Usage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\n" +
+                "Usage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\n" +
                 "Options:\r\n\r\n  --property1  \r\n\r\n  --property2  \r\n\r\n" +
                 "This is a pretty short epilogue. Test data set 1 to fill the line up to its\r\n" +
                 "end. Test data set 2 to fill the line up to its end.\r\n";
@@ -578,13 +600,13 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithLongCopyrightPrologueEpilogue> processor = new HelpProcessor<TestClassWithLongCopyrightPrologueEpilogue>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassWithMinimumHelpAttributesButVeryLongParameterName_ResultIsMinimumHelpButLineBreak()
         {
-            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
+            String expected = "\r\nUsage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n\r\nOptions:\r\n\r\n" +
                 "  --this-is-a-very-long-parameter-name-longer-than-line-with  \r\n" +
                 "               The summary of the very long parameter name.\r\n\r\n" +
                 "  --property2                                                 \r\n" +
@@ -594,19 +616,19 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassWithMinimumHelpAttributesButVeryLongParameterName> processor = new HelpProcessor<TestClassWithMinimumHelpAttributesButVeryLongParameterName>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
         public void Generate_TestClassTwoEmptyUtilize_ResultIsTwoWithDefaultUsages()
         {
-            String expected = "\r\nUsage:\r\n\r\n  testhost.x86.exe [options]\r\n  testhost.x86.exe [options]\r\n\r\n";
+            String expected = "\r\nUsage:\r\n\r\n  testhost.net48.x86.exe [options]\r\n  testhost.net48.x86.exe [options]\r\n\r\n";
 
             TestClassTwoEmptyUtilize instance = new TestClassTwoEmptyUtilize();
             HelpProcessor<TestClassTwoEmptyUtilize> processor = new HelpProcessor<TestClassTwoEmptyUtilize>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -618,7 +640,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassTwoContentUtilize> processor = new HelpProcessor<TestClassTwoContentUtilize>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -630,7 +652,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassTwoContentUtilizeHeadingOther> processor = new HelpProcessor<TestClassTwoContentUtilizeHeadingOther>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -642,7 +664,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassTwoContentUtilizeWithSection> processor = new HelpProcessor<TestClassTwoContentUtilizeWithSection>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -656,7 +678,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassUtilizeFullFeatured> processor = new HelpProcessor<TestClassUtilizeFullFeatured>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -674,7 +696,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassSummaryTwoHeadings> processor = new HelpProcessor<TestClassSummaryTwoHeadings>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
 
         [Test]
@@ -699,7 +721,49 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             HelpProcessor<TestClassSummaryTwoHeadingsTwoSections> processor = new HelpProcessor<TestClassSummaryTwoHeadingsTwoSections>(instance);
             processor.Generate();
 
-            Assert.AreEqual(processor.Results, expected);
+            Assert.That(processor.Results, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Generate_TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels_ResultIsAsExpected()
+        {
+            String expected = "\r\nUsage:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\n" +
+                "Options:\r\n\r\n" +
+                "  --switch-1 [-s1]        Switch with solid label and one brief label.\r\n\r\n" +
+                "  --switch-2 [-s2a,-s2b]  Switch with solid label and two brief labels.\r\n\r\n" +
+                "  -s3                     Switch without solid label and one brief label.\r\n\r\n" +
+                "  -s4a,-s4b,-s4c          Switch without solid label and three brief labels.\r\n\r\n";
+
+            TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels instance = new TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels();
+            HelpProcessor<TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels> processor = new HelpProcessor<TestClassHelpSummaryAndSwitchArgumentsMultipleBriefLabels>(instance);
+            processor.Generate();
+
+            Assert.That(processor.Results, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Generate_TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels_ResultIsAsExpected()
+        {
+            String expected = "\r\nUsage:\r\n\r\n" +
+                "  testhost.net48.x86.exe [options]\r\n\r\n" +
+                "Options:\r\n\r\n" +
+                "  --string-option [-so1,-so2] str-val    String option with solid label and\r\n" +
+                "                                         additional arguments in help output.\r\n\r\n" +
+                "  --int-option [-io1,-io2,-io3] num-val  Integer option with solid label and\r\n" +
+                "                                         additional arguments in help output.\r\n\r\n" +
+                "  -so1,-so2 str-val                      String option without solid label\r\n" +
+                "                                         and additional arguments in help\r\n" +
+                "                                         output.\r\n\r\n" +
+                "  -io1,-io2,-io3 num-val                 Integer option without solid label\r\n" +
+                "                                         and additional arguments in help\r\n" +
+                "                                         output.\r\n\r\n";
+
+            TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels instance = new TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels();
+            HelpProcessor<TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels> processor = new HelpProcessor<TestClassHelpSummaryAndOptionArgumentsMultipleBriefLabels>(instance);
+            processor.Generate();
+
+            Assert.That(processor.Results, Is.EqualTo(expected));
         }
     }
 }

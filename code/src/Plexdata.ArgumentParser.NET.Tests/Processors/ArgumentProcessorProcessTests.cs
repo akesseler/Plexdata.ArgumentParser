@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,9 +39,7 @@ namespace Plexdata.ArgumentParser.Tests.Processors
     [TestOf(nameof(ArgumentProcessorProcess))]
     public class ArgumentProcessorProcessTests
     {
-        private class ArgumentProcessorProcess
-        {
-        }
+        private class ArgumentProcessorProcess { }
 
         private class ArgumentProcessorProcessHelper
         {
@@ -82,6 +80,8 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             public Boolean Switch3 { get; set; }
             [SwitchParameter(SolidLabel = "switch4", BriefLabel = "s4")]
             public Boolean Switch4 { get; set; }
+            [SwitchParameter(SolidLabel = "switch5", BriefLabel = "s5a,s5b")]
+            public Boolean Switch5 { get; set; }
         }
 
         private static readonly ArgumentProcessorProcessHelper[] OnlySwitchTestData = new ArgumentProcessorProcessHelper[]
@@ -90,29 +90,65 @@ namespace Plexdata.ArgumentParser.Tests.Processors
                 Arguments = new String[] { "--switch1" },
                 Expected = new TestClassSwitchProperties { Switch1 = true } },
             new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s1" },
+                Expected = new TestClassSwitchProperties { Switch1 = true } },
+            new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1", "--switch2" },
+                Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s1", "-s2" },
                 Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true } },
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1", "--switch2", "--switch3" },
                 Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true, Switch3 = true } },
             new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s1", "-s2", "-s3" },
+                Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true, Switch3 = true } },
+            new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1", "--switch2", "--switch3", "--switch4" },
+                Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true, Switch3 = true, Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s1", "-s2", "-s3", "-s4" },
                 Expected = new TestClassSwitchProperties { Switch1 = true, Switch2 = true, Switch3 = true, Switch4 = true } },
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch2", "--switch3", "--switch4" },
                 Expected = new TestClassSwitchProperties { Switch2 = true, Switch3 = true, Switch4 = true } },
             new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s2", "-s3", "-s4" },
+                Expected = new TestClassSwitchProperties { Switch2 = true, Switch3 = true, Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch3", "--switch4" },
+                Expected = new TestClassSwitchProperties { Switch3 = true, Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s3", "-s4" },
                 Expected = new TestClassSwitchProperties { Switch3 = true, Switch4 = true } },
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch4" },
                 Expected = new TestClassSwitchProperties { Switch4 = true } },
             new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s4" },
+                Expected = new TestClassSwitchProperties { Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch1", "--switch3" },
+                Expected = new TestClassSwitchProperties { Switch1 = true, Switch3 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s1", "-s3" },
                 Expected = new TestClassSwitchProperties { Switch1 = true, Switch3 = true } },
             new ArgumentProcessorProcessHelper{
                 Arguments = new String[] { "--switch2", "--switch4" },
                 Expected = new TestClassSwitchProperties { Switch2 = true, Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s2", "-s4" },
+                Expected = new TestClassSwitchProperties { Switch2 = true, Switch4 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "--switch5" },
+                Expected = new TestClassSwitchProperties { Switch5 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s5a" },
+                Expected = new TestClassSwitchProperties { Switch5 = true } },
+            new ArgumentProcessorProcessHelper{
+                Arguments = new String[] { "-s5b" },
+                Expected = new TestClassSwitchProperties { Switch5 = true } },
         };
 
         [ParametersGroup]
@@ -401,7 +437,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlySwitchTestData))]
         public void Process_TestClassSwitchProperties_ResultIsEqual(Object testObject)
         {
@@ -415,7 +450,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.AreEqual(actual.Stringify(), expected.Stringify());
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlyOptionTestData))]
         public void Process_TestClassOptionProperties_ResultIsEqual(Object testObject)
         {
@@ -429,7 +463,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.AreEqual(actual.Stringify(), expected.Stringify());
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.OnlyVerbalTestData))]
         public void Process_TestClassVerbalProperties_ResultIsEqual(Object testObject)
         {
@@ -443,7 +476,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.AreEqual(actual.Stringify(), expected.Stringify());
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.InvalidArgumentsTestData))]
         public void Process_InvalidArguments_ThrowsException(Object testObject)
         {
@@ -479,7 +511,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.Throws<OptionViolationException>(() => { processor.Process(); });
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.ExclusiveArgumentsTestData))]
         public void Process_ExclusiveArguments_ThrowsException(Object testObject)
         {
@@ -489,7 +520,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.Throws<ExclusiveViolationException>(() => { processor.Process(); });
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.RequiredArgumentsTestData))]
         public void Process_RequiredArguments_ThrowsException(Object testObject)
         {
@@ -499,7 +529,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.Throws<RequiredViolationException>(() => { processor.Process(); });
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.DependencyArgumentsTestData))]
         public void Process_DependencyArguments_ThrowsException(Object testObject)
         {
@@ -509,7 +538,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             Assert.Throws<DependentViolationException>(() => { processor.Process(); });
         }
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.MixedArgumentsTestData))]
         public void Process_MixedArguments_ResultIsEqual(Object testObject)
         {
@@ -572,7 +600,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDebugDefaultA))]
         public void Process_BugfixTestDataSwitchDebugDefaultA_ResultIsEqual(Object testObject)
         {
@@ -635,7 +662,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDebugDefaultB))]
         public void Process_BugfixTestDataSwitchDebugDefaultB_ResultIsEqual(Object testObject)
         {
@@ -698,7 +724,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDefaultDebugA))]
         public void Process_BugfixTestDataSwitchDefaultDebugA_ResultIsEqual(Object testObject)
         {
@@ -761,7 +786,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataSwitchDefaultDebugB))]
         public void Process_BugfixTestDataSwitchDefaultDebugB_ResultIsEqual(Object testObject)
         {
@@ -824,7 +848,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultA))]
         public void Process_BugfixTestDataOptionDebugDefaultA_ResultIsEqual(Object testObject)
         {
@@ -887,7 +910,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultASeparator))]
         public void Process_BugfixTestDataOptionDebugDefaultASeparator_ResultIsEqual(Object testObject)
         {
@@ -950,7 +972,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultB))]
         public void Process_BugfixTestDataOptionDebugDefaultB_ResultIsEqual(Object testObject)
         {
@@ -1013,7 +1034,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDebugDefaultBSeparator))]
         public void Process_BugfixTestDataOptionDebugDefaultBSeparator_ResultIsEqual(Object testObject)
         {
@@ -1076,7 +1096,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugA))]
         public void Process_BugfixTestDataOptionDefaultDebugA_ResultIsEqual(Object testObject)
         {
@@ -1139,7 +1158,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugASeparator))]
         public void Process_BugfixTestDataOptionDefaultDebugASeparator_ResultIsEqual(Object testObject)
         {
@@ -1202,7 +1220,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugB))]
         public void Process_BugfixTestDataOptionDefaultDebugB_ResultIsEqual(Object testObject)
         {
@@ -1265,7 +1282,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataOptionDefaultDebugBSeparator))]
         public void Process_BugfixTestDataOptionDefaultDebugBSeparator_ResultIsEqual(Object testObject)
         {
@@ -1328,7 +1344,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugA))]
         public void Process_BugfixTestDataMixedDefaultDebugA_ResultIsEqual(Object testObject)
         {
@@ -1391,7 +1406,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugB))]
         public void Process_BugfixTestDataMixedDefaultDebugB_ResultIsEqual(Object testObject)
         {
@@ -1454,7 +1468,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugC))]
         public void Process_BugfixTestDataMixedDefaultDebugC_ResultIsEqual(Object testObject)
         {
@@ -1517,7 +1530,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDefaultDebugD))]
         public void Process_BugfixTestDataMixedDefaultDebugD_ResultIsEqual(Object testObject)
         {
@@ -1580,7 +1592,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultA))]
         public void Process_BugfixTestDataMixedDebugDefaultA_ResultIsEqual(Object testObject)
         {
@@ -1643,7 +1654,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultB))]
         public void Process_BugfixTestDataMixedDebugDefaultB_ResultIsEqual(Object testObject)
         {
@@ -1706,7 +1716,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultC))]
         public void Process_BugfixTestDataMixedDebugDefaultC_ResultIsEqual(Object testObject)
         {
@@ -1769,7 +1778,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.BugfixTestDataMixedDebugDefaultD))]
         public void Process_BugfixTestDataMixedDebugDefaultD_ResultIsEqual(Object testObject)
         {
@@ -1822,7 +1830,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataMixedSeparators))]
         public void Process_TestDataMixedSeparators_ResultIsEqual(Object testObject)
         {
@@ -1877,7 +1884,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencySingleSingle))]
         public void Process_TestDataDependencySingleSingle_ResultIsEqual(Object testObject)
         {
@@ -1943,7 +1949,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencySingleDouble))]
         public void Process_TestDataDependencySingleDouble_ResultIsEqual(Object testObject)
         {
@@ -2023,7 +2028,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencyDoubleSingle))]
         public void Process_TestDataDependencyDoubleSingle_ResultIsEqual(Object testObject)
         {
@@ -2146,7 +2150,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataDependencyDoubleDouble))]
         public void Process_TestDataDependencyDoubleDouble_ResultIsEqual(Object testObject)
         {
@@ -2213,7 +2216,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitStrongInvalid))]
         public void Process_TestDataOptionalRequiredImplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
         {
@@ -2242,7 +2244,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitStrongValid))]
         public void Process_TestDataOptionalRequiredImplicitStrongValid_ResultIsEqual(Object testObject)
         {
@@ -2305,7 +2306,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitWeakInvalid))]
         public void Process_TestDataOptionalRequiredImplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
         {
@@ -2339,7 +2339,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredImplicitWeakValid))]
         public void Process_TestDataOptionalRequiredImplicitWeakValid_ResultIsEqual(Object testObject)
         {
@@ -2414,7 +2413,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitStrongInvalid))]
         public void Process_TestDataOptionalRequiredExplicitStrongInvalid_ThrowsDependentViolationException(Object testObject)
         {
@@ -2433,7 +2431,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitStrongValid))]
         public void Process_TestDataOptionalRequiredExplicitStrongValid_ResultIsEqual(Object testObject)
         {
@@ -2496,7 +2493,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitWeakInvalid))]
         public void Process_TestDataOptionalRequiredExplicitWeakInvalid_ThrowsDependentViolationException(Object testObject)
         {
@@ -2530,7 +2526,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredExplicitWeakValid))]
         public void Process_TestDataOptionalRequiredExplicitWeakValid_ResultIsEqual(Object testObject)
         {
@@ -2585,7 +2580,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredMutualInvalid))]
         public void Process_TestDataOptionalRequiredMutualInvalid_ThrowsDependentViolationException(Object testObject)
         {
@@ -2604,7 +2598,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalRequiredMutualValid))]
         public void Process_TestDataOptionalRequiredMutualValid_ResultIsEqual(Object testObject)
         {
@@ -2667,7 +2660,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalDefaultValueWrongType))]
         public void Process_TestDataOptionalDefaultValueWrongType_ThrowsDefaultValueException(Object testObject)
         {
@@ -2745,7 +2737,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             },
         };
 
-        [Test]
         [TestCaseSource(nameof(ArgumentProcessorProcessTests.TestDataOptionalDefaultValueValidType))]
         public void Process_TestDataOptionalDefaultValueValidType_DefaultValueAsExpected(Object testObject)
         {
@@ -2783,27 +2774,6 @@ namespace Plexdata.ArgumentParser.Tests.Processors
             ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
 
             Assert.That(() => processor.Process(), Throws.InstanceOf<SupportViolationException>());
-        }
-
-        [Test]
-        [Category("IntegrationTest")]
-        public void Process_ComplexTypeIsRegistered_InterfaceConvertWasCalledAsExpected()
-        {
-            // TODO: Remove obsolete test later on.
-            String[] arguments = new String[] { "--complex", "width,height" };
-
-            Mock<ICustomConverter<ComplexType>> converter = new Mock<ICustomConverter<ComplexType>>();
-
-            converter.Object.AddConverter();
-
-            TestClassOptionalWithComplexType actual = new TestClassOptionalWithComplexType();
-            ArgumentProcessor<Object> processor = new ArgumentProcessor<Object>(actual, arguments);
-
-            processor.Process();
-
-            converter.Object.RemoveConverter();
-
-            converter.Verify(x => x.Convert("--complex", "width,height", "@"), Times.Once);
         }
 
         public class ComplexTypeCustomConverter : ICustomConverter<ComplexType>

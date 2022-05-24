@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
     {
         #region Types
 
-        [Test]
         [TestCase(typeof(String))]
         [TestCase(typeof(SByte))]
         [TestCase(typeof(SByte?))]
@@ -67,7 +66,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.IsTrue(OptionTypeConverter.IsSupportedType(type));
         }
 
-        [Test]
         [TestCase(typeof(Boolean))]
         [TestCase(typeof(Boolean?))]
         public void TryConvert_CheckUnsupportedType_ResultIsEqual(Type type)
@@ -75,7 +73,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.IsFalse(OptionTypeConverter.IsSupportedType(type));
         }
 
-        [Test]
         [TestCase("42", typeof(Int16), 42)]
         [TestCase("42", typeof(Int16?), 42)]
         public void Convert_SupportedType_ResultIsEqual(String actual, Type type, Object expected)
@@ -83,7 +80,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(OptionTypeConverter.Convert(actual, type), expected);
         }
 
-        [Test]
         [TestCase("True", typeof(Boolean))]
         [TestCase("True", typeof(Boolean?))]
         public void Convert_UnsupportedType_ThrowsException(String actual, Type type)
@@ -95,7 +91,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
 
         #region Byte / SByte / Char / String
 
-        [Test]
         [TestCase(null, typeof(Byte), false, null)]
         [TestCase(null, typeof(Byte?), true, null)]
         [TestCase("", typeof(Byte), false, null)]
@@ -130,7 +125,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(SByte), false, null)]
         [TestCase(null, typeof(SByte?), true, null)]
         [TestCase("", typeof(SByte), false, null)]
@@ -171,7 +165,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(Char), false, null)]
         [TestCase(null, typeof(Char?), true, null)]
         [TestCase("", typeof(Char), false, null)]
@@ -183,11 +176,15 @@ namespace Plexdata.ArgumentParser.Tests.Converters
         [TestCase("   A string value", typeof(Char?), true, ' ')]
         [TestCase("\tA string value", typeof(Char?), true, '\t')]
         [TestCase("\0", typeof(Char), true, Char.MinValue)]
-        [TestCase("\uffff", typeof(Char), true, Char.MaxValue)]
+        [TestCase("\\uffff", typeof(Char), true, "Char.MaxValue")]
         [TestCase("\0", typeof(Char?), true, Char.MinValue)]
-        [TestCase("\uffff", typeof(Char?), true, Char.MaxValue)]
+        [TestCase("\\uffff", typeof(Char?), true, "Char.MaxValue")]
         public void TryConvert_CharConversion_ResultIsEqual(String actual, Type type, Boolean isTrue, Object expected)
         {
+            // The test explorer may have an issue with unicode characters.
+            if ("Char.MaxValue" == expected as String) { expected = Char.MaxValue; }
+            actual = actual?.Replace("\\uffff", "\uffff");
+
             Object result = null;
 
             if (isTrue)
@@ -202,7 +199,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(String), true, null)]
         [TestCase("", typeof(String), true, null)]
         [TestCase("  \t \v \n \r ", typeof(String), true, "  \t \v \n \r ")]
@@ -228,7 +224,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
 
         #region Int16 / UInt16 / Int32 / UInt32 / Int64 / UInt64
 
-        [Test]
         [TestCase(null, typeof(Int16), false, null)]
         [TestCase(null, typeof(Int16?), true, null)]
         [TestCase("", typeof(Int16), false, null)]
@@ -269,7 +264,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(UInt16), false, null)]
         [TestCase(null, typeof(UInt16?), true, null)]
         [TestCase("", typeof(UInt16), false, null)]
@@ -310,7 +304,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(Int32), false, null)]
         [TestCase(null, typeof(Int32?), true, null)]
         [TestCase("", typeof(Int32), false, null)]
@@ -351,7 +344,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(UInt32), false, null)]
         [TestCase(null, typeof(UInt32?), true, null)]
         [TestCase("", typeof(UInt32), false, null)]
@@ -392,7 +384,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(Int64), false, null)]
         [TestCase(null, typeof(Int64?), true, null)]
         [TestCase("", typeof(Int64), false, null)]
@@ -433,7 +424,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(UInt64), false, null)]
         [TestCase(null, typeof(UInt64?), true, null)]
         [TestCase("", typeof(UInt64), false, null)]
@@ -478,7 +468,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
 
         #region DateTime
 
-        [Test]
         [TestCase(null, typeof(DateTime), false, null)]
         [TestCase(null, typeof(DateTime?), true, null)]
         [TestCase("", typeof(DateTime), false, null)]
@@ -530,7 +519,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
 
         #region Decimal, Double, Single
 
-        [Test]
         [TestCase(null, typeof(Decimal), false, null)]
         [TestCase(null, typeof(Decimal?), true, null)]
         [TestCase("", typeof(Decimal), false, null)]
@@ -571,7 +559,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected == null ? expected : Decimal.Parse(expected.ToString()));
         }
 
-        [Test]
         [TestCase(null, typeof(Double), false, null)]
         [TestCase(null, typeof(Double?), true, null)]
         [TestCase("", typeof(Double), false, null)]
@@ -612,7 +599,6 @@ namespace Plexdata.ArgumentParser.Tests.Converters
             Assert.AreEqual(result, expected);
         }
 
-        [Test]
         [TestCase(null, typeof(Single), false, null)]
         [TestCase(null, typeof(Single?), true, null)]
         [TestCase("", typeof(Single), false, null)]

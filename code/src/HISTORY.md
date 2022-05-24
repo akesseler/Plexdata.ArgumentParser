@@ -1,5 +1,15 @@
 
 
+**1.0.7**
+- Anything marked as obsolete removed (BREAKING CHANGES).
+- Bug fixing (exceptions, tests, etc.).
+- Source code documentation as well as online documentation reviewed and extended.
+- Changing of the copyright year in all files into 2022.
+- Update of online documentation as well as Wiki.
+- Version number increased.
+- Package release on `nuget.org`.
+- Release uploaded on `github.com`.
+
 **1.0.6**
 - Testing library and testing console application moved to _.NET Framework 4.8_.
 - Bugfix for `HelpSummary` used with `VerbalParameter`.

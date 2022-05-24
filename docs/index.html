@@ -129,7 +129,7 @@ The software has been published under the terms of
 <h3>MIT License</h3>
 
 <p>
-Copyright &copy; 2020 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
+Copyright &copy; 2022 <a target="_blank" href="http://www.plexdata.de/">plexdata.de</a>
 </p>
 <p>
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
@@ -270,6 +270,34 @@ $&gt; program.exe --verbose
 $&gt; program.exe -v
 $&gt; program.exe --debug</code></pre>
 
+<h4>Multiple Brief Labels</h4>
+
+<p>
+Since version 1.0.7 it became possible to use multiple brief labels for one and the same switch parameter. 
+This is pretty useful, especially when one and the same program parameter can be applied by different switches. 
+The program help is a good example for such a switch, as code snippet below demonstrates.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [SwitchParameter(SolidLabel = "help", BriefLabel = "h,?")]
+    public Boolean IsHelp { get; set; }
+}</code></pre>
+<p>
+As shown above, property <code>BriefLabel</code> takes a list of comma separated brief labels and the program 
+can now be called with all of these parameters. See here for some calling examples.
+</p>
+<pre><code>$&gt; program.exe --help
+$&gt; program.exe -h
+$&gt; program.exe -?</code></pre>
+<p>
+In each of these cases, property <code>IsHelp</code> of class <code>CmdLineArgs</code> is set to <code>true</code>.
+</p>
+<p>
+For sure, it doesn&rsquo;t really make sense to use multiple solid labels. Therefore, such a feature is not 
+supported.
+</p>
+
 <h3 id="usage-option">Option</h3>
 
 <p>
@@ -316,6 +344,34 @@ Here are some rules of how to use this feature. Each default value can be applie
 constant value and as string literal as well for all of the supported types. An exception of type 
 <code>DefaultValueException</code> is thrown if applying a default value fails for any reason. Default 
 values are replaced by the argument parser as soon as they are provided as command line argument.
+</p>
+
+<h4>Multiple Brief Labels</h4>
+
+<p>
+Since version 1.0.7 it became possible to use multiple brief labels for one and the same option parameter. 
+This is pretty useful, especially when one and the same program parameter can be applied by different option 
+values.
+</p>
+<pre><code>[ParametersGroup]
+class CmdLineArgs
+{
+    [OptionParameter(SolidLabel = "method", BriefLabel = "m,M")]
+    public String Method { get; set; }
+}</code></pre>
+<p>
+As shown above, property <code>BriefLabel</code> takes a list of comma separated brief labels and the program 
+can now be called with all of these parameters. See here for some calling examples.
+</p>
+<pre><code>$&gt; program.exe --method SHA
+$&gt; program.exe -m SHA
+$&gt; program.exe -M SHA</code></pre>
+<p>
+In each of these cases, property <code>Method</code> of class <code>CmdLineArgs</code> is set to <code>SHA</code>.
+</p>
+<p>
+For sure, it doesn&rsquo;t really make sense to use multiple solid labels. Therefore, such a feature is not
+supported.
 </p>
 
 <h3 id="usage-verbal">Verbal</h3>

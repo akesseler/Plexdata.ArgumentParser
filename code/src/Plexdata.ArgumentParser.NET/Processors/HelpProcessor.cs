@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2022 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -749,6 +749,7 @@ namespace Plexdata.ArgumentParser.Processors
         /// <returns>
         /// The fixed help processor setting.
         /// </returns>
+        /// <seealso cref="GetBriefLabelsCaption(ParameterObjectAttribute, String)"/>
         private HelpProcessorSetting FixupSetting(HelpProcessorSetting value)
         {
             if (value.Setting.IsSolidLabel)
@@ -757,12 +758,12 @@ namespace Plexdata.ArgumentParser.Processors
 
                 if (value.Setting.IsBriefLabel)
                 {
-                    value.Caption += $" [{ParameterPrefixes.BriefPrefix}{value.Setting.BriefLabel}]";
+                    value.Caption += $" [{this.GetBriefLabelsCaption(value.Setting)}]";
                 }
             }
             else if (value.Setting.IsBriefLabel)
             {
-                value.Caption += $"{ParameterPrefixes.BriefPrefix}{value.Setting.BriefLabel}";
+                value.Caption += $"{this.GetBriefLabelsCaption(value.Setting)}";
             }
 
             if (value.Summary.IsOptions)
@@ -895,6 +896,34 @@ namespace Plexdata.ArgumentParser.Processors
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the formatted brief labels.
+        /// </summary>
+        /// <remarks>
+        /// This method formats the caption of brief labels for help output 
+        /// and returns it.
+        /// </remarks>
+        /// <param name="setting">
+        /// The settings to take the brief labels from.
+        /// </param>
+        /// <param name="prefix">
+        /// The option prefix to be used. Default is dash (<c>'-'</c>).
+        /// </param>
+        /// <returns>
+        /// The formatted brief labels caption.
+        /// </returns>
+        /// <seealso cref="FixupSetting(HelpProcessorSetting)"/>
+        /// <see cref="ParameterPrefixes.BriefPrefix"/>
+        private String GetBriefLabelsCaption(ParameterObjectAttribute setting, String prefix = ParameterPrefixes.BriefPrefix)
+        {
+            return String.Join(
+                AttributeSeparators.CommaSeparator,
+                setting.BriefLabels
+                    .Where(x => !String.IsNullOrWhiteSpace(x))
+                    .Select(x => $"{prefix}{x}")
+                );
         }
 
         #endregion
